@@ -235,10 +235,52 @@
     color: var(--text-muted);
   }
 
-  .ovr-elite { color: var(--gold); }
-  .ovr-high { color: var(--accent); }
-  .ovr-mid { color: var(--blue); }
-  .ovr-low { color: var(--silver); }
+  /* rarity tiers */
+  .rarity-legendary { color: var(--gold); }
+  .rarity-very-rare { color: #e040fb; }
+  .rarity-rare { color: var(--blue); }
+  .rarity-common { color: var(--silver); }
+
+  .player-card.tier-legendary {
+    border-color: rgba(255, 215, 0, 0.3);
+    background: linear-gradient(135deg, #141b2d, #2a1f00);
+  }
+  .player-card.tier-legendary::before {
+    background: linear-gradient(90deg, var(--gold), #ff9800, var(--gold));
+    opacity: 1;
+  }
+
+  .player-card.tier-very-rare {
+    border-color: rgba(224, 64, 251, 0.3);
+    background: linear-gradient(135deg, #141b2d, #1a0028);
+  }
+  .player-card.tier-very-rare::before {
+    background: linear-gradient(90deg, #e040fb, #7c4dff, #e040fb);
+    opacity: 1;
+  }
+
+  .player-card.tier-rare {
+    border-color: rgba(59, 130, 246, 0.2);
+  }
+  .player-card.tier-rare::before {
+    background: linear-gradient(90deg, var(--blue), #60a5fa);
+    opacity: 1;
+  }
+
+  .rarity-badge {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    display: inline-block;
+  }
+  .rarity-badge.legendary { background: rgba(255,215,0,0.15); color: var(--gold); }
+  .rarity-badge.very-rare { background: rgba(224,64,251,0.15); color: #e040fb; }
+  .rarity-badge.rare { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .rarity-badge.common { background: rgba(148,163,184,0.1); color: var(--silver); }
 
   /* card pick animation */
   .player-card.picked {
@@ -772,55 +814,67 @@
 <script>
 // ===================== MOCK DATA =====================
 const ALL_PLAYERS = [
-  { id:1,  name:"Tuts",                team:"3E", ovr:71 },
-  { id:2,  name:"Severo",              team:"3E", ovr:87 },
-  { id:3,  name:"Severo cabeçada",     team:"3E", ovr:71 },
-  { id:4,  name:"Jovelli",             team:"3E", ovr:98 },
-  { id:5,  name:"Lucas Graças",        team:"3E", ovr:93 },
-  { id:6,  name:"MGA Prime",           team:"3E", ovr:99 },
-  { id:7,  name:"MGA Base",            team:"3E", ovr:98 },
-  { id:8,  name:"Samuel",              team:"3E", ovr:80 },
-  { id:9,  name:"Thigas",              team:"3E", ovr:85 },
-  { id:10, name:"Braz",                team:"3F", ovr:96 },
-  { id:11, name:"Braz Chorão",         team:"3F", ovr:87 },
-  { id:12, name:"De Longhi",           team:"3F", ovr:79 },
-  { id:13, name:"Paulino",             team:"3F", ovr:81 },
-  { id:14, name:"Alemão",              team:"3F", ovr:96 },
-  { id:15, name:"Alemão De Tênis",     team:"3F", ovr:86 },
-  { id:16, name:"Nakashima DJ",        team:"3F", ovr:92 },
-  { id:17, name:"Petê",                team:"3F", ovr:84 },
-  { id:18, name:"Alisson",             team:"3G", ovr:89 },
-  { id:19, name:"Cadu",                team:"3G", ovr:79 },
-  { id:20, name:"Inacio",              team:"3G", ovr:86 },
-  { id:21, name:"Joás",                team:"3G", ovr:97 },
-  { id:22, name:"Lins",                team:"3G", ovr:96 },
-  { id:23, name:"D'addio",             team:"3G", ovr:94 },
-  { id:24, name:"Vitão",               team:"3G", ovr:79 },
-  { id:25, name:"Fellipão",            team:"3H", ovr:79 },
-  { id:26, name:"Gui Costa",           team:"3H", ovr:94 },
-  { id:27, name:"Gui Costa sem Ciscar",team:"3H", ovr:88 },
-  { id:28, name:"Nacarelli",           team:"3H", ovr:92 },
-  { id:29, name:"Guimas",              team:"3H", ovr:34 },
-  { id:30, name:"Guimas na nóia",      team:"3H", ovr:21 },
-  { id:31, name:"Igor",                team:"3H", ovr:86 },
-  { id:32, name:"Igor no intervalo",   team:"3H", ovr:94 },
-  { id:33, name:"Matheus Bastos",      team:"3H", ovr:79 },
-  { id:34, name:"Makita",              team:"3H", ovr:84 },
-  { id:35, name:"Pedrão",              team:"3H", ovr:79 },
-  { id:36, name:"Frodo",               team:"3H", ovr:85 },
-  { id:37, name:"Pips",                team:"3H", ovr:83 },
-  { id:38, name:"Ruan",                team:"3H", ovr:82 },
-  { id:39, name:"Zeba com Pubelgia",   team:"3H", ovr:89 },
-  { id:40, name:"Zeba sem Pubelgia",   team:"3H", ovr:95 },
-  { id:41, name:"BGG",                 team:"3I", ovr:93 },
-  { id:42, name:"Fefo",                team:"3I", ovr:94 },
-  { id:43, name:"Bento",               team:"3I", ovr:85 },
-  { id:44, name:"Hallison",            team:"3I", ovr:87 },
-  { id:45, name:"Vargas",              team:"3I", ovr:81 },
-  { id:46, name:"Gueguelas",           team:"3I", ovr:89 },
-  { id:47, name:"Rafinha",             team:"3I", ovr:83 },
-  { id:48, name:"Ryan",                team:"3I", ovr:89 },
-  { id:49, name:"Koji",                team:"3I", ovr:84 },
+  { id:1,  name:"Tuts",                 team:"3E", ovr:71 },
+  { id:2,  name:"Severo",               team:"3E", ovr:87 },
+  { id:3,  name:"Severo (Pós-Cabeçada)",team:"3E", ovr:71 },
+  { id:4,  name:"Priminho",             team:"3E", ovr:62 },
+  { id:5,  name:"Lucas Graças",         team:"3E", ovr:93 },
+  { id:6,  name:"Marcola",              team:"3E", ovr:67 },
+  { id:7,  name:"Marcola PRIME",        team:"3E", ovr:98 },
+  { id:8,  name:"Samuel",               team:"3E", ovr:80 },
+  { id:9,  name:"Thigas",               team:"3E", ovr:85 },
+  { id:10, name:"Braz (Demônio)",       team:"3F", ovr:99 },
+  { id:11, name:"Braz (Cara de choro)", team:"3F", ovr:83 },
+  { id:12, name:"De Longhi",            team:"3F", ovr:79 },
+  { id:13, name:"Paulino",              team:"3F", ovr:81 },
+  { id:14, name:"Alemão Descalço",      team:"3F", ovr:96 },
+  { id:15, name:"Alemão De Tênis",      team:"3F", ovr:86 },
+  { id:16, name:"Nakashima (DJ)",       team:"3F", ovr:92 },
+  { id:17, name:"Petê",                 team:"3F", ovr:84 },
+  { id:18, name:"Alisson",              team:"3G", ovr:89 },
+  { id:19, name:"Cadu",                 team:"3G", ovr:79 },
+  { id:20, name:"Inacio",               team:"3G", ovr:86 },
+  { id:21, name:"Joás",                 team:"3G", ovr:97 },
+  { id:22, name:"Lins",                 team:"3G", ovr:96 },
+  { id:23, name:"D'addio",              team:"3G", ovr:94 },
+  { id:24, name:"Vitão",                team:"3G", ovr:79 },
+  { id:25, name:"Fellipão",             team:"3H", ovr:79 },
+  { id:26, name:"Gui Costa",            team:"3H", ovr:94 },
+  { id:27, name:"Gui Costa (Sem Ciscar)",team:"3H", ovr:88 },
+  { id:28, name:"Nacarelli",            team:"3H", ovr:92 },
+  { id:29, name:"Guimas",               team:"3H", ovr:34 },
+  { id:30, name:"Guimas (Na Nóia)",     team:"3H", ovr:21 },
+  { id:31, name:"Igor",                 team:"3H", ovr:86 },
+  { id:32, name:"Igor (Intervalo)",     team:"3H", ovr:94 },
+  { id:33, name:"Matheus Bastos",       team:"3H", ovr:79 },
+  { id:34, name:"Makita",               team:"3H", ovr:84 },
+  { id:35, name:"Pedrão",               team:"3H", ovr:79 },
+  { id:36, name:"Frodo",                team:"3H", ovr:85 },
+  { id:37, name:"Pips",                 team:"3H", ovr:83 },
+  { id:38, name:"Ruan",                 team:"3H", ovr:82 },
+  { id:39, name:"Zeba (Pubelgia)",      team:"3H", ovr:89 },
+  { id:40, name:"Zeba (Sem Pubelgia)",  team:"3H", ovr:95 },
+  { id:41, name:"BGG",                  team:"3I", ovr:93 },
+  { id:42, name:"Fefo",                 team:"3I", ovr:94 },
+  { id:43, name:"Bento",                team:"3I", ovr:85 },
+  { id:44, name:"Hallison",             team:"3I", ovr:87 },
+  { id:45, name:"Vargas",               team:"3I", ovr:81 },
+  { id:46, name:"Gueguelas",            team:"3I", ovr:89 },
+  { id:47, name:"Rafinha",              team:"3I", ovr:83 },
+  { id:48, name:"Ryan",                 team:"3I", ovr:89 },
+  { id:49, name:"Koji",                 team:"3I", ovr:84 },
+  { id:50, name:"D'addio (Cabelo Cortado)", team:"3G", ovr:81 },
+  { id:51, name:"Gueguelas (Intertech)",team:"3G", ovr:94 },
+  { id:52, name:"Fefo (Bernoulli JR)",  team:"3H", ovr:97 },
+  { id:53, name:"Pedrão da TI",         team:"TI", ovr:55 },
+  { id:54, name:"Lucca (Pré Apito)",    team:"3E", ovr:85 },
+  { id:55, name:"Davi",                 team:"Bocão", ovr:1 },
+  { id:56, name:"Tuts (Intertech)",     team:"1G", ovr:70 },
+  { id:57, name:"Cadu (Técnico)",       team:"1H", ovr:79 },
+  { id:58, name:"Kaique (Intertech)",   team:"3H", ovr:40 },
+  { id:59, name:"Geladeira",            team:"3I", ovr:77 },
+  { id:60, name:"Paulino (PH Falso)",   team:"3F", ovr:86 },
+  { id:61, name:"Rafinha (Careca)",     team:"Casa da Pedra", ovr:94 },
 ];
 
 const TEAM_NAMES_AWAY = [
@@ -841,6 +895,42 @@ let state = {
   matchEvents: [],
 };
 
+// ===================== RARITY SYSTEM =====================
+// Faixas: Comum (≤79), Raro (80-89), Muito Raro (90-95), Lendário (96+)
+// Peso no draft: Comum aparece mais, Lendário é raro
+function getRarity(ovr) {
+  if (ovr >= 96) return { tier: 'legendary', label: 'Lendário', cssClass: 'tier-legendary', colorClass: 'rarity-legendary' };
+  if (ovr >= 90) return { tier: 'very-rare', label: 'Muito Raro', cssClass: 'tier-very-rare', colorClass: 'rarity-very-rare' };
+  if (ovr >= 80) return { tier: 'rare', label: 'Raro', cssClass: 'tier-rare', colorClass: 'rarity-rare' };
+  return { tier: 'common', label: 'Comum', cssClass: 'tier-common', colorClass: 'rarity-common' };
+}
+
+// Weighted pick: jogadores com raridade alta têm MENOS chance de aparecer
+function getWeight(ovr) {
+  if (ovr >= 96) return 1;   // Lendário — muito difícil
+  if (ovr >= 90) return 3;   // Muito Raro
+  if (ovr >= 80) return 6;   // Raro
+  return 10;                  // Comum — aparece fácil
+}
+
+function weightedSample(players, count) {
+  const pool = [...players];
+  const result = [];
+  for (let i = 0; i < count && pool.length > 0; i++) {
+    const weights = pool.map(p => getWeight(p.ovr));
+    const totalWeight = weights.reduce((s, w) => s + w, 0);
+    let r = Math.random() * totalWeight;
+    let idx = 0;
+    for (idx = 0; idx < weights.length; idx++) {
+      r -= weights[idx];
+      if (r <= 0) break;
+    }
+    result.push(pool[idx]);
+    pool.splice(idx, 1);
+  }
+  return result;
+}
+
 // ===================== HELPERS =====================
 function shuffle(arr) {
   const a = [...arr];
@@ -852,10 +942,7 @@ function shuffle(arr) {
 }
 
 function ovrClass(ovr) {
-  if (ovr >= 93) return 'ovr-elite';
-  if (ovr >= 88) return 'ovr-high';
-  if (ovr >= 84) return 'ovr-mid';
-  return 'ovr-low';
+  return getRarity(ovr).colorClass;
 }
 
 function showScreen(id) {
@@ -891,19 +978,21 @@ function nextDraftRound() {
   state.round++;
   document.getElementById('draftRound').textContent = `RODADA ${state.round} / 5`;
 
-  // pick 6 random from remaining pool
+  // pick 6 from remaining pool using WEIGHTED RARITY
   const available = state.draftPool.filter(p => !state.myPicks.find(pp => pp.id === p.id));
-  state.currentOptions = shuffle(available).slice(0, 6);
+  state.currentOptions = weightedSample(available, 6);
 
   const container = document.getElementById('draftCards');
   container.innerHTML = '';
   container.classList.add('shuffling');
 
   state.currentOptions.forEach((p, i) => {
+    const rarity = getRarity(p.ovr);
     const card = document.createElement('div');
-    card.className = 'player-card';
+    card.className = `player-card ${rarity.cssClass}`;
     card.innerHTML = `
-      <div class="card-ovr ${ovrClass(p.ovr)}">${p.ovr}</div>
+      <span class="rarity-badge ${rarity.tier}">${rarity.label}</span>
+      <div class="card-ovr ${rarity.colorClass}">${p.ovr}</div>
       <div class="card-name">${p.name}</div>
       <div class="card-team">${p.team}</div>
     `;
@@ -1092,6 +1181,11 @@ function startMatch() {
 }
 
 function simulateMatch(home, away, homeAvg, awayAvg) {
+  // identify GKs (the player in GK slot for each team)
+  const homeGK = state.formation.gk;
+  // away GK = first player in their team (random assignment)
+  const awayGK = state.awayTeam[0];
+
   // generate events at random minutes
   const eventMinutes = [];
   const numEvents = 6 + Math.floor(Math.random() * 6); // 6-11 events
@@ -1108,23 +1202,41 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
   // decide events
   const events = eventMinutes.map(min => {
     const r = Math.random();
-    // home chance boosted by ovr advantage
     const homeChance = 0.5 + (homeAvg - awayAvg) * 0.008;
 
-    if (r < 0.55) {
-      // goal attempt
+    if (r < 0.40) {
+      // goal
       const isHome = Math.random() < homeChance;
       const team = isHome ? home : away;
-      const scorer = team[Math.floor(Math.random() * team.length)];
+      // scorers are non-GK field players preferably
+      const nonGK = team.filter(p => p.id !== (isHome ? homeGK : awayGK)?.id);
+      const scorerPool = nonGK.length > 0 ? nonGK : team;
+      const scorer = scorerPool[Math.floor(Math.random() * scorerPool.length)];
       return { min, type: 'goal', isHome, player: scorer };
-    } else if (r < 0.7) {
-      // save
+    } else if (r < 0.52) {
+      // great save — ONLY the GK
+      const isHome = Math.random() < 0.5;
+      const gk = isHome ? homeGK : awayGK;
+      return { min, type: 'save', isHome, player: gk };
+    } else if (r < 0.62) {
+      // frango — ONLY the GK
+      const isHome = Math.random() < 0.5;
+      const gk = isHome ? homeGK : awayGK;
+      return { min, type: 'frango', isHome, player: gk };
+    } else if (r < 0.72) {
+      // bolada na cara
       const isHome = Math.random() < 0.5;
       const team = isHome ? home : away;
-      const keeper = team[Math.floor(Math.random() * team.length)];
-      return { min, type: 'save', isHome, player: keeper };
-    } else if (r < 0.85) {
-      // foul/card
+      const p = team[Math.floor(Math.random() * team.length)];
+      return { min, type: 'bolada', isHome, player: p };
+    } else if (r < 0.82) {
+      // isolou na rua
+      const isHome = Math.random() < homeChance;
+      const team = isHome ? home : away;
+      const p = team[Math.floor(Math.random() * team.length)];
+      return { min, type: 'isolou', isHome, player: p };
+    } else if (r < 0.90) {
+      // card
       const isHome = Math.random() < 0.5;
       const team = isHome ? home : away;
       const p = team[Math.floor(Math.random() * team.length)];
@@ -1166,7 +1278,14 @@ function processMatchEvent(evt) {
   switch (evt.type) {
     case 'goal':
       icon = '⚽';
-      text = `<strong>${evt.player.name}</strong> ${side} marca!`;
+      const goalTexts = [
+        `<strong>${evt.player.name}</strong> ${side} marca! GOLAÇO!`,
+        `<strong>${evt.player.name}</strong> ${side} não perdoa! GOL!`,
+        `<strong>${evt.player.name}</strong> ${side} manda pro fundo da rede!`,
+        `<strong>${evt.player.name}</strong> ${side} amplia! Bola na rede!`,
+        `<strong>${evt.player.name}</strong> ${side} fuzilou o goleiro!`,
+      ];
+      text = goalTexts[Math.floor(Math.random() * goalTexts.length)];
       if (evt.isHome) {
         state.matchGoalsHome++;
         document.getElementById('scoreHome').textContent = state.matchGoalsHome;
@@ -1177,7 +1296,50 @@ function processMatchEvent(evt) {
       break;
     case 'save':
       icon = '🧤';
-      text = `Defesaça de <strong>${evt.player.name}</strong> ${side}`;
+      const saveTexts = [
+        `QUE DEFESAÇA de <strong>${evt.player.name}</strong> ${side}!`,
+        `<strong>${evt.player.name}</strong> ${side} FECHA O GOL! Mão santa!`,
+        `MILAGRE! <strong>${evt.player.name}</strong> ${side} salva o time!`,
+        `<strong>${evt.player.name}</strong> ${side} voa e espalma! Inacreditável!`,
+      ];
+      text = saveTexts[Math.floor(Math.random() * saveTexts.length)];
+      break;
+    case 'frango':
+      icon = '🐔';
+      const frangoTexts = [
+        `<strong>${evt.player.name}</strong> ${side} FRANGOU! Que vergonha!`,
+        `FRANGO! <strong>${evt.player.name}</strong> ${side} deixou passar entre as pernas!`,
+        `<strong>${evt.player.name}</strong> ${side} entregou a bola! FRANGO MONUMENTAL!`,
+        `A bola passou MANSA e <strong>${evt.player.name}</strong> ${side} só olhou!`,
+      ];
+      text = frangoTexts[Math.floor(Math.random() * frangoTexts.length)];
+      // frango = gol pro outro time
+      if (evt.isHome) {
+        state.matchGoalsAway++;
+        document.getElementById('scoreAway').textContent = state.matchGoalsAway;
+      } else {
+        state.matchGoalsHome++;
+        document.getElementById('scoreHome').textContent = state.matchGoalsHome;
+      }
+      break;
+    case 'bolada':
+      icon = '🤕';
+      const boladaTexts = [
+        `<strong>${evt.player.name}</strong> ${side} TOMOU UMA BOLADA NA CARA!`,
+        `BOLADA! <strong>${evt.player.name}</strong> ${side} tá no chão vendo estrelas!`,
+        `<strong>${evt.player.name}</strong> ${side} levou uma bomba na fuça! Aiii!`,
+      ];
+      text = boladaTexts[Math.floor(Math.random() * boladaTexts.length)];
+      break;
+    case 'isolou':
+      icon = '🚀';
+      const isolouTexts = [
+        `<strong>${evt.player.name}</strong> ${side} ISOLOU NA RUA IRINEU JOSÉ BORDON!`,
+        `<strong>${evt.player.name}</strong> ${side} mandou a bola pro estacionamento!`,
+        `<strong>${evt.player.name}</strong> ${side} chutou pra fora do Espaço da Felicidade!`,
+        `ISOLOU! <strong>${evt.player.name}</strong> ${side} mandou na lua!`,
+      ];
+      text = isolouTexts[Math.floor(Math.random() * isolouTexts.length)];
       break;
     case 'yellow':
       icon = '🟨';
@@ -1189,7 +1351,12 @@ function processMatchEvent(evt) {
       break;
     case 'miss':
       icon = '💨';
-      text = `<strong>${evt.player.name}</strong> ${side} desperdiça chance`;
+      const missTexts = [
+        `<strong>${evt.player.name}</strong> ${side} desperdiça chance!`,
+        `<strong>${evt.player.name}</strong> ${side} perdeu gol feito!`,
+        `<strong>${evt.player.name}</strong> ${side} chutou fraco nas mãos do goleiro!`,
+      ];
+      text = missTexts[Math.floor(Math.random() * missTexts.length)];
       break;
   }
 
