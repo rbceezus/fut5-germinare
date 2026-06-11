@@ -603,25 +603,6 @@
     font-weight: 600;
   }
 
-  .pos-tag {
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding: 1px 5px;
-    border-radius: 3px;
-    text-transform: uppercase;
-    margin-top: 2px;
-    display: inline-block;
-  }
-  .pos-tag.gk  { background: rgba(255,215,0,0.15); color: var(--gold); }
-  .pos-tag.zag { background: rgba(59,130,246,0.15); color: var(--blue); }
-  .pos-tag.ata { background: rgba(0,230,118,0.15);  color: var(--accent); }
-
-  .field-slot.pos-buff {
-    border-color: var(--gold) !important;
-    box-shadow: 0 0 14px rgba(255,215,0,0.35);
-  }
-
   .confirm-formation {
     margin-top: 10px;
   }
@@ -910,338 +891,6 @@
       transform: rotate(720deg);
     }
   }
-
-  /* ============ MODE SELECTION ============ */
-  .mode-buttons {
-    display: flex;
-    gap: 24px;
-    margin: 40px 0;
-  }
-
-  .mode-btn {
-    width: 200px;
-    padding: 40px 20px;
-    background: var(--bg-card);
-    border: 2px solid var(--text-muted);
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-family: 'Inter', sans-serif;
-  }
-
-  .mode-btn:hover {
-    border-color: var(--accent);
-    background: var(--bg-card-hover);
-    box-shadow: 0 0 20px var(--accent-glow);
-  }
-
-  .mode-btn-icon {
-    font-size: 48px;
-  }
-
-  .mode-btn-title {
-    font-family: 'Bebas Neue', cursive;
-    font-size: 20px;
-    letter-spacing: 2px;
-    color: var(--text);
-  }
-
-  .mode-btn-desc {
-    font-size: 12px;
-    color: var(--text-muted);
-    text-align: center;
-  }
-
-  /* ============ CHAMPIONSHIP SCREENS ============ */
-  .championship-header {
-    font-family: 'Bebas Neue', cursive;
-    font-size: 28px;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    color: var(--gold);
-  }
-
-  .championship-phase {
-    font-family: 'Bebas Neue', cursive;
-    font-size: 20px;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    color: var(--accent);
-  }
-
-  .groups-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    width: 100%;
-    max-width: 1200px;
-    margin: 20px 0;
-  }
-
-  .group-card {
-    background: var(--bg-card);
-    border: 1px solid rgba(0, 230, 118, 0.2);
-    border-radius: 12px;
-    padding: 16px;
-  }
-
-  .group-title {
-    font-family: 'Bebas Neue', cursive;
-    font-size: 18px;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
-    color: var(--accent);
-  }
-
-  .group-table {
-    width: 100%;
-    font-size: 12px;
-  }
-
-  .group-row {
-    display: grid;
-    grid-template-columns: 1fr 30px 30px 30px 30px 30px;
-    gap: 6px;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    align-items: center;
-  }
-
-  .group-row.header {
-    font-weight: 700;
-    color: var(--text-muted);
-    margin-bottom: 4px;
-  }
-
-  .group-row.player-row {
-    background: rgba(0, 230, 118, 0.05);
-    padding: 8px 6px;
-    border-radius: 6px;
-    margin: 2px 0;
-  }
-
-  .group-team-name {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .group-stat {
-    text-align: center;
-  }
-
-  .standings-table {
-    background: var(--bg-card);
-    border-radius: 12px;
-    padding: 20px;
-    max-width: 600px;
-    width: 100%;
-    margin: 20px 0;
-  }
-
-  .standings-row {
-    display: grid;
-    grid-template-columns: 40px 1fr 50px 50px 50px 50px;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    align-items: center;
-  }
-
-  .standings-row.header {
-    font-weight: 700;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-    font-size: 12px;
-  }
-
-  .standings-pos {
-    text-align: center;
-    font-weight: 700;
-    color: var(--accent);
-  }
-
-  .standings-badge {
-    display: inline-block;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 10px;
-    font-weight: 700;
-    margin-left: 6px;
-  }
-
-  .badge-qualified {
-    background: rgba(0, 230, 118, 0.3);
-    color: var(--accent);
-  }
-
-  .bracket-container {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    padding: 20px;
-    background: var(--bg-card);
-    border-radius: 12px;
-    margin: 20px 0;
-    max-width: 100%;
-  }
-
-  .bracket-round {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    min-width: 200px;
-  }
-
-  .bracket-title {
-    font-family: 'Bebas Neue', cursive;
-    font-size: 14px;
-    letter-spacing: 1px;
-    color: var(--accent);
-    text-align: center;
-    margin-bottom: 10px;
-  }
-
-  .bracket-match {
-    background: rgba(0, 230, 118, 0.1);
-    border: 1px solid rgba(0, 230, 118, 0.3);
-    border-radius: 8px;
-    overflow: hidden;
-    font-size: 12px;
-  }
-
-  .bracket-team {
-    padding: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(0, 230, 118, 0.2);
-  }
-
-  .bracket-team:last-child {
-    border: none;
-  }
-
-  .bracket-team.winner {
-    background: rgba(0, 230, 118, 0.2);
-    color: var(--accent);
-    font-weight: 700;
-  }
-
-  .bracket-team.player {
-    background: rgba(59, 130, 246, 0.1);
-    color: var(--blue);
-  }
-
-  .bracket-team-score {
-    font-weight: 700;
-    min-width: 30px;
-    text-align: right;
-  }
-
-  .championship-matches {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    max-width: 600px;
-    margin: 20px 0;
-  }
-
-  .match-card {
-    background: var(--bg-card);
-    border-radius: 12px;
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: 1px solid rgba(0, 230, 118, 0.1);
-  }
-
-  .match-card:hover {
-    border-color: var(--accent);
-    box-shadow: 0 0 12px var(--accent-glow);
-  }
-
-  .match-card.played {
-    opacity: 0.7;
-  }
-
-  .match-teams {
-    flex: 1;
-  }
-
-  .match-team-line {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 0;
-    font-size: 13px;
-  }
-
-  .match-score {
-    font-weight: 700;
-    color: var(--accent);
-    min-width: 40px;
-    text-align: right;
-  }
-
-  .match-status {
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-
-  .championship-result {
-    text-align: center;
-    font-family: 'Bebas Neue', cursive;
-    font-size: 32px;
-    letter-spacing: 2px;
-    margin: 30px 0;
-    color: var(--gold);
-  }
-
-  .champion-title {
-    font-family: 'Bebas Neue', cursive;
-    font-size: 24px;
-    letter-spacing: 2px;
-    color: var(--gold);
-    margin-bottom: 20px;
-  }
-
-  .champion-stats {
-    background: var(--bg-card);
-    border-radius: 12px;
-    padding: 20px;
-    max-width: 600px;
-    width: 100%;
-  }
-
-  .stat-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 14px;
-  }
-
-  .stat-row:last-child {
-    border: none;
-  }
-
-  .stat-label {
-    color: var(--text-muted);
-  }
-
-  .stat-value {
-    color: var(--accent);
-    font-weight: 700;
-  }
 </style>
 </head>
 <body>
@@ -1251,18 +900,7 @@
   <div class="splash-logo">Fut5 - Germinare</div>
   <div class="splash-sub">Monte sua seleção.</div>
   <div class="splash-venue">Espaço da Felicidade</div>
-  <div class="mode-buttons">
-    <div class="mode-btn" onclick="startDraftSingle()">
-      <div class="mode-btn-icon">⚽</div>
-      <div class="mode-btn-title">JOGO ÚNICO</div>
-      <div class="mode-btn-desc">Uma partida contra um adversário</div>
-    </div>
-    <div class="mode-btn" onclick="startDraftChampionship()">
-      <div class="mode-btn-icon">🏆</div>
-      <div class="mode-btn-title">CAMPEONATO</div>
-      <div class="mode-btn-desc">Copa do Mundo - Grupos, Eliminatórias e Final</div>
-    </div>
-  </div>
+  <button class="btn btn-primary" onclick="startDraft()">Jogar</button>
 </div>
 
 <!-- DRAFT SCREEN -->
@@ -1296,7 +934,6 @@
     <div class="field-slot slot-ar empty" data-pos="ar" data-pos-label="ATA" onclick="placePlayer('ar')"></div>
   </div>
   <div class="bench-area" id="bench"></div>
-  <div id="chemistryBar" style="min-height:28px;text-align:center;font-size:12px;color:var(--text-muted);letter-spacing:1px;"></div>
   <button class="btn btn-primary confirm-formation" id="confirmBtn" onclick="startMatch()" style="display:none;">
     Iniciar Partida
   </button>
@@ -1305,7 +942,7 @@
 <!-- MATCH SCREEN -->
 <div id="match" class="screen">
   <div class="match-venue">Espaço da Felicidade</div>
-  <div class="match-title" id="matchTitle">FINAL</div>
+  <div class="match-title">FINAL</div>
   <div class="scoreboard">
     <div class="team-side">
       <div class="team-name" id="teamHomeName">SEU TIME</div>
@@ -1358,144 +995,98 @@
   <div class="result-score" id="resultScore"></div>
   <div class="result-mvp" id="resultMvp"></div>
   <div class="result-details" id="resultDetails"></div>
-  <div id="resultEvents" class="match-events" style="max-width:700px;"></div><button class="btn btn-primary" onclick="handleMatchResult()">Continuar</button>
+  <div id="resultEvents" class="match-events" style="max-width:700px;"></div><button class="btn btn-primary" onclick="resetGame()">Jogar novamente</button>
 </div>
-
-<!-- CHAMPIONSHIP GROUPS SCREEN -->
-<div id="championship-groups" class="screen">
-  <div class="championship-header">FASE DE GRUPOS</div>
-  <div class="championship-phase" id="groupsPhaseLabel"></div>
-  <div class="groups-container" id="groupsContainer"></div>
-  <div style="display: flex; gap: 12px; margin-top: 20px;">
-    <button class="btn btn-primary" onclick="viewChampionshipStandings()">Ver Classificação</button>
-    <button class="btn btn-primary" onclick="nextGroupsMatch()" id="nextGroupsBtn" style="display:none;">Próxima Partida</button>
-    <button class="btn btn-primary" onclick="proceedToKnockout()" id="proceedBtn" style="display:none;">Ir para Eliminatórias</button>
-  </div>
-</div>
-
-<!-- CHAMPIONSHIP STANDINGS SCREEN -->
-<div id="championship-standings" class="screen">
-  <div class="championship-header">CLASSIFICAÇÃO</div>
-  <div class="standings-table" id="standingsTable"></div>
-  <button class="btn btn-primary" onclick="showScreen('championship-groups')">Voltar</button>
-</div>
-
-<!-- CHAMPIONSHIP KNOCKOUT SCREEN -->
-<div id="championship-knockout" class="screen">
-  <div class="championship-header">ELIMINATÓRIAS</div>
-  <div class="championship-phase" id="knockoutPhaseLabel"></div>
-  <div class="bracket-container" id="bracketContainer"></div>
-  <div style="display: flex; gap: 12px; margin-top: 20px;">
-    <button class="btn btn-primary" onclick="nextKnockoutMatch()" id="nextKnockoutBtn">Próxima Partida</button>
-    <button class="btn btn-primary" onclick="showScreen('championship-groups')" id="backGroupsBtn">Voltar para Grupos</button>
-  </div>
-</div>
-
-<!-- CHAMPIONSHIP CHAMPION SCREEN -->
-<div id="championship-champion" class="screen">
-  <div id="championResult"></div>
-  <button class="btn btn-primary" onclick="resetGame()">Voltar ao Menu</button>
-</div>
-
 
 <script>
 // ===================== MOCK DATA =====================
-// posicao_favorita: 'gk' | 'zag' | 'ata'
-// Buff: +4 OVR se jogado na posição favorita (gk=slot gk, zag=dl/dr, ata=al/ar)
 const ALL_PLAYERS = [
-  { id:1,  name:"Tuts",                 team:"3E", ovr:71, posicao_favorita:"zag"  },
-  { id:2,  name:"Severo",               team:"3E", ovr:87, posicao_favorita:"ata" },
-  { id:3,  name:"Severo (Pós-Cabeçada)",team:"3E", ovr:71, posicao_favorita:"ata" },
-  { id:4,  name:"Priminho",             team:"3E", ovr:62, posicao_favorita:"gk" },
-  { id:5,  name:"Lucas Graças",         team:"3E", ovr:93, posicao_favorita:"gk" },
-  { id:6,  name:"Marcola",              team:"3E", ovr:67, posicao_favorita:"zag" },
-  { id:7,  name:"Marcola (Prime)",      team:"3E", ovr:98, posicao_favorita:"zag" },
-  { id:8,  name:"Samuel",               team:"3E", ovr:80, posicao_favorita:"ata" },
-  { id:9,  name:"Thigas",               team:"3E", ovr:85, posicao_favorita:"ata" },
-  { id:10, name:"Braz (Demônio)",       team:"3F", ovr:99, posicao_favorita:"ata" },
-  { id:11, name:"Braz (Cara de choro)", team:"3F", ovr:83, posicao_favorita:"ata" },
-  { id:12, name:"De Longhi",            team:"3F", ovr:79, posicao_favorita:"zag" },
-  { id:13, name:"Paulino",              team:"3F", ovr:81, posicao_favorita:"zag" },
-  { id:14, name:"Alemão Descalço",      team:"3F", ovr:96, posicao_favorita:"ata" },
-  { id:15, name:"Alemão De Tênis",      team:"3F", ovr:86, posicao_favorita:"ata" },
-  { id:16, name:"Nakashima (DJ)",       team:"3F", ovr:92, posicao_favorita:"ata" },
-  { id:17, name:"Petê",                 team:"3F", ovr:84, posicao_favorita:"ata" },
-  { id:18, name:"Alisson",              team:"3G", ovr:89, posicao_favorita:"ata"  },
-  { id:19, name:"Cadu",                 team:"3G", ovr:79, posicao_favorita:"gk" },
-  { id:20, name:"Inacio",               team:"3G", ovr:86, posicao_favorita:"ata" },
-  { id:21, name:"Joás (Chupeira)",      team:"3G", ovr:95, posicao_favorita:"zag" },
-  { id:22, name:"Lins",                 team:"3G", ovr:92, posicao_favorita:"ata" },
-  { id:23, name:"D'addio",              team:"3G", ovr:90, posicao_favorita:"ata" },
-  { id:24, name:"Vitão",                team:"3G", ovr:79, posicao_favorita:"gk" },
-  { id:25, name:"Fellipão",             team:"3H", ovr:79, posicao_favorita:"gk"  },
-  { id:26, name:"Gui Costa",            team:"3H", ovr:88, posicao_favorita:"ata" },
-  { id:27, name:"Gui Costa (Sem Ciscar)",team:"3H",ovr:82, posicao_favorita:"ata" },
-  { id:28, name:"Nacarelli",            team:"3H", ovr:87, posicao_favorita:"gk" },
-  { id:29, name:"Guimas",               team:"3H", ovr:34, posicao_favorita:"ata" },
-  { id:30, name:"Guimas (Na Nóia)",     team:"3H", ovr:21, posicao_favorita:"ata" },
-  { id:31, name:"Igor",                 team:"3H", ovr:83, posicao_favorita:"zag" },
-  { id:32, name:"Igor (Intervalo)",     team:"3H", ovr:94, posicao_favorita:"ata" },
-  { id:33, name:"Matheus Bastos",       team:"3H", ovr:79, posicao_favorita:"ata" },
-  { id:34, name:"Makita",               team:"3H", ovr:81, posicao_favorita:"gk" },
-  { id:36, name:"Frodo",                team:"3H", ovr:85, posicao_favorita:"gk" },
-  { id:37, name:"Pips",                 team:"3H", ovr:83, posicao_favorita:"zag" },
-  { id:38, name:"Ruan",                 team:"3H", ovr:82, posicao_favorita:"zag" },
-  { id:39, name:"Zeba (Pubalgia)",      team:"3H", ovr:89, posicao_favorita:"ata" },
-  { id:40, name:"Zeba (Sem Pubalgia)",  team:"3H", ovr:96, posicao_favorita:"ata" },
-  { id:41, name:"BGG",                  team:"3I", ovr:93, posicao_favorita:"ata" },
-  { id:42, name:"Fefo",                 team:"3I", ovr:91, posicao_favorita:"ata" },
-  { id:43, name:"Bento",                team:"3I", ovr:85, posicao_favorita:"zag" },
-  { id:44, name:"Hallison",             team:"3I", ovr:87, posicao_favorita:"zag"  },
-  { id:45, name:"Vargas",               team:"3I", ovr:81, posicao_favorita:"ata" },
-  { id:46, name:"Gueguelas",            team:"3I", ovr:87, posicao_favorita:"zag" },
-  { id:47, name:"Rafinha",              team:"3I", ovr:80, posicao_favorita:"ata" },
-  { id:48, name:"Ryan",                 team:"3I", ovr:84, posicao_favorita:"ata" },
-  { id:49, name:"Koji",                 team:"3I", ovr:84, posicao_favorita:"ata" },
-  { id:50, name:"D'addio (Cabelo Cortado)", team:"3G", ovr:81, posicao_favorita:"gk" },
-  { id:51, name:"Gueguelas (Intertech)",team:"3G", ovr:94, posicao_favorita:"zag" },
-  { id:52, name:"Fefo (Bernoulli JR)",  team:"3H", ovr:97, posicao_favorita:"ata" },
-  { id:53, name:"Pedrão da TI",         team:"TI", ovr:55, posicao_favorita:"zag"  },
-  { id:54, name:"Lucca (Pré Apito)",    team:"3E", ovr:85, posicao_favorita:"ata" },
-  { id:55, name:"Davi",                 team:"1E", ovr:1, posicao_favorita:"gk" },
-  { id:56, name:"Tuts (Intertech)",     team:"1G", ovr:70, posicao_favorita:"zag"  },
-  { id:57, name:"Cadu (Técnico)",       team:"1H", ovr:79, posicao_favorita:"zag" },
-  { id:58, name:"Kaique (Intertech)",   team:"3H", ovr:40, posicao_favorita:"ata" },
-  { id:59, name:"Geladeira",            team:"3I", ovr:77, posicao_favorita:"gk"  },
-  { id:60, name:"Paulino (PH Falso)",   team:"3F", ovr:86, posicao_favorita:"zag" },
-  { id:62, name:"Bento (Prime)",        team:"2I", ovr:90, posicao_favorita:"zag" },
-  { id:63, name:"Nakashima (Baseball)", team:"3F", ovr:93, posicao_favorita:"ata" },
-  { id:64, name:"Guegs (Atacadao)",     team:"1H", ovr:60, posicao_favorita:"gk" },
-  { id:66, name:"Vargas (Careca)",      team:"3H", ovr:78, posicao_favorita:"zag" },
-  { id:68, name:"Guimas (Middle Part)", team:"3H", ovr:45, posicao_favorita:"gk" },
-  { id:69, name:"Frodo (Hérnia)",       team:"3H", ovr:40, posicao_favorita:"gk" },
-  { id:70, name:"Taxiotti (Barbudo)",   team:"TI", ovr:60, posicao_favorita:"ata" },
-  { id:71, name:"Rafinha (Careca)",     team:"3I", ovr:94, posicao_favorita:"ata" },
-  { id:72, name:"Everton (Van)",        team:"Leva e Traz", ovr:94, posicao_favorita:"zag" },
-  { id:73, name:"Hermithão (TI)",       team:"TI", ovr:82, posicao_favorita:"gk"  },
-  { id:74, name:"Patrick",              team:"TI", ovr:69, posicao_favorita:"ata" },
-  { id:75, name:"Hobert (Várzea)",      team:"Professores", ovr:82, posicao_favorita:"ata" },
-  { id:76, name:"Hobert (Fatiada)",     team:"Professores", ovr:96, posicao_favorita:"ata" },
-  { id:77, name:"João Jonas",           team:"Professores", ovr:81, posicao_favorita:"ata" },
+  { id:1,  name:"Tuts",                 team:"3E", ovr:71 },
+  { id:2,  name:"Severo",               team:"3E", ovr:87 },
+  { id:3,  name:"Severo (Pós-Cabeçada)",team:"3E", ovr:71 },
+  { id:4,  name:"Priminho",             team:"3E", ovr:62 },
+  { id:5,  name:"Lucas Graças",         team:"3E", ovr:93 },
+  { id:6,  name:"Marcola",              team:"3E", ovr:67 },
+  { id:7,  name:"Marcola (Prime)",      team:"3E", ovr:98 },
+  { id:8,  name:"Samuel",               team:"3E", ovr:80 },
+  { id:9,  name:"Thigas",               team:"3E", ovr:85 },
+  { id:10, name:"Braz (Demônio)",       team:"3F", ovr:99 },
+  { id:11, name:"Braz (Cara de choro)", team:"3F", ovr:83 },
+  { id:12, name:"De Longhi",            team:"3F", ovr:79 },
+  { id:13, name:"Paulino",              team:"3F", ovr:81 },
+  { id:14, name:"Alemão Descalço",      team:"3F", ovr:96 },
+  { id:15, name:"Alemão De Tênis",      team:"3F", ovr:86 },
+  { id:16, name:"Nakashima (DJ)",       team:"3F", ovr:92 },
+  { id:17, name:"Petê",                 team:"3F", ovr:84 },
+  { id:18, name:"Alisson",              team:"3G", ovr:89 },
+  { id:19, name:"Cadu",                 team:"3G", ovr:79 },
+  { id:20, name:"Inacio",               team:"3G", ovr:86 },
+  { id:21, name:"Joás (Chupeira)",      team:"3G", ovr:95 },
+  { id:22, name:"Lins",                 team:"3G", ovr:92 },
+  { id:23, name:"D'addio",              team:"3G", ovr:90 },
+  { id:24, name:"Vitão",                team:"3G", ovr:79 },
+  { id:25, name:"Fellipão",             team:"3H", ovr:79 },
+  { id:26, name:"Gui Costa",            team:"3H", ovr:88 },
+  { id:27, name:"Gui Costa (Sem Ciscar)",team:"3H", ovr:82 },
+  { id:28, name:"Nacarelli",            team:"3H", ovr:87 },
+  { id:29, name:"Guimas",               team:"3H", ovr:34 },
+  { id:30, name:"Guimas (Na Nóia)",     team:"3H", ovr:21 },
+  { id:31, name:"Igor",                 team:"3H", ovr:83 },
+  { id:32, name:"Igor (Intervalo)",     team:"3H", ovr:94 },
+  { id:33, name:"Matheus Bastos",       team:"3H", ovr:79 },
+  { id:34, name:"Makita",               team:"3H", ovr:81 },
+  { id:35, name:"RENATO BARROS",        team:"PicPay", ovr:99 },
+  { id:36, name:"Frodo",                team:"3H", ovr:85 },
+  { id:37, name:"Pips",                 team:"3H", ovr:83 },
+  { id:38, name:"Ruan",                 team:"3H", ovr:82 },
+  { id:39, name:"Zeba (Pubalgia)",      team:"3H", ovr:89 },
+  { id:40, name:"Zeba (Sem Pubalgia)",  team:"3H", ovr:96 },
+  { id:41, name:"BGG",                  team:"3I", ovr:93 },
+  { id:42, name:"Fefo",                 team:"3I", ovr:91 },
+  { id:43, name:"Bento",                team:"3I", ovr:85 },
+  { id:44, name:"Hallison",             team:"3I", ovr:87 },
+  { id:45, name:"Vargas",               team:"3I", ovr:81 },
+  { id:46, name:"Gueguelas",            team:"3I", ovr:87 },
+  { id:47, name:"Rafinha",              team:"3I", ovr:80 },
+  { id:48, name:"Ryan",                 team:"3I", ovr:84 },
+  { id:49, name:"Koji",                 team:"3I", ovr:84 },
+  { id:50, name:"D'addio (Cabelo Cortado)", team:"3G", ovr:81 },
+  { id:51, name:"Gueguelas (Intertech)",team:"3G", ovr:94 },
+  { id:52, name:"Fefo (Bernoulli JR)",  team:"3H", ovr:97 },
+  { id:53, name:"Pedrão da TI",         team:"TI", ovr:55 },
+  { id:54, name:"Lucca (Pré Apito)",    team:"3E", ovr:85 },
+  { id:55, name:"Davi",                 team:"Bocão", ovr:1 },
+  { id:56, name:"Tuts (Intertech)",     team:"1G", ovr:70 },
+  { id:57, name:"Cadu (Técnico)",       team:"1H", ovr:79 },
+  { id:58, name:"Kaique (Intertech)",   team:"3H", ovr:40 },
+  { id:59, name:"Geladeira",            team:"3I", ovr:77 },
+  { id:60, name:"Paulino (PH Falso)",   team:"3F", ovr:86 },
+  { id:62, name:"Bento (Prime)",        team:"Jumentos", ovr:90 },
+  { id:63, name:"Nakashima (Baseball)", team:"Sp.Giants", ovr:93 },
+  { id:64, name:"Guegs (Atacadao)",     team:"Atacadão", ovr:60 },
+  { id:66, name:"Vargas (Careca)",      team:"3H", ovr:78 },
+  { id:68, name:"Guimas (Middle Part)", team:"3H", ovr:45 },
+  { id:69, name:"Frodo (Hérnia)",       team:"3H", ovr:40 },
+  { id:70, name:"Taxiotti (Barbudo)",   team:"Workspace JF", ovr:60 },
+  { id:71, name:"Rafinha (Careca)",     team:"Casa da Pedra", ovr:94 },
+  { id:72, name:"Everton (Van)",        team:"Leva e Traz", ovr:94 },
+  { id:73, name:"Hermithão (TI)",       team:"VIX", ovr:82 },
+  { id:74, name:"Patrick",              team:"DEPSE", ovr:69 },
+
 ];
 
 const TEAM_NAMES_AWAY = [
-  "Último Lance FC", "Casa da Pedra", "Sim Sim Sim?", "Mesa do Pagode", "Força Jovem", "Git Bash", "Atende Play", "Jumentos FC", "Roldão Atacadista", "Quadrilha FC", "Canil"
+  "Último Lance FC", "Casa Pedra", "Sim Sim Sim?", "Mesa do Pagode", "Força Jovem", "Git Bash", "Atende Play"
 ];
 
 // ===================== STATE =====================
 let state = {
-  // Modo de jogo
-  gameMode: 'single', // 'single' ou 'championship'
-  
-  // Draft
   round: 0,
   myPicks: [],
   draftPool: [],
   currentOptions: [],
   selectedBenchPlayer: null,
   formation: { gk: null, dl: null, dr: null, al: null, ar: null },
-  
-  // Match
   awayTeam: [],
   matchGoalsHome: 0,
   matchGoalsAway: 0,
@@ -1505,33 +1096,7 @@ let state = {
   redCards: new Set(),
   penalties: null,
   penState: null,
-  awayName: '',
-  
-  // Championship
-  championship: {
-    groups: [], // Array de grupos
-    playerGroup: null,
-    playerTeamName: 'Sua Seleção',
-    groupMatches: [], // Partidas da fase de grupos
-    groupMatchIndex: 0, // Qual partida está jogando agora
-    groupStats: {}, // Stats por time na fase de grupos
-    knockoutBracket: {}, // Tabela de eliminatórias
-    knockoutMatches: [], // Partidas eliminatórias
-    knockoutMatchIndex: 0,
-    currentPhase: 'groups', // 'groups', 'knockout', 'final'
-    currentRound: '8-avos', // '8-avos', '4-avos', 'semis', 'final'
-    champion: null,
-    statsTotal: { wins: 0, draws: 0, losses: 0, goalsFor: 0, goalsAgainst: 0 }
-  }
 };
-
-// ===================== DATA VALIDATION =====================
-// Garantir que nenhum jogador tenha overall <= 0
-ALL_PLAYERS.forEach(player => {
-  if (!player.ovr || player.ovr <= 0) {
-    player.ovr = Math.max(1, player.ovr || 1);
-  }
-});
 
 // ===================== RARITY SYSTEM =====================
 // Faixas: Comum (≤79), Raro (80-89), Muito Raro (90-95), Lendário (96+)
@@ -1591,1015 +1156,6 @@ function showScreen(id) {
 function avgOvr(players) {
   if (!players.length) return 0;
   return Math.round(players.reduce((s, p) => s + p.ovr, 0) / players.length);
-}
-
-// ===================== CHEMISTRY & BUFF SYSTEMS =====================
-
-// Mapeamento posicao_favorita → slots no campo
-const POS_SLOTS = { gk: ['gk'], zag: ['dl','dr'], ata: ['al','ar'] };
-
-// Retorna o OVR efetivo de um jogador numa determinada slot (com buff de posição)
-function effectiveOvr(player, slot) {
-  if (!player) return 0;
-  const posSlots = POS_SLOTS[player.posicao_favorita] || [];
-  const posBuff = posSlots.includes(slot) ? 4 : 0;
-  return Math.min(99, player.ovr + posBuff);
-}
-
-// Calcula bônus de entrosamento para um array de jogadores (do mesmo time)
-// +2 OVR médio por par de jogadores com o mesmo time (máx +8)
-function chemistryBonus(players) {
-  const teamCount = {};
-  players.forEach(p => { if (p) teamCount[p.team] = (teamCount[p.team] || 0) + 1; });
-  let pairs = 0;
-  Object.values(teamCount).forEach(c => { pairs += Math.floor(c * (c - 1) / 2); });
-  return Math.min(8, pairs * 2); // cada par = +2 OVR médio, máx +8
-}
-
-// Retorna info de entrosamento para exibir na tela de formação
-function getChemistryInfo(formation) {
-  const players = Object.values(formation).filter(Boolean);
-  const bonus = chemistryBonus(players);
-  const teamCount = {};
-  players.forEach(p => { teamCount[p.team] = (teamCount[p.team] || 0) + 1; });
-  const combos = Object.entries(teamCount)
-    .filter(([,c]) => c > 1)
-    .map(([t,c]) => `${c}x ${t}`);
-  return { bonus, combos };
-}
-
-// Calcula nota de desempenho (1-10) para cada jogador ao final da partida
-function calcPlayerRating(player, isHome) {
-  const goals = state.playerGoals[player.id] || 0;
-  const assists = state.playerAssists[player.id] || 0;
-  const teamWon = isHome
-    ? (state.penalties ? state.penalties.winner === 'home' : state.matchGoalsHome > state.matchGoalsAway)
-    : (state.penalties ? state.penalties.winner === 'away' : state.matchGoalsAway > state.matchGoalsHome);
-  const drew = !state.penalties && state.matchGoalsHome === state.matchGoalsAway;
-
-  // Base pela qualidade (OVR) + contribuição da partida
-  let base = 4.5 + (player.ovr - 50) * 0.04; // OVR 50→4.5, OVR 99→6.5
-  base += goals * 1.5;
-  base += assists * 0.8;
-  if (teamWon) base += 0.8;
-  if (drew) base += 0.2;
-  // Aleatoriedade pequena ±0.5
-  base += (Math.random() - 0.5);
-  return Math.min(10, Math.max(1, Math.round(base * 10) / 10));
-}
-
-function ratingColor(r) {
-  if (r >= 8.5) return '#ffd700';
-  if (r >= 7.0) return '#00e676';
-  if (r >= 5.5) return '#94a3b8';
-  return '#ef4444';
-}
-
-// ===================== SPLASH → DRAFT =====================
-function startDraftSingle() {
-  state.gameMode = 'single';
-  startDraft();
-}
-
-function startDraftChampionship() {
-  state.gameMode = 'championship';
-  startDraft();
-}
-
-// ===================== CHAMPIONSHIP GENERATION =====================
-function generateChampionship() {
-  const champ = state.championship;
-  
-  // Usar apenas jogadores que não estão no meu time
-  const used = new Set(state.myPicks.map(p => p.id));
-  const available = ALL_PLAYERS.filter(p => !used.has(p.id));
-  
-  // Criar 8 grupos com 4 times aleatórios cada
-  champ.groups = [];
-  const shuffled = shuffle(available);
-  
-  // Embaralhar nomes de times para garantir diversidade
-  const usedTeamNames = new Set();
-  const availableTeamNames = shuffle([...TEAM_NAMES_AWAY]);
-  let teamNameIndex = 0;
-  
-  // Controlar quais jogadores já foram atribuídos aos times
-  let playerIndex = 0;
-  
-  for (let g = 0; g < 8; g++) {
-    const group = {
-      id: String.fromCharCode(65 + g), // A, B, C, D, ...
-      teams: Array.from({length: 4}).map((_, idx) => {
-        let teamName;
-        // Pegar próximo nome disponível
-        while (teamNameIndex < availableTeamNames.length && usedTeamNames.has(availableTeamNames[teamNameIndex])) {
-          teamNameIndex++;
-        }
-        // Se passou de todos, reembaralhar e recomeçar
-        if (teamNameIndex >= availableTeamNames.length) {
-          availableTeamNames.push(...shuffle([...TEAM_NAMES_AWAY]));
-        }
-        teamName = availableTeamNames[teamNameIndex];
-        usedTeamNames.add(teamName);
-        teamNameIndex++;
-        
-        // Pegar 5 jogadores sequenciais do pool
-        let teamPlayers = shuffled.slice(playerIndex, playerIndex + 5);
-        
-        // Se não temos 5 jogadores, reabastecer o pool
-        if (teamPlayers.length < 5) {
-          const remainingNeeded = 5 - teamPlayers.length;
-          const extraPlayers = shuffle(ALL_PLAYERS).slice(0, remainingNeeded);
-          teamPlayers.push(...extraPlayers);
-        }
-        
-        // Garantir exatamente 5 jogadores
-        teamPlayers = teamPlayers.slice(0, 5);
-        
-        // Garantir que nenhum jogador tenha overall <= 0
-        teamPlayers = teamPlayers.map(p => ({
-          ...p,
-          ovr: Math.max(1, p.ovr || 1)
-        }));
-        
-        playerIndex += 5;
-        
-        return {
-          name: teamName,
-          players: teamPlayers,
-          points: 0,
-          wins: 0,
-          draws: 0,
-          losses: 0,
-          goalsFor: 0,
-          goalsAgainst: 0,
-          isPlayer: false
-        };
-      })
-    };
-    champ.groups.push(group);
-  }
-  
-  // Encontrar grupo do jogador (aleatório)
-  const playerGroupIdx = Math.floor(Math.random() * 8);
-  const playerGroup = champ.groups[playerGroupIdx];
-  
-  // Substituir um time aleatório do grupo pelo time do jogador
-  const replaceIdx = Math.floor(Math.random() * 4);
-  playerGroup.teams[replaceIdx] = {
-    name: 'Sua Seleção',
-    players: state.myPicks,
-    points: 0,
-    wins: 0,
-    draws: 0,
-    losses: 0,
-    goalsFor: 0,
-    goalsAgainst: 0,
-    isPlayer: true
-  };
-  
-  champ.playerGroup = playerGroupIdx;
-  champ.playerTeamName = 'Sua Seleção';
-  
-  // Gerar calendário de partidas da fase de grupos
-  // Cada grupo: 4 times, cada time joga contra os outros 3 (total 6 partidas por grupo)
-  champ.groupMatches = [];
-  champ.groupStats = {};
-  
-  // Criar partidas para TODOS os 8 grupos
-  champ.groups.forEach((group, groupIdx) => {
-    group.teams.forEach((team, idx) => {
-      if (!champ.groupStats[team.name]) {
-        champ.groupStats[team.name] = { ...team };
-      }
-    });
-    
-    // Criar partidas: cada time vs cada outro time do grupo
-    for (let t1 = 0; t1 < 4; t1++) {
-      for (let t2 = t1 + 1; t2 < 4; t2++) {
-        const match = {
-          group: group.id,
-          team1: group.teams[t1],
-          team2: group.teams[t2],
-          score1: null,
-          score2: null,
-          played: false,
-          isPlayerMatch: group.teams[t1].isPlayer || group.teams[t2].isPlayer
-        };
-        champ.groupMatches.push(match);
-      }
-    }
-  });
-  
-  champ.groupMatchIndex = 0;
-  champ.currentPhase = 'groups';
-}
-
-function nextGroupsMatch() {
-  const champ = state.championship;
-  const currentMatchIdx = champ.groupMatchIndex;
-  
-  // Encontrar próxima partida do jogador
-  let nextPlayerMatch = -1;
-  for (let i = currentMatchIdx; i < champ.groupMatches.length; i++) {
-    if (champ.groupMatches[i].isPlayerMatch && !champ.groupMatches[i].played) {
-      nextPlayerMatch = i;
-      break;
-    }
-  }
-  
-  if (nextPlayerMatch === -1) {
-    // Todos os jogos do jogador foram feitos
-    // Simular todos os outros jogos
-    champ.groupMatches.forEach((match, idx) => {
-      if (!match.isPlayerMatch && !match.played) {
-        simulateAIMatch(match);
-      }
-    });
-    
-    // Sincronizar dados dos times com os grupos (em caso de desincronização)
-    champ.groups.forEach(group => {
-      group.teams.forEach(team => {
-        // Recalcular pontos e stats baseado nas partidas
-        const relevantMatches = champ.groupMatches.filter(m => 
-          (m.team1 === team || m.team2 === team) && m.played
-        );
-        
-        // Resetar stats
-        team.points = 0;
-        team.wins = 0;
-        team.draws = 0;
-        team.losses = 0;
-        team.goalsFor = 0;
-        team.goalsAgainst = 0;
-        
-        // Recalcular
-        relevantMatches.forEach(match => {
-          const isTeam1 = match.team1 === team;
-          const score1 = match.score1;
-          const score2 = match.score2;
-          
-          if (isTeam1) {
-            team.goalsFor += score1;
-            team.goalsAgainst += score2;
-            if (score1 > score2) {
-              team.wins++;
-              team.points += 3;
-            } else if (score1 < score2) {
-              team.losses++;
-            } else {
-              team.draws++;
-              team.points += 1;
-            }
-          } else {
-            team.goalsFor += score2;
-            team.goalsAgainst += score1;
-            if (score2 > score1) {
-              team.wins++;
-              team.points += 3;
-            } else if (score2 < score1) {
-              team.losses++;
-            } else {
-              team.draws++;
-              team.points += 1;
-            }
-          }
-        });
-      });
-    });
-    
-    proceedToKnockout();
-    return;
-  }
-  
-  champ.groupMatchIndex = nextPlayerMatch;
-  playGroupsMatch();
-}
-
-function playGroupsMatch() {
-  const champ = state.championship;
-  const match = champ.groupMatches[champ.groupMatchIndex];
-  
-  // Definir times para a partida - sempre eu vs o outro time
-  const opponent = match.team1.isPlayer ? match.team2 : match.team1;
-  state.awayTeam = opponent.players;
-  state.awayName = opponent.name;
-  
-  // Montar meu time na formação
-  const homePlayers = Object.values(state.formation);
-  const homeAvg = avgOvr(homePlayers);
-  const awayAvg = avgOvr(state.awayTeam);
-  
-  state.matchGoalsHome = 0;
-  state.matchGoalsAway = 0;
-  state.matchEvents = [];
-  state.playerGoals = {};
-  state.playerAssists = {};
-  state.redCards = new Set();
-  state.penalties = null;
-  state.penState = null;
-  
-  document.getElementById('matchTitle').textContent = `FASE DE GRUPOS - GRUPO ${match.group}`;
-  document.getElementById('teamHomeName').textContent = 'SEU TIME';
-  document.getElementById('teamAwayName').textContent = state.awayName;
-  document.getElementById('teamHomeOvr').textContent = `OVR ${homeAvg}`;
-  document.getElementById('teamAwayOvr').textContent = `OVR ${awayAvg}`;
-  document.getElementById('scoreHome').textContent = '0';
-  document.getElementById('scoreAway').textContent = '0';
-  document.getElementById('matchEvents').innerHTML = '';
-  document.getElementById('matchProgress').style.width = '0%';
-  
-  showScreen('match');
-  simulateMatch(homePlayers, state.awayTeam, homeAvg, awayAvg);
-}
-
-function simulateAIMatch(match) {
-  // Simular um jogo entre dois times de IA
-  const team1Avg = avgOvr(match.team1.players);
-  const team2Avg = avgOvr(match.team2.players);
-  
-  // Usar a mesma simulação mas sem mostrar na tela
-  const homeAvg = team1Avg;
-  const awayAvg = team2Avg;
-  
-  // Probabilidade de gol
-  function ovrFactor(ovr) { return (Math.max(1, ovr) - 1) / 98; }
-  function goalProb(scorer, gk) {
-    const attackBonus = ovrFactor(scorer.ovr) * 0.22;
-    const gkPenalty = (1 - ovrFactor(gk ? gk.ovr : 70)) * 0.15;
-    return 0.28 + attackBonus + gkPenalty;
-  }
-  
-  // Simular eventos
-  let homeGoals = 0, awayGoals = 0;
-  const numEvents = 12 + Math.floor(Math.random() * 8);
-  
-  for (let i = 0; i < numEvents; i++) {
-    const isHome = Math.random() < 0.5;
-    const attackTeam = isHome ? match.team1.players : match.team2.players;
-    const defendGK = isHome ? (match.team2.players[0] || match.team2.players[0]) : (match.team1.players[0] || match.team1.players[0]);
-    
-    const scorerPool = attackTeam.filter((p, idx) => idx !== 0);
-    if (scorerPool.length > 0 && Math.random() < 0.25) {
-      const totalOvr = scorerPool.reduce((s, p) => s + p.ovr, 0);
-      let scorer = scorerPool[0];
-      
-      if (totalOvr > 0) {
-        let rw = Math.random() * totalOvr;
-        for (const p of scorerPool) {
-          rw -= p.ovr;
-          if (rw <= 0) { scorer = p; break; }
-        }
-      } else {
-        scorer = scorerPool[Math.floor(Math.random() * scorerPool.length)];
-      }
-      
-      if (Math.random() < goalProb(scorer, defendGK)) {
-        if (isHome) homeGoals++;
-        else awayGoals++;
-      }
-    }
-  }
-  
-  // Registrar resultado
-  match.score1 = homeGoals;
-  match.score2 = awayGoals;
-  match.played = true;
-  updateGroupStats(match);
-}
-
-function updateGroupStats(match) {
-  const champ = state.championship;
-  const team1 = match.team1;
-  const team2 = match.team2;
-  
-  team1.goalsFor += match.score1;
-  team1.goalsAgainst += match.score2;
-  team2.goalsFor += match.score2;
-  team2.goalsAgainst += match.score1;
-  
-  if (match.score1 > match.score2) {
-    team1.wins++;
-    team1.points += 3;
-    team2.losses++;
-  } else if (match.score1 < match.score2) {
-    team2.wins++;
-    team2.points += 3;
-    team1.losses++;
-  } else {
-    team1.draws++;
-    team1.points += 1;
-    team2.draws++;
-    team2.points += 1;
-  }
-}
-
-function proceedToKnockout() {
-  const champ = state.championship;
-  
-  // Classificar cada grupo
-  const winners = [];
-  const runnerUps = [];
-  
-  champ.groups.forEach(group => {
-    const sorted = [...group.teams].sort((a, b) => {
-      if (b.points !== a.points) return b.points - a.points;
-      if ((b.goalsFor - b.goalsAgainst) !== (a.goalsFor - a.goalsAgainst))
-        return (b.goalsFor - b.goalsAgainst) - (a.goalsFor - a.goalsAgainst);
-      return b.goalsFor - a.goalsFor;
-    });
-    
-    winners.push(sorted[0]);
-    runnerUps.push(sorted[1]);
-  });
-  
-  // Verificar se o jogador se classificou
-  let playerQualified = false;
-  winners.forEach(team => {
-    if (team.isPlayer) playerQualified = true;
-  });
-  runnerUps.forEach(team => {
-    if (team.isPlayer) playerQualified = true;
-  });
-  
-  if (!playerQualified) {
-    // Jogador foi eliminado - mostrar resultado
-    showChampionEliminated();
-    return;
-  }
-  
-  // Montar bracket de eliminatórias (oitavas de final)
-  // 1º lugar do grupo A vs 2º lugar do grupo B
-  // 1º lugar do grupo B vs 2º lugar do grupo A
-  // ... e assim por diante
-  
-  champ.knockoutMatches = [];
-  champ.knockoutBracket = { '8-avos': [], 'quartas': [], 'semis': [], 'final': [] };
-  champ.currentRound = '8-avos';
-  
-  // Criar oitavas
-  for (let i = 0; i < 4; i++) {
-    champ.knockoutMatches.push({
-      round: '8-avos',
-      team1: winners[i],
-      team2: runnerUps[i + 4],
-      score1: null,
-      score2: null,
-      played: false
-    });
-    champ.knockoutMatches.push({
-      round: '8-avos',
-      team1: winners[i + 4],
-      team2: runnerUps[i],
-      score1: null,
-      score2: null,
-      played: false
-    });
-  }
-  
-  champ.knockoutMatchIndex = 0;
-  champ.currentPhase = 'knockout';
-  
-  showScreen('championship-knockout');
-  renderKnockoutBracket();
-}
-
-function renderKnockoutBracket() {
-  const champ = state.championship;
-  const container = document.getElementById('bracketContainer');
-  container.innerHTML = '';
-  
-  // Agrupar partidas por rodada
-  const rounds = {};
-  const roundLabels = { '8-avos': 'OITAVAS', 'quartas': 'QUARTAS', 'semis': 'SEMIFINAL', 'final': 'FINAL' };
-  
-  champ.knockoutMatches.forEach(match => {
-    if (!rounds[match.round]) rounds[match.round] = [];
-    rounds[match.round].push(match);
-  });
-  
-  // Renderizar
-  const roundOrder = ['8-avos', 'quartas', 'semis', 'final'];
-  roundOrder.forEach(round => {
-    if (rounds[round] && rounds[round].length > 0) {
-      const roundDiv = document.createElement('div');
-      roundDiv.className = 'bracket-round';
-      
-      const title = document.createElement('div');
-      title.className = 'bracket-title';
-      title.textContent = roundLabels[round];
-      roundDiv.appendChild(title);
-      
-      rounds[round].forEach(match => {
-        const matchDiv = document.createElement('div');
-        matchDiv.className = 'bracket-match';
-        
-        const team1Div = document.createElement('div');
-        team1Div.className = `bracket-team ${match.played && match.score1 > match.score2 ? 'winner' : ''} ${match.team1.isPlayer ? 'player' : ''}`;
-        team1Div.innerHTML = `
-          <span>${match.team1.name}</span>
-          <span class="bracket-team-score">${match.played ? match.score1 : '-'}</span>
-        `;
-        matchDiv.appendChild(team1Div);
-        
-        const team2Div = document.createElement('div');
-        team2Div.className = `bracket-team ${match.played && match.score2 > match.score1 ? 'winner' : ''} ${match.team2.isPlayer ? 'player' : ''}`;
-        team2Div.innerHTML = `
-          <span>${match.team2.name}</span>
-          <span class="bracket-team-score">${match.played ? match.score2 : '-'}</span>
-        `;
-        matchDiv.appendChild(team2Div);
-        
-        roundDiv.appendChild(matchDiv);
-      });
-      
-      container.appendChild(roundDiv);
-    }
-  });
-}
-
-function nextKnockoutMatch() {
-  const champ = state.championship;
-  
-  // Verificar se o jogador tem uma partida já jogada nesta rodada
-  const playerMatchThisRound = champ.knockoutMatches.find(m => 
-    m.round === champ.currentRound && 
-    m.played && 
-    (m.team1.isPlayer || m.team2.isPlayer)
-  );
-  
-  // Se sim, verificar se o jogador perdeu
-  if (playerMatchThisRound) {
-    const playerWon = playerMatchThisRound.team1.isPlayer 
-      ? playerMatchThisRound.score1 > playerMatchThisRound.score2
-      : playerMatchThisRound.score2 > playerMatchThisRound.score1;
-    
-    if (!playerWon) {
-      // Jogador foi eliminado
-      showChampionEliminated();
-      return;
-    }
-  }
-  
-  // Encontrar próxima partida do jogador não jogada
-  let nextPlayerMatch = -1;
-  for (let i = 0; i < champ.knockoutMatches.length; i++) {
-    const match = champ.knockoutMatches[i];
-    if (!match.played && (match.team1.isPlayer || match.team2.isPlayer)) {
-      nextPlayerMatch = i;
-      break;
-    }
-  }
-  
-  if (nextPlayerMatch === -1) {
-    // Simular todas as outras partidas da rodada atual
-    const currentRoundLabel = champ.currentRound;
-    let playerWon = false;
-    
-    champ.knockoutMatches.forEach(match => {
-      if (match.round === currentRoundLabel && !match.played) {
-        simulateKnockoutMatch(match);
-        if (match.team1.isPlayer && match.score1 > match.score2) playerWon = true;
-        if (match.team2.isPlayer && match.score2 > match.score1) playerWon = true;
-      }
-    });
-    
-    if (!playerWon) {
-      // Jogador foi eliminado
-      showChampionEliminated();
-      return;
-    }
-    
-    // Preparar próxima rodada
-    advanceKnockout();
-    renderKnockoutBracket();
-    return;
-  }
-  
-  champ.knockoutMatchIndex = nextPlayerMatch;
-  playKnockoutMatch();
-}
-
-function playKnockoutMatch() {
-  const champ = state.championship;
-  const match = champ.knockoutMatches[champ.knockoutMatchIndex];
-  
-  // Definir times
-  const isPlayerTeam1 = match.team1.isPlayer;
-  state.awayTeam = isPlayerTeam1 ? match.team2.players : match.team1.players;
-  state.awayName = isPlayerTeam1 ? match.team2.name : match.team1.name;
-  
-  const homePlayers = Object.values(state.formation);
-  const homeAvg = avgOvr(homePlayers);
-  const awayAvg = avgOvr(state.awayTeam);
-  
-  state.matchGoalsHome = 0;
-  state.matchGoalsAway = 0;
-  state.matchEvents = [];
-  state.playerGoals = {};
-  state.playerAssists = {};
-  state.redCards = new Set();
-  state.penalties = null;
-  state.penState = null;
-  
-  // Mapear nome da rodada
-  const roundLabels = { '8-avos': 'OITAVAS', 'quartas': 'QUARTAS', 'semis': 'SEMIFINAL', 'final': 'FINAL' };
-  document.getElementById('matchTitle').textContent = roundLabels[match.round] || 'ELIMINATÓRIAS';
-  document.getElementById('teamHomeName').textContent = 'SEU TIME';
-  document.getElementById('teamAwayName').textContent = state.awayName;
-  document.getElementById('teamHomeOvr').textContent = `OVR ${homeAvg}`;
-  document.getElementById('teamAwayOvr').textContent = `OVR ${awayAvg}`;
-  document.getElementById('scoreHome').textContent = '0';
-  document.getElementById('scoreAway').textContent = '0';
-  document.getElementById('matchEvents').innerHTML = '';
-  document.getElementById('matchProgress').style.width = '0%';
-  
-  showScreen('match');
-  simulateMatch(homePlayers, state.awayTeam, homeAvg, awayAvg);
-}
-
-function simulateKnockoutMatch(match) {
-  // Simular um jogo de eliminatória entre dois times de IA
-  const team1Avg = avgOvr(match.team1.players);
-  const team2Avg = avgOvr(match.team2.players);
-  
-  function ovrFactor(ovr) { return (Math.max(1, ovr) - 1) / 98; }
-  function goalProb(scorer, gk) {
-    const attackBonus = ovrFactor(scorer.ovr) * 0.22;
-    const gkPenalty = (1 - ovrFactor(gk ? gk.ovr : 70)) * 0.15;
-    return 0.28 + attackBonus + gkPenalty;
-  }
-  
-  let homeGoals = 0, awayGoals = 0;
-  const numEvents = 12 + Math.floor(Math.random() * 8);
-  
-  for (let i = 0; i < numEvents; i++) {
-    const isHome = Math.random() < 0.5;
-    const attackTeam = isHome ? match.team1.players : match.team2.players;
-    const defendGK = isHome ? (match.team2.players[0] || match.team2.players[0]) : (match.team1.players[0] || match.team1.players[0]);
-    
-    const scorerPool = attackTeam.filter((p, idx) => idx !== 0);
-    if (scorerPool.length > 0 && Math.random() < 0.25) {
-      const totalOvr = scorerPool.reduce((s, p) => s + p.ovr, 0);
-      let scorer = scorerPool[0];
-      
-      if (totalOvr > 0) {
-        let rw = Math.random() * totalOvr;
-        for (const p of scorerPool) {
-          rw -= p.ovr;
-          if (rw <= 0) { scorer = p; break; }
-        }
-      } else {
-        scorer = scorerPool[Math.floor(Math.random() * scorerPool.length)];
-      }
-      
-      if (Math.random() < goalProb(scorer, defendGK)) {
-        if (isHome) homeGoals++;
-        else awayGoals++;
-      }
-    }
-  }
-  
-  // Se empate, ir para pênaltis
-  if (homeGoals === awayGoals) {
-    // Simular pênaltis
-    const penProb = (kicker, gk) => {
-      const att = kicker ? (Math.max(1, kicker.ovr) - 1) / 98 : 0.5;
-      const def = gk ? (Math.max(1, gk.ovr) - 1) / 98 : 0.5;
-      return Math.max(0.30, Math.min(0.85, 0.60 + att * 0.15 - def * 0.12));
-    };
-    
-    let penHome = 0, penAway = 0;
-    const gk1 = match.team1.players[0];
-    const gk2 = match.team2.players[0];
-    
-    for (let k = 0; k < 5; k++) {
-      const kicker1 = match.team1.players[k % match.team1.players.length] || gk1;
-      const kicker2 = match.team2.players[k % match.team2.players.length] || gk2;
-      if (Math.random() < penProb(kicker1, gk2)) penHome++;
-      if (Math.random() < penProb(kicker2, gk1)) penAway++;
-    }
-    
-    // Morte súbita se necessário
-    let k = 5;
-    while (penHome === penAway && k < 20) {
-      const kicker1 = match.team1.players[k % match.team1.players.length] || gk1;
-      const kicker2 = match.team2.players[k % match.team2.players.length] || gk2;
-      if (Math.random() < penProb(kicker1, gk2)) penHome++;
-      if (Math.random() < penProb(kicker2, gk1)) penAway++;
-      k++;
-    }
-    
-    homeGoals = penHome;
-    awayGoals = penAway;
-  }
-  
-  match.score1 = homeGoals;
-  match.score2 = awayGoals;
-  match.played = true;
-}
-
-function advanceKnockout() {
-  const champ = state.championship;
-  const roundOrder = ['8-avos', 'quartas', 'semis', 'final'];
-  const currentIdx = roundOrder.indexOf(champ.currentRound);
-  
-  if (currentIdx >= roundOrder.length - 1) {
-    // Final já foi jogada, mostrar campeão
-    showChampion();
-    return;
-  }
-  
-  const nextRound = roundOrder[currentIdx + 1];
-  champ.currentRound = nextRound;
-  
-  // Criar matches da próxima rodada com os vencedores
-  const winnersThisRound = champ.knockoutMatches
-    .filter(m => m.round === roundOrder[currentIdx] && m.played)
-    .map(m => m.score1 > m.score2 ? m.team1 : m.team2);
-  
-  // Agrupar vencedores para próxima rodada
-  champ.knockoutMatches.push(...winnersThisRound.slice(0, winnersThisRound.length / 2).map((t1, idx) => ({
-    round: nextRound,
-    team1: t1,
-    team2: winnersThisRound[winnersThisRound.length / 2 + idx],
-    score1: null,
-    score2: null,
-    played: false
-  })));
-}
-
-function showChampionEliminated() {
-  const champ = state.championship;
-  const container = document.getElementById('championResult');
-  container.innerHTML = `
-    <div style="text-align: center;">
-      <div style="font-family: 'Bebas Neue', cursive; font-size: 32px; letter-spacing: 2px; color: var(--red); margin: 20px 0;">
-        ❌ ELIMINADO ❌
-      </div>
-      <div style="font-family: 'Bebas Neue', cursive; font-size: 20px; letter-spacing: 1px; margin: 30px 0; color: var(--text-muted);">
-        ${champ.currentPhase === 'groups' ? 'Você não se classificou para as eliminatórias!' : 'Você foi eliminado nas eliminatórias!'}
-      </div>
-      <div class="champion-stats">
-        <div class="stat-row">
-          <span class="stat-label">Vitórias</span>
-          <span class="stat-value">${champ.statsTotal.wins}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Empates</span>
-          <span class="stat-value">${champ.statsTotal.draws}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Derrotas</span>
-          <span class="stat-value">${champ.statsTotal.losses}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Gols Marcados</span>
-          <span class="stat-value">${champ.statsTotal.goalsFor}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Gols Sofridos</span>
-          <span class="stat-value">${champ.statsTotal.goalsAgainst}</span>
-        </div>
-      </div>
-    </div>
-  `;
-  showScreen('championship-champion');
-}
-
-function showChampion() {
-  const champ = state.championship;
-  
-  // Encontrar vencedor da final
-  const finalMatch = champ.knockoutMatches.find(m => m.round === 'final' && m.played);
-  if (!finalMatch) return;
-  
-  const winner = finalMatch.score1 > finalMatch.score2 ? finalMatch.team1 : finalMatch.team2;
-  champ.champion = winner;
-  
-  if (!winner.isPlayer) {
-    showChampionEliminated();
-    return;
-  }
-  
-  launchConfetti();
-  
-  const container = document.getElementById('championResult');
-  container.innerHTML = `
-    <div style="text-align: center;">
-      <div style="font-family: 'Bebas Neue', cursive; font-size: 48px; margin: 20px 0;">
-        🏆 🎉 CAMPEÃO! 🎉 🏆
-      </div>
-      <div class="champion-title">Sua Seleção é Tricampeã!</div>
-      <div class="champion-stats">
-        <div class="stat-row">
-          <span class="stat-label">Vitórias</span>
-          <span class="stat-value">${champ.statsTotal.wins}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Empates</span>
-          <span class="stat-value">${champ.statsTotal.draws}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Derrotas</span>
-          <span class="stat-value">${champ.statsTotal.losses}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Gols Marcados</span>
-          <span class="stat-value">${champ.statsTotal.goalsFor}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Gols Sofridos</span>
-          <span class="stat-value">${champ.statsTotal.goalsAgainst}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Saldo de Gols</span>
-          <span class="stat-value" style="color: var(--gold);">${champ.statsTotal.goalsFor - champ.statsTotal.goalsAgainst}</span>
-        </div>
-      </div>
-    </div>
-  `;
-  showScreen('championship-champion');
-}
-
-function viewChampionshipStandings() {
-  const champ = state.championship;
-  const playerGroup = champ.groups[champ.playerGroup];
-  
-  const container = document.getElementById('standingsTable');
-  container.innerHTML = '<div class="standings-row header"><div></div><div>Time</div><div>P</div><div>V</div><div>E</div><div>D</div></div>';
-  
-  // Classificar grupo
-  const sorted = [...playerGroup.teams].sort((a, b) => {
-    if (b.points !== a.points) return b.points - a.points;
-    if ((b.goalsFor - b.goalsAgainst) !== (a.goalsFor - a.goalsAgainst))
-      return (b.goalsFor - b.goalsAgainst) - (a.goalsFor - a.goalsAgainst);
-    return b.goalsFor - a.goalsFor;
-  });
-  
-  sorted.forEach((team, idx) => {
-    const row = document.createElement('div');
-    row.className = 'standings-row';
-    row.innerHTML = `
-      <div class="standings-pos">${idx + 1}${idx < 2 ? '<span class="standings-badge badge-qualified">✓</span>' : ''}</div>
-      <div class="group-team-name">${team.name}</div>
-      <div class="group-stat">${team.points}</div>
-      <div class="group-stat">${team.wins}</div>
-      <div class="group-stat">${team.draws}</div>
-      <div class="group-stat">${team.losses}</div>
-    `;
-    container.appendChild(row);
-  });
-  
-  showScreen('championship-standings');
-}
-
-function handleMatchResult() {
-  if (state.gameMode === 'single') {
-    resetGame();
-  } else {
-    // Registrar resultado no campeonato
-    const champ = state.championship;
-    
-    if (champ.currentPhase === 'groups') {
-      // Fase de grupos
-      const currentMatch = champ.groupMatches[champ.groupMatchIndex];
-      
-      // Determinar se o jogador é team1 ou team2
-      const playerIsTeam1 = currentMatch.team1.isPlayer;
-      
-      // Atribuir scores corretamente
-      if (playerIsTeam1) {
-        currentMatch.score1 = state.matchGoalsHome;
-        currentMatch.score2 = state.matchGoalsAway;
-      } else {
-        currentMatch.score1 = state.matchGoalsAway;
-        currentMatch.score2 = state.matchGoalsHome;
-      }
-      currentMatch.played = true;
-      
-      // Atualizar stats
-      updateGroupStats(currentMatch);
-      
-      // Atualizar stats totais
-      champ.statsTotal.goalsFor += state.matchGoalsHome;
-      champ.statsTotal.goalsAgainst += state.matchGoalsAway;
-      
-      if (state.matchGoalsHome > state.matchGoalsAway) {
-        champ.statsTotal.wins++;
-      } else if (state.matchGoalsHome < state.matchGoalsAway) {
-        champ.statsTotal.losses++;
-      } else {
-        champ.statsTotal.draws++;
-      }
-      
-      showScreen('championship-groups');
-      renderGroupsDisplay();
-    } else if (champ.currentPhase === 'knockout') {
-      // Fase de eliminatórias
-      const currentMatch = champ.knockoutMatches[champ.knockoutMatchIndex];
-      
-      // Determinar se o jogador é team1 ou team2
-      const playerIsTeam1 = currentMatch.team1.isPlayer;
-      
-      // Atribuir scores corretamente
-      if (playerIsTeam1) {
-        currentMatch.score1 = state.matchGoalsHome;
-        currentMatch.score2 = state.matchGoalsAway;
-      } else {
-        currentMatch.score1 = state.matchGoalsAway;
-        currentMatch.score2 = state.matchGoalsHome;
-      }
-      currentMatch.played = true;
-      
-      // Verificar se o jogador perdeu
-      const playerWon = state.matchGoalsHome > state.matchGoalsAway;
-      if (!playerWon) {
-        // Jogador foi eliminado
-        showChampionEliminated();
-        return;
-      }
-      
-      // Atualizar stats totais
-      champ.statsTotal.goalsFor += state.matchGoalsHome;
-      champ.statsTotal.goalsAgainst += state.matchGoalsAway;
-      
-      if (state.matchGoalsHome > state.matchGoalsAway) {
-        champ.statsTotal.wins++;
-      } else if (state.matchGoalsHome < state.matchGoalsAway) {
-        champ.statsTotal.losses++;
-      } else {
-        champ.statsTotal.draws++;
-      }
-      
-      showScreen('championship-knockout');
-      renderKnockoutBracket();
-    }
-  }
-}
-
-function renderGroupsDisplay() {
-  const champ = state.championship;
-  const container = document.getElementById('groupsContainer');
-  container.innerHTML = '';
-  
-  // Mostrar todos os 8 grupos
-  champ.groups.forEach(group => {
-    const groupCard = document.createElement('div');
-    groupCard.className = 'group-card';
-    
-    const title = document.createElement('div');
-    title.className = 'group-title';
-    title.textContent = `GRUPO ${group.id}`;
-    groupCard.appendChild(title);
-    
-    const table = document.createElement('div');
-    table.className = 'group-table';
-    
-    // Header
-    const headerRow = document.createElement('div');
-    headerRow.className = 'group-row header';
-    headerRow.innerHTML = '<div>Time</div><div>P</div><div>V</div><div>E</div><div>D</div><div>SG</div>';
-    table.appendChild(headerRow);
-    
-    // Classificar
-    const sorted = [...group.teams].sort((a, b) => {
-      if (b.points !== a.points) return b.points - a.points;
-      if ((b.goalsFor - b.goalsAgainst) !== (a.goalsFor - a.goalsAgainst))
-        return (b.goalsFor - b.goalsAgainst) - (a.goalsFor - a.goalsAgainst);
-      return b.goalsFor - a.goalsFor;
-    });
-    
-    sorted.forEach(team => {
-      const row = document.createElement('div');
-      row.className = 'group-row player-row';
-      const saldoGols = team.goalsFor - team.goalsAgainst;
-      row.innerHTML = `
-        <div class="group-team-name">${team.name}</div>
-        <div class="group-stat">${team.points}</div>
-        <div class="group-stat">${team.wins}</div>
-        <div class="group-stat">${team.draws}</div>
-        <div class="group-stat">${team.losses}</div>
-        <div class="group-stat">${saldoGols > 0 ? '+' : ''}${saldoGols}</div>
-      `;
-      table.appendChild(row);
-    });
-    
-    groupCard.appendChild(table);
-    container.appendChild(groupCard);
-  });
-  
-  // Mostrar próxima partida
-  const nextMatch = champ.groupMatches.find(m => !m.played && m.isPlayerMatch);
-  if (nextMatch) {
-    document.getElementById('nextGroupsBtn').style.display = 'block';
-    document.getElementById('proceedBtn').style.display = 'none';
-  } else {
-    document.getElementById('nextGroupsBtn').style.display = 'none';
-    document.getElementById('proceedBtn').style.display = 'block';
-  }
-  
-  document.getElementById('groupsPhaseLabel').textContent = 'Fase de Grupos';
 }
 
 // ===================== SPLASH → DRAFT =====================
@@ -2731,11 +1287,9 @@ function renderBench() {
 
     const el = document.createElement('div');
     el.className = 'bench-player';
-    const posLabel = { gk:'GK', zag:'ZAG', ata:'ATA' }[p.posicao_favorita] || '';
     el.innerHTML = `
       <div class="bp-ovr ${ovrClass(p.ovr)}">${p.ovr}</div>
       <div class="bp-name">${p.name}</div>
-      <span class="pos-tag ${p.posicao_favorita}">${posLabel} +4</span>
     `;
     el.onclick = () => selectBenchPlayer(p, el);
     bench.appendChild(el);
@@ -2815,14 +1369,9 @@ function renderField() {
     const slot = document.querySelector(`.field-slot[data-pos="${pos}"]`);
     const player = state.formation[pos];
     if (player) {
-      const eOvr = effectiveOvr(player, pos);
-      const hasBuff = eOvr > player.ovr;
-      const ovrDisplay = hasBuff
-        ? `<span class="slot-ovr" style="color:#ffd700">${eOvr}<span style="font-size:9px;vertical-align:super;color:#ffd700">▲</span></span>`
-        : `<span class="slot-ovr">${player.ovr}</span>`;
-      slot.className = `field-slot slot-${pos} filled${hasBuff ? ' pos-buff' : ''}`;
+      slot.className = `field-slot slot-${pos} filled`;
       slot.innerHTML = `
-        ${ovrDisplay}
+        <span class="slot-ovr">${player.ovr}</span>
         <span class="slot-name">${player.name}</span>
       `;
     } else {
@@ -2832,111 +1381,26 @@ function renderField() {
       slot.innerHTML = '';
     }
   });
-
-  // Update chemistry bar
-  const chem = getChemistryInfo(state.formation);
-  const bar = document.getElementById('chemistryBar');
-  if (bar) {
-    if (chem.bonus > 0) {
-      const hearts = chem.bonus >= 6 ? '🔥' : chem.bonus >= 4 ? '💚💚' : '💚';
-      bar.innerHTML = `${hearts} <span style="color:var(--accent);font-weight:700">ENTROSAMENTO +${chem.bonus} OVR</span> — ${chem.combos.join(', ')}`;
-    } else {
-      bar.innerHTML = `<span style="color:var(--text-muted)">Escale jogadores do mesmo time para ganhar entrosamento</span>`;
-    }
-  }
 }
 
 // ===================== MATCH =====================
 function generateAwayTeam() {
   const used = new Set(state.myPicks.map(p => p.id));
-  let available = ALL_PLAYERS.filter(p => !used.has(p.id));
-  
-  // Garantir mínimo 5 jogadores disponíveis
-  if (available.length < 5) {
-    available = ALL_PLAYERS.filter(p => !used.has(p.id) || true); // use todos se necessário
-    if (available.length < 5) {
-      console.warn('⚠️ Menos de 5 jogadores disponíveis. Usando todos os jogadores.');
-    }
-  }
-  
+  const available = ALL_PLAYERS.filter(p => !used.has(p.id));
   state.awayTeam = shuffle(available).slice(0, 5);
-  
-  // Garantir que o time tem exatamente 5 jogadores
-  while (state.awayTeam.length < 5) {
-    const newPlayers = shuffle(ALL_PLAYERS).slice(0, 5 - state.awayTeam.length);
-    state.awayTeam.push(...newPlayers);
-  }
-  state.awayTeam = state.awayTeam.slice(0, 5);
-  
-  // Garantir que nenhum jogador tenha overall <= 0
-  state.awayTeam = state.awayTeam.map(p => ({
-    ...p,
-    ovr: Math.max(1, p.ovr || 1)
-  }));
-  
   state.awayName = TEAM_NAMES_AWAY[Math.floor(Math.random() * TEAM_NAMES_AWAY.length)];
 }
 
 function startMatch() {
-  // Modo campeonato: inicializar estrutura e ir para grupos
-  if (state.gameMode === 'championship') {
-    generateChampionship();
-    renderGroupsDisplay();
-    showScreen('championship-groups');
-    return;
-  }
-  
-  // Modo jogo único: começar partida
   generateAwayTeam();
 
   const homePlayers = Object.values(state.formation);
-<<<<<<< HEAD
-  
-  // Validar que o time do jogador tem exatamente 5 jogadores
-  if (homePlayers.length !== 5 || homePlayers.some(p => !p)) {
-    alert('❌ Seu time precisa ter exatamente 5 jogadores! Por favor, complete a formação.');
-    showScreen('formation');
-    return;
-  }
-  
-  // Validar que o time adversário tem 5 jogadores
-  if (!state.awayTeam || state.awayTeam.length < 5) {
-    console.error('❌ Erro: time adversário não tem jogadores suficientes');
-    generateAwayTeam();
-    if (!state.awayTeam || state.awayTeam.length < 5) {
-      alert('❌ Erro ao gerar time adversário. Tente novamente.');
-      resetGame();
-      return;
-    }
-  }
-  
   const homeAvg = avgOvr(homePlayers);
   const awayAvg = avgOvr(state.awayTeam);
 
-  document.getElementById('matchTitle').textContent = 'JOGO ÚNICO';
-=======
-
-  // Apply position buffs: create effective-OVR copies for simulation
-  const homeEffective = Object.entries(state.formation).map(([slot, p]) => {
-    if (!p) return p;
-    return { ...p, ovr: effectiveOvr(p, slot) };
-  });
-
-  // Apply chemistry bonus as flat OVR bump distributed to all home players
-  const chemBonus = chemistryBonus(homePlayers);
-  const homeWithChem = homeEffective.map(p => p ? { ...p, ovr: Math.min(99, p.ovr + chemBonus) } : p);
-
-  const homeAvg = avgOvr(homeWithChem.filter(Boolean));
-  const awayAvg = avgOvr(state.awayTeam);
-
-  // Store effective team for simulation use
-  state.homeEffective = homeWithChem;
-  state.chemBonus = chemBonus;
-
->>>>>>> 39369db857da44cc0dc5d6f952f344ecc34ee4c0
   document.getElementById('teamHomeName').textContent = 'SEU TIME';
   document.getElementById('teamAwayName').textContent = state.awayName;
-  document.getElementById('teamHomeOvr').textContent = `OVR ${homeAvg}${chemBonus > 0 ? ` (+${chemBonus} ent.)` : ''}`;
+  document.getElementById('teamHomeOvr').textContent = `OVR ${homeAvg}`;
   document.getElementById('teamAwayOvr').textContent = `OVR ${awayAvg}`;
   document.getElementById('scoreHome').textContent = '0';
   document.getElementById('scoreAway').textContent = '0';
@@ -2953,32 +1417,17 @@ function startMatch() {
   state.penState = null;
 
   showScreen('match');
-  simulateMatch(homeWithChem.filter(Boolean), state.awayTeam, homeAvg, awayAvg);
+  simulateMatch(homePlayers, state.awayTeam, homeAvg, awayAvg);
 }
 
 function simulateMatch(home, away, homeAvg, awayAvg) {
-  // Validar que os times têm jogadores
-  if (!home || home.length < 5 || !away || away.length < 5) {
-    console.error('❌ Erro: Um dos times não tem 5 jogadores');
-    console.error('Home players:', home?.length, 'Away players:', away?.length);
-    showResult();
-    return;
-  }
-  
   // identify GKs (the player in GK slot for each team)
   const homeGK = state.formation.gk;
   // away GK = first player in their team (random assignment)
   const awayGK = state.awayTeam[0];
-  
-  // Validar que os goleiros existem
-  if (!homeGK || !awayGK) {
-    console.error('❌ Erro: Um dos goleiros não existe');
-    showResult();
-    return;
-  }
 
   // OVR helpers: normalize OVR to a 0-1 scale for probability tuning
-  function ovrFactor(ovr) { return (Math.max(1, ovr) - 1) / 98; } // 0 (OVR=1) → 1 (OVR=99)
+  function ovrFactor(ovr) { return (ovr - 1) / 98; } // 0 (OVR=1) → 1 (OVR=99)
 
   // Higher OVR scorer → more likely to score; lower OVR GK → more likely to concede
   function goalProb(scorer, gk) {
@@ -3025,14 +1474,9 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
       const nonGK = attackTeam.filter(p => p.id !== (isHome ? homeGK : awayGK)?.id);
       const scorerPool = nonGK.length > 0 ? nonGK : attackTeam;
       const totalOvr = scorerPool.reduce((s, p) => s + p.ovr, 0);
+      let rw = Math.random() * totalOvr;
       let scorer = scorerPool[0];
-      
-      if (totalOvr > 0) {
-        let rw = Math.random() * totalOvr;
-        for (const p of scorerPool) { rw -= p.ovr; if (rw <= 0) { scorer = p; break; } }
-      } else {
-        scorer = scorerPool[Math.floor(Math.random() * scorerPool.length)];
-      }
+      for (const p of scorerPool) { rw -= p.ovr; if (rw <= 0) { scorer = p; break; } }
 
       // Now decide if goal actually goes in based on scorer vs GK OVR
       const prob = goalProb(scorer, defendGK);
@@ -3043,14 +1487,9 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
           const assistPool = scorerPool.filter(p => p.id !== scorer.id);
           if (assistPool.length > 0) {
             const totalAsstOvr = assistPool.reduce((s, p) => s + p.ovr, 0);
+            let ra = Math.random() * totalAsstOvr;
             assister = assistPool[0];
-            
-            if (totalAsstOvr > 0) {
-              let ra = Math.random() * totalAsstOvr;
-              for (const p of assistPool) { ra -= p.ovr; if (ra <= 0) { assister = p; break; } }
-            } else {
-              assister = assistPool[Math.floor(Math.random() * assistPool.length)];
-            }
+            for (const p of assistPool) { ra -= p.ovr; if (ra <= 0) { assister = p; break; } }
           }
         }
         return { min, type: 'goal', isHome, player: scorer, assister };
@@ -3086,14 +1525,9 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
       // weight inversely by OVR: bad players isolate more
       const invOvr = team.map(p => Math.max(1, 100 - p.ovr));
       const totalInv = invOvr.reduce((s, w) => s + w, 0);
+      let ri = Math.random() * totalInv;
       let isoler = team[0];
-      
-      if (totalInv > 0) {
-        let ri = Math.random() * totalInv;
-        for (let i = 0; i < team.length; i++) { ri -= invOvr[i]; if (ri <= 0) { isoler = team[i]; break; } }
-      } else {
-        isoler = team[Math.floor(Math.random() * team.length)];
-      }
+      for (let i = 0; i < team.length; i++) { ri -= invOvr[i]; if (ri <= 0) { isoler = team[i]; break; } }
       return { min, type: 'isolou', isHome, player: isoler };
     } else if (r < 0.74) {
       // drible especial — mais provável em jogadores de alto OVR
@@ -3101,14 +1535,9 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
       const team = isHome ? home : away;
       // peso por OVR: craques driblam mais
       const totalOvrDrib = team.reduce((s, p) => s + p.ovr, 0);
+      let rd = Math.random() * totalOvrDrib;
       let dribler = team[0];
-      
-      if (totalOvrDrib > 0) {
-        let rd = Math.random() * totalOvrDrib;
-        for (const p of team) { rd -= p.ovr; if (rd <= 0) { dribler = p; break; } }
-      } else {
-        dribler = team[Math.floor(Math.random() * team.length)];
-      }
+      for (const p of team) { rd -= p.ovr; if (rd <= 0) { dribler = p; break; } }
       const dribles = ['caneta', 'chapeu', 'elastico', 'pedalada'];
       const drible = dribles[Math.floor(Math.random() * dribles.length)];
       return { min, type: 'drible', isHome, player: dribler, drible };
@@ -3147,15 +1576,7 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
       document.getElementById('matchProgress').style.width = progress + '%';
 
       if (idx === events.length - 1) {
-        // Pênaltis apenas nas eliminatórias, não na fase de grupos
-        const hasPenalties = state.gameMode === 'championship' && state.championship.currentPhase === 'knockout';
-        setTimeout(() => { 
-          if(state.matchGoalsHome===state.matchGoalsAway && hasPenalties) {
-            simulatePenalties();
-          } else {
-            showResult();
-          }
-        }, 1500);
+        setTimeout(() => { if(state.matchGoalsHome===state.matchGoalsAway){simulatePenalties();} else {showResult();}}, 1500);
       }
     }, delay);
     delay += 1200 + Math.random() * 800;
@@ -3298,33 +1719,6 @@ function processMatchEvent(evt) {
   container.insertBefore(div, container.firstChild);
 }
 
-// ===================== PERFORMANCE CALC =====================
-function calculatePlayerPerformance(player) {
-  // Score 0-10 começando em 6 (score base)
-  let score = 6;
-  
-  const goals = state.playerGoals[player.id] || 0;
-  const assists = state.playerAssists[player.id] || 0;
-  const ovrNormalized = (Math.max(1, player.ovr) - 1) / 98; // 0-1
-  
-  // Gols valem até 2 pontos (1 ponto por gol até 2)
-  score += Math.min(goals, 2);
-  
-  // Assistências valem até 1 ponto (0.5 ponto por assist até 2)
-  score += Math.min(assists * 0.5, 1);
-  
-  // OVR base vale até 1 ponto (jogador com OVR 99 recebe +1)
-  score += ovrNormalized * 1;
-  
-  // Red card penaliza -1 ponto
-  if (state.redCards.has(player.id)) {
-    score -= 1;
-  }
-  
-  // Clampar entre 0 e 10
-  return Math.max(0, Math.min(10, Math.round(score * 10) / 10));
-}
-
 // ===================== RESULT =====================
 function showResult() {
   const banner = document.getElementById('resultBanner');
@@ -3355,27 +1749,21 @@ function showResult() {
 
   score.textContent = `${h} x ${a}` + (state.penalties ? ` (Pênaltis ${state.penalties.home}x${state.penalties.away})` : '');
 
-  // MVP — usar o jogador com maior score de performance
+  // MVP — score = goals*2 + assists*1; fallback to best OVR
   const homePlayers = Object.values(state.formation);
   const allPlayers = [...homePlayers, ...state.awayTeam];
-  
-  let maxScore = -1;
-  let mvp = null;
-  allPlayers.forEach(p => {
-    const perf = calculatePlayerPerformance(p);
-    if (perf > maxScore) {
-      maxScore = perf;
-      mvp = p;
-    }
-  });
-  
+  function mvpScore(p) {
+    return (state.playerGoals[p.id] || 0) * 2 + (state.playerAssists[p.id] || 0);
+  }
+  const maxScore = Math.max(0, ...allPlayers.map(mvpScore));
+  let candidates = maxScore > 0 ? allPlayers.filter(p => mvpScore(p) === maxScore) : allPlayers;
+  let mvp = candidates[Math.floor(Math.random() * candidates.length)];
   const mvpGoals = state.playerGoals[mvp.id] || 0;
   const mvpAssists = state.playerAssists[mvp.id] || 0;
-  const mvpPerf = calculatePlayerPerformance(mvp);
   const mvpStatParts = [];
   if (mvpGoals > 0) mvpStatParts.push(`${mvpGoals} gol${mvpGoals > 1 ? 's' : ''}`);
   if (mvpAssists > 0) mvpStatParts.push(`${mvpAssists} assist${mvpAssists > 1 ? 's' : ''}`);
-  if (mvpStatParts.length === 0) mvpStatParts.push(`score ${mvpPerf.toFixed(1)}/10`);
+  if (mvpStatParts.length === 0) mvpStatParts.push('destaque da partida');
   mvpDiv.innerHTML = `
     <div class="mvp-label">MVP da Final</div>
     <div class="mvp-name">${mvp.name}</div>
@@ -3383,51 +1771,34 @@ function showResult() {
   `;
   document.getElementById('resultEvents').innerHTML=document.getElementById('matchEvents').innerHTML;
 
-  // details with performance ratings
+  // details
   details.innerHTML = `
     <div class="result-team-col">
       <h3>Seu Time</h3>
       ${homePlayers.map(p => {
         const g = state.playerGoals[p.id] || 0;
         const a = state.playerAssists[p.id] || 0;
-        const perf = calculatePlayerPerformance(p);
         const stats = [g > 0 ? `⚽${g}` : '', a > 0 ? `🅰️${a}` : ''].filter(Boolean).join(' ');
-        const rating = calcPlayerRating(p, true);
-        const rColor = ratingColor(rating);
         return `<div class="result-player-row">
           <span>${p.name}</span>
           <span style="display:flex;gap:8px;align-items:center;">
             ${stats ? `<span style="font-size:11px;color:var(--accent)">${stats}</span>` : ''}
-<<<<<<< HEAD
             <span class="${ovrClass(p.ovr)}">${p.ovr}</span>
-            <span style="font-size:11px;color:var(--gold);font-weight:700;">${perf.toFixed(1)}</span>
-=======
-            <span style="font-family:'Bebas Neue',cursive;font-size:15px;color:${rColor};min-width:28px;text-align:right;">${rating}</span>
->>>>>>> 39369db857da44cc0dc5d6f952f344ecc34ee4c0
           </span>
         </div>`;
       }).join('')}
-      ${(state.chemBonus > 0) ? `<div style="margin-top:8px;font-size:10px;color:var(--accent);letter-spacing:1px;">🔗 Entrosamento +${state.chemBonus}</div>` : ''}
     </div>
     <div class="result-team-col">
       <h3>${state.awayName}</h3>
       ${state.awayTeam.map(p => {
         const g = state.playerGoals[p.id] || 0;
         const a = state.playerAssists[p.id] || 0;
-        const perf = calculatePlayerPerformance(p);
         const stats = [g > 0 ? `⚽${g}` : '', a > 0 ? `🅰️${a}` : ''].filter(Boolean).join(' ');
-        const rating = calcPlayerRating(p, false);
-        const rColor = ratingColor(rating);
         return `<div class="result-player-row">
           <span>${p.name}</span>
           <span style="display:flex;gap:8px;align-items:center;">
             ${stats ? `<span style="font-size:11px;color:var(--accent)">${stats}</span>` : ''}
-<<<<<<< HEAD
             <span class="${ovrClass(p.ovr)}">${p.ovr}</span>
-            <span style="font-size:11px;color:var(--gold);font-weight:700;">${perf.toFixed(1)}</span>
-=======
-            <span style="font-family:'Bebas Neue',cursive;font-size:15px;color:${rColor};min-width:28px;text-align:right;">${rating}</span>
->>>>>>> 39369db857da44cc0dc5d6f952f344ecc34ee4c0
           </span>
         </div>`;
       }).join('')}
@@ -3446,8 +1817,8 @@ function simulatePenalties() {
   const awayPlayers = state.awayTeam.filter(p => p.id !== awayGK?.id);
 
   function penProb(kicker, gk) {
-    const att = kicker ? (Math.max(1, kicker.ovr) - 1) / 98 : 0.5;
-    const def = gk    ? (Math.max(1, gk.ovr)    - 1) / 98 : 0.5;
+    const att = kicker ? (kicker.ovr - 1) / 98 : 0.5;
+    const def = gk    ? (gk.ovr    - 1) / 98 : 0.5;
     return Math.max(0.30, Math.min(0.85, 0.60 + att * 0.15 - def * 0.12));
   }
 
