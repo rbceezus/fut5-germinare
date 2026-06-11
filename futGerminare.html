@@ -603,6 +603,25 @@
     font-weight: 600;
   }
 
+  .pos-tag {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    margin-top: 2px;
+    display: inline-block;
+  }
+  .pos-tag.gk  { background: rgba(255,215,0,0.15); color: var(--gold); }
+  .pos-tag.zag { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .pos-tag.ata { background: rgba(0,230,118,0.15);  color: var(--accent); }
+
+  .field-slot.pos-buff {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 14px rgba(255,215,0,0.35);
+  }
+
   .confirm-formation {
     margin-top: 10px;
   }
@@ -1277,6 +1296,7 @@
     <div class="field-slot slot-ar empty" data-pos="ar" data-pos-label="ATA" onclick="placePlayer('ar')"></div>
   </div>
   <div class="bench-area" id="bench"></div>
+  <div id="chemistryBar" style="min-height:28px;text-align:center;font-size:12px;color:var(--text-muted);letter-spacing:1px;"></div>
   <button class="btn btn-primary confirm-formation" id="confirmBtn" onclick="startMatch()" style="display:none;">
     Iniciar Partida
   </button>
@@ -1380,83 +1400,86 @@
 
 <script>
 // ===================== MOCK DATA =====================
+// posicao_favorita: 'gk' | 'zag' | 'ata'
+// Buff: +4 OVR se jogado na posição favorita (gk=slot gk, zag=dl/dr, ata=al/ar)
 const ALL_PLAYERS = [
-  { id:1,  name:"Tuts",                 team:"3E", ovr:71 },
-  { id:2,  name:"Severo",               team:"3E", ovr:87 },
-  { id:3,  name:"Severo (Pós-Cabeçada)",team:"3E", ovr:71 },
-  { id:4,  name:"Priminho",             team:"3E", ovr:62 },
-  { id:5,  name:"Lucas Graças",         team:"3E", ovr:93 },
-  { id:6,  name:"Marcola",              team:"3E", ovr:67 },
-  { id:7,  name:"Marcola (Prime)",      team:"3E", ovr:98 },
-  { id:8,  name:"Samuel",               team:"3E", ovr:80 },
-  { id:9,  name:"Thigas",               team:"3E", ovr:85 },
-  { id:10, name:"Braz (Demônio)",       team:"3F", ovr:99 },
-  { id:11, name:"Braz (Cara de choro)", team:"3F", ovr:83 },
-  { id:12, name:"De Longhi",            team:"3F", ovr:79 },
-  { id:13, name:"Paulino",              team:"3F", ovr:81 },
-  { id:14, name:"Alemão Descalço",      team:"3F", ovr:96 },
-  { id:15, name:"Alemão De Tênis",      team:"3F", ovr:86 },
-  { id:16, name:"Nakashima (DJ)",       team:"3F", ovr:92 },
-  { id:17, name:"Petê",                 team:"3F", ovr:84 },
-  { id:18, name:"Alisson",              team:"3G", ovr:89 },
-  { id:19, name:"Cadu",                 team:"3G", ovr:79 },
-  { id:20, name:"Inacio",               team:"3G", ovr:86 },
-  { id:21, name:"Joás (Chupeira)",      team:"3G", ovr:95 },
-  { id:22, name:"Lins",                 team:"3G", ovr:92 },
-  { id:23, name:"D'addio",              team:"3G", ovr:90 },
-  { id:24, name:"Vitão",                team:"3G", ovr:79 },
-  { id:25, name:"Fellipão",             team:"3H", ovr:79 },
-  { id:26, name:"Gui Costa",            team:"3H", ovr:88 },
-  { id:27, name:"Gui Costa (Sem Ciscar)",team:"3H", ovr:82 },
-  { id:28, name:"Nacarelli",            team:"3H", ovr:87 },
-  { id:29, name:"Guimas",               team:"3H", ovr:34 },
-  { id:30, name:"Guimas (Na Nóia)",     team:"3H", ovr:21 },
-  { id:31, name:"Igor",                 team:"3H", ovr:83 },
-  { id:32, name:"Igor (Intervalo)",     team:"3H", ovr:94 },
-  { id:33, name:"Matheus Bastos",       team:"3H", ovr:79 },
-  { id:34, name:"Makita",               team:"3H", ovr:81 },
-  { id:35, name:"RENATO BARROS",        team:"PicPay", ovr:99 },
-  { id:36, name:"Frodo",                team:"3H", ovr:85 },
-  { id:37, name:"Pips",                 team:"3H", ovr:83 },
-  { id:38, name:"Ruan",                 team:"3H", ovr:82 },
-  { id:39, name:"Zeba (Pubalgia)",      team:"3H", ovr:89 },
-  { id:40, name:"Zeba (Sem Pubalgia)",  team:"3H", ovr:96 },
-  { id:41, name:"BGG",                  team:"3I", ovr:93 },
-  { id:42, name:"Fefo",                 team:"3I", ovr:91 },
-  { id:43, name:"Bento",                team:"3I", ovr:85 },
-  { id:44, name:"Hallison",             team:"3I", ovr:87 },
-  { id:45, name:"Vargas",               team:"3I", ovr:81 },
-  { id:46, name:"Gueguelas",            team:"3I", ovr:87 },
-  { id:47, name:"Rafinha",              team:"3I", ovr:80 },
-  { id:48, name:"Ryan",                 team:"3I", ovr:84 },
-  { id:49, name:"Koji",                 team:"3I", ovr:84 },
-  { id:50, name:"D'addio (Cabelo Cortado)", team:"3G", ovr:81 },
-  { id:51, name:"Gueguelas (Intertech)",team:"3G", ovr:94 },
-  { id:52, name:"Fefo (Bernoulli JR)",  team:"3H", ovr:97 },
-  { id:53, name:"Pedrão da TI",         team:"TI", ovr:55 },
-  { id:54, name:"Lucca (Pré Apito)",    team:"3E", ovr:85 },
-  { id:55, name:"Davi",                 team:"Bocão", ovr:1 },
-  { id:56, name:"Tuts (Intertech)",     team:"1G", ovr:70 },
-  { id:57, name:"Cadu (Técnico)",       team:"1H", ovr:79 },
-  { id:58, name:"Kaique (Intertech)",   team:"3H", ovr:40 },
-  { id:59, name:"Geladeira",            team:"3I", ovr:77 },
-  { id:60, name:"Paulino (PH Falso)",   team:"3F", ovr:86 },
-  { id:62, name:"Bento (Prime)",        team:"Jumentos", ovr:90 },
-  { id:63, name:"Nakashima (Baseball)", team:"Sp.Giants", ovr:93 },
-  { id:64, name:"Guegs (Atacadao)",     team:"Atacadão", ovr:60 },
-  { id:66, name:"Vargas (Careca)",      team:"3H", ovr:78 },
-  { id:68, name:"Guimas (Middle Part)", team:"3H", ovr:45 },
-  { id:69, name:"Frodo (Hérnia)",       team:"3H", ovr:40 },
-  { id:70, name:"Taxiotti (Barbudo)",   team:"Workspace JF", ovr:60 },
-  { id:71, name:"Rafinha (Careca)",     team:"Casa da Pedra", ovr:94 },
-  { id:72, name:"Everton (Van)",        team:"Leva e Traz", ovr:94 },
-  { id:73, name:"Hermithão (TI)",       team:"VIX", ovr:82 },
-  { id:74, name:"Patrick",              team:"DEPSE", ovr:69 },
-
+  { id:1,  name:"Tuts",                 team:"3E", ovr:71, posicao_favorita:"zag"  },
+  { id:2,  name:"Severo",               team:"3E", ovr:87, posicao_favorita:"ata" },
+  { id:3,  name:"Severo (Pós-Cabeçada)",team:"3E", ovr:71, posicao_favorita:"ata" },
+  { id:4,  name:"Priminho",             team:"3E", ovr:62, posicao_favorita:"gk" },
+  { id:5,  name:"Lucas Graças",         team:"3E", ovr:93, posicao_favorita:"gk" },
+  { id:6,  name:"Marcola",              team:"3E", ovr:67, posicao_favorita:"zag" },
+  { id:7,  name:"Marcola (Prime)",      team:"3E", ovr:98, posicao_favorita:"zag" },
+  { id:8,  name:"Samuel",               team:"3E", ovr:80, posicao_favorita:"ata" },
+  { id:9,  name:"Thigas",               team:"3E", ovr:85, posicao_favorita:"ata" },
+  { id:10, name:"Braz (Demônio)",       team:"3F", ovr:99, posicao_favorita:"ata" },
+  { id:11, name:"Braz (Cara de choro)", team:"3F", ovr:83, posicao_favorita:"ata" },
+  { id:12, name:"De Longhi",            team:"3F", ovr:79, posicao_favorita:"zag" },
+  { id:13, name:"Paulino",              team:"3F", ovr:81, posicao_favorita:"zag" },
+  { id:14, name:"Alemão Descalço",      team:"3F", ovr:96, posicao_favorita:"ata" },
+  { id:15, name:"Alemão De Tênis",      team:"3F", ovr:86, posicao_favorita:"ata" },
+  { id:16, name:"Nakashima (DJ)",       team:"3F", ovr:92, posicao_favorita:"ata" },
+  { id:17, name:"Petê",                 team:"3F", ovr:84, posicao_favorita:"ata" },
+  { id:18, name:"Alisson",              team:"3G", ovr:89, posicao_favorita:"ata"  },
+  { id:19, name:"Cadu",                 team:"3G", ovr:79, posicao_favorita:"gk" },
+  { id:20, name:"Inacio",               team:"3G", ovr:86, posicao_favorita:"ata" },
+  { id:21, name:"Joás (Chupeira)",      team:"3G", ovr:95, posicao_favorita:"zag" },
+  { id:22, name:"Lins",                 team:"3G", ovr:92, posicao_favorita:"ata" },
+  { id:23, name:"D'addio",              team:"3G", ovr:90, posicao_favorita:"ata" },
+  { id:24, name:"Vitão",                team:"3G", ovr:79, posicao_favorita:"gk" },
+  { id:25, name:"Fellipão",             team:"3H", ovr:79, posicao_favorita:"gk"  },
+  { id:26, name:"Gui Costa",            team:"3H", ovr:88, posicao_favorita:"ata" },
+  { id:27, name:"Gui Costa (Sem Ciscar)",team:"3H",ovr:82, posicao_favorita:"ata" },
+  { id:28, name:"Nacarelli",            team:"3H", ovr:87, posicao_favorita:"gk" },
+  { id:29, name:"Guimas",               team:"3H", ovr:34, posicao_favorita:"ata" },
+  { id:30, name:"Guimas (Na Nóia)",     team:"3H", ovr:21, posicao_favorita:"ata" },
+  { id:31, name:"Igor",                 team:"3H", ovr:83, posicao_favorita:"zag" },
+  { id:32, name:"Igor (Intervalo)",     team:"3H", ovr:94, posicao_favorita:"ata" },
+  { id:33, name:"Matheus Bastos",       team:"3H", ovr:79, posicao_favorita:"ata" },
+  { id:34, name:"Makita",               team:"3H", ovr:81, posicao_favorita:"gk" },
+  { id:36, name:"Frodo",                team:"3H", ovr:85, posicao_favorita:"gk" },
+  { id:37, name:"Pips",                 team:"3H", ovr:83, posicao_favorita:"zag" },
+  { id:38, name:"Ruan",                 team:"3H", ovr:82, posicao_favorita:"zag" },
+  { id:39, name:"Zeba (Pubalgia)",      team:"3H", ovr:89, posicao_favorita:"ata" },
+  { id:40, name:"Zeba (Sem Pubalgia)",  team:"3H", ovr:96, posicao_favorita:"ata" },
+  { id:41, name:"BGG",                  team:"3I", ovr:93, posicao_favorita:"ata" },
+  { id:42, name:"Fefo",                 team:"3I", ovr:91, posicao_favorita:"ata" },
+  { id:43, name:"Bento",                team:"3I", ovr:85, posicao_favorita:"zag" },
+  { id:44, name:"Hallison",             team:"3I", ovr:87, posicao_favorita:"zag"  },
+  { id:45, name:"Vargas",               team:"3I", ovr:81, posicao_favorita:"ata" },
+  { id:46, name:"Gueguelas",            team:"3I", ovr:87, posicao_favorita:"zag" },
+  { id:47, name:"Rafinha",              team:"3I", ovr:80, posicao_favorita:"ata" },
+  { id:48, name:"Ryan",                 team:"3I", ovr:84, posicao_favorita:"ata" },
+  { id:49, name:"Koji",                 team:"3I", ovr:84, posicao_favorita:"ata" },
+  { id:50, name:"D'addio (Cabelo Cortado)", team:"3G", ovr:81, posicao_favorita:"gk" },
+  { id:51, name:"Gueguelas (Intertech)",team:"3G", ovr:94, posicao_favorita:"zag" },
+  { id:52, name:"Fefo (Bernoulli JR)",  team:"3H", ovr:97, posicao_favorita:"ata" },
+  { id:53, name:"Pedrão da TI",         team:"TI", ovr:55, posicao_favorita:"zag"  },
+  { id:54, name:"Lucca (Pré Apito)",    team:"3E", ovr:85, posicao_favorita:"ata" },
+  { id:55, name:"Davi",                 team:"1E", ovr:1, posicao_favorita:"gk" },
+  { id:56, name:"Tuts (Intertech)",     team:"1G", ovr:70, posicao_favorita:"zag"  },
+  { id:57, name:"Cadu (Técnico)",       team:"1H", ovr:79, posicao_favorita:"zag" },
+  { id:58, name:"Kaique (Intertech)",   team:"3H", ovr:40, posicao_favorita:"ata" },
+  { id:59, name:"Geladeira",            team:"3I", ovr:77, posicao_favorita:"gk"  },
+  { id:60, name:"Paulino (PH Falso)",   team:"3F", ovr:86, posicao_favorita:"zag" },
+  { id:62, name:"Bento (Prime)",        team:"2I", ovr:90, posicao_favorita:"zag" },
+  { id:63, name:"Nakashima (Baseball)", team:"3F", ovr:93, posicao_favorita:"ata" },
+  { id:64, name:"Guegs (Atacadao)",     team:"1H", ovr:60, posicao_favorita:"gk" },
+  { id:66, name:"Vargas (Careca)",      team:"3H", ovr:78, posicao_favorita:"zag" },
+  { id:68, name:"Guimas (Middle Part)", team:"3H", ovr:45, posicao_favorita:"gk" },
+  { id:69, name:"Frodo (Hérnia)",       team:"3H", ovr:40, posicao_favorita:"gk" },
+  { id:70, name:"Taxiotti (Barbudo)",   team:"TI", ovr:60, posicao_favorita:"ata" },
+  { id:71, name:"Rafinha (Careca)",     team:"3I", ovr:94, posicao_favorita:"ata" },
+  { id:72, name:"Everton (Van)",        team:"Leva e Traz", ovr:94, posicao_favorita:"zag" },
+  { id:73, name:"Hermithão (TI)",       team:"TI", ovr:82, posicao_favorita:"gk"  },
+  { id:74, name:"Patrick",              team:"TI", ovr:69, posicao_favorita:"ata" },
+  { id:75, name:"Hobert (Várzea)",      team:"Professores", ovr:82, posicao_favorita:"ata" },
+  { id:76, name:"Hobert (Fatiada)",     team:"Professores", ovr:96, posicao_favorita:"ata" },
+  { id:77, name:"João Jonas",           team:"Professores", ovr:81, posicao_favorita:"ata" },
 ];
 
 const TEAM_NAMES_AWAY = [
-  "Último Lance FC", "Casa Pedra", "Sim Sim Sim?", "Mesa do Pagode", "Força Jovem", "Git Bash", "Atende Play"
+  "Último Lance FC", "Casa da Pedra", "Sim Sim Sim?", "Mesa do Pagode", "Força Jovem", "Git Bash", "Atende Play", "Jumentos FC", "Roldão Atacadista", "Quadrilha FC", "Canil"
 ];
 
 // ===================== STATE =====================
@@ -1568,6 +1591,68 @@ function showScreen(id) {
 function avgOvr(players) {
   if (!players.length) return 0;
   return Math.round(players.reduce((s, p) => s + p.ovr, 0) / players.length);
+}
+
+// ===================== CHEMISTRY & BUFF SYSTEMS =====================
+
+// Mapeamento posicao_favorita → slots no campo
+const POS_SLOTS = { gk: ['gk'], zag: ['dl','dr'], ata: ['al','ar'] };
+
+// Retorna o OVR efetivo de um jogador numa determinada slot (com buff de posição)
+function effectiveOvr(player, slot) {
+  if (!player) return 0;
+  const posSlots = POS_SLOTS[player.posicao_favorita] || [];
+  const posBuff = posSlots.includes(slot) ? 4 : 0;
+  return Math.min(99, player.ovr + posBuff);
+}
+
+// Calcula bônus de entrosamento para um array de jogadores (do mesmo time)
+// +2 OVR médio por par de jogadores com o mesmo time (máx +8)
+function chemistryBonus(players) {
+  const teamCount = {};
+  players.forEach(p => { if (p) teamCount[p.team] = (teamCount[p.team] || 0) + 1; });
+  let pairs = 0;
+  Object.values(teamCount).forEach(c => { pairs += Math.floor(c * (c - 1) / 2); });
+  return Math.min(8, pairs * 2); // cada par = +2 OVR médio, máx +8
+}
+
+// Retorna info de entrosamento para exibir na tela de formação
+function getChemistryInfo(formation) {
+  const players = Object.values(formation).filter(Boolean);
+  const bonus = chemistryBonus(players);
+  const teamCount = {};
+  players.forEach(p => { teamCount[p.team] = (teamCount[p.team] || 0) + 1; });
+  const combos = Object.entries(teamCount)
+    .filter(([,c]) => c > 1)
+    .map(([t,c]) => `${c}x ${t}`);
+  return { bonus, combos };
+}
+
+// Calcula nota de desempenho (1-10) para cada jogador ao final da partida
+function calcPlayerRating(player, isHome) {
+  const goals = state.playerGoals[player.id] || 0;
+  const assists = state.playerAssists[player.id] || 0;
+  const teamWon = isHome
+    ? (state.penalties ? state.penalties.winner === 'home' : state.matchGoalsHome > state.matchGoalsAway)
+    : (state.penalties ? state.penalties.winner === 'away' : state.matchGoalsAway > state.matchGoalsHome);
+  const drew = !state.penalties && state.matchGoalsHome === state.matchGoalsAway;
+
+  // Base pela qualidade (OVR) + contribuição da partida
+  let base = 4.5 + (player.ovr - 50) * 0.04; // OVR 50→4.5, OVR 99→6.5
+  base += goals * 1.5;
+  base += assists * 0.8;
+  if (teamWon) base += 0.8;
+  if (drew) base += 0.2;
+  // Aleatoriedade pequena ±0.5
+  base += (Math.random() - 0.5);
+  return Math.min(10, Math.max(1, Math.round(base * 10) / 10));
+}
+
+function ratingColor(r) {
+  if (r >= 8.5) return '#ffd700';
+  if (r >= 7.0) return '#00e676';
+  if (r >= 5.5) return '#94a3b8';
+  return '#ef4444';
 }
 
 // ===================== SPLASH → DRAFT =====================
@@ -2646,9 +2731,11 @@ function renderBench() {
 
     const el = document.createElement('div');
     el.className = 'bench-player';
+    const posLabel = { gk:'GK', zag:'ZAG', ata:'ATA' }[p.posicao_favorita] || '';
     el.innerHTML = `
       <div class="bp-ovr ${ovrClass(p.ovr)}">${p.ovr}</div>
       <div class="bp-name">${p.name}</div>
+      <span class="pos-tag ${p.posicao_favorita}">${posLabel} +4</span>
     `;
     el.onclick = () => selectBenchPlayer(p, el);
     bench.appendChild(el);
@@ -2728,9 +2815,14 @@ function renderField() {
     const slot = document.querySelector(`.field-slot[data-pos="${pos}"]`);
     const player = state.formation[pos];
     if (player) {
-      slot.className = `field-slot slot-${pos} filled`;
+      const eOvr = effectiveOvr(player, pos);
+      const hasBuff = eOvr > player.ovr;
+      const ovrDisplay = hasBuff
+        ? `<span class="slot-ovr" style="color:#ffd700">${eOvr}<span style="font-size:9px;vertical-align:super;color:#ffd700">▲</span></span>`
+        : `<span class="slot-ovr">${player.ovr}</span>`;
+      slot.className = `field-slot slot-${pos} filled${hasBuff ? ' pos-buff' : ''}`;
       slot.innerHTML = `
-        <span class="slot-ovr">${player.ovr}</span>
+        ${ovrDisplay}
         <span class="slot-name">${player.name}</span>
       `;
     } else {
@@ -2740,6 +2832,18 @@ function renderField() {
       slot.innerHTML = '';
     }
   });
+
+  // Update chemistry bar
+  const chem = getChemistryInfo(state.formation);
+  const bar = document.getElementById('chemistryBar');
+  if (bar) {
+    if (chem.bonus > 0) {
+      const hearts = chem.bonus >= 6 ? '🔥' : chem.bonus >= 4 ? '💚💚' : '💚';
+      bar.innerHTML = `${hearts} <span style="color:var(--accent);font-weight:700">ENTROSAMENTO +${chem.bonus} OVR</span> — ${chem.combos.join(', ')}`;
+    } else {
+      bar.innerHTML = `<span style="color:var(--text-muted)">Escale jogadores do mesmo time para ganhar entrosamento</span>`;
+    }
+  }
 }
 
 // ===================== MATCH =====================
@@ -2786,6 +2890,7 @@ function startMatch() {
   generateAwayTeam();
 
   const homePlayers = Object.values(state.formation);
+<<<<<<< HEAD
   
   // Validar que o time do jogador tem exatamente 5 jogadores
   if (homePlayers.length !== 5 || homePlayers.some(p => !p)) {
@@ -2809,9 +2914,29 @@ function startMatch() {
   const awayAvg = avgOvr(state.awayTeam);
 
   document.getElementById('matchTitle').textContent = 'JOGO ÚNICO';
+=======
+
+  // Apply position buffs: create effective-OVR copies for simulation
+  const homeEffective = Object.entries(state.formation).map(([slot, p]) => {
+    if (!p) return p;
+    return { ...p, ovr: effectiveOvr(p, slot) };
+  });
+
+  // Apply chemistry bonus as flat OVR bump distributed to all home players
+  const chemBonus = chemistryBonus(homePlayers);
+  const homeWithChem = homeEffective.map(p => p ? { ...p, ovr: Math.min(99, p.ovr + chemBonus) } : p);
+
+  const homeAvg = avgOvr(homeWithChem.filter(Boolean));
+  const awayAvg = avgOvr(state.awayTeam);
+
+  // Store effective team for simulation use
+  state.homeEffective = homeWithChem;
+  state.chemBonus = chemBonus;
+
+>>>>>>> 39369db857da44cc0dc5d6f952f344ecc34ee4c0
   document.getElementById('teamHomeName').textContent = 'SEU TIME';
   document.getElementById('teamAwayName').textContent = state.awayName;
-  document.getElementById('teamHomeOvr').textContent = `OVR ${homeAvg}`;
+  document.getElementById('teamHomeOvr').textContent = `OVR ${homeAvg}${chemBonus > 0 ? ` (+${chemBonus} ent.)` : ''}`;
   document.getElementById('teamAwayOvr').textContent = `OVR ${awayAvg}`;
   document.getElementById('scoreHome').textContent = '0';
   document.getElementById('scoreAway').textContent = '0';
@@ -2828,7 +2953,7 @@ function startMatch() {
   state.penState = null;
 
   showScreen('match');
-  simulateMatch(homePlayers, state.awayTeam, homeAvg, awayAvg);
+  simulateMatch(homeWithChem.filter(Boolean), state.awayTeam, homeAvg, awayAvg);
 }
 
 function simulateMatch(home, away, homeAvg, awayAvg) {
@@ -3258,7 +3383,7 @@ function showResult() {
   `;
   document.getElementById('resultEvents').innerHTML=document.getElementById('matchEvents').innerHTML;
 
-  // details
+  // details with performance ratings
   details.innerHTML = `
     <div class="result-team-col">
       <h3>Seu Time</h3>
@@ -3267,15 +3392,22 @@ function showResult() {
         const a = state.playerAssists[p.id] || 0;
         const perf = calculatePlayerPerformance(p);
         const stats = [g > 0 ? `⚽${g}` : '', a > 0 ? `🅰️${a}` : ''].filter(Boolean).join(' ');
+        const rating = calcPlayerRating(p, true);
+        const rColor = ratingColor(rating);
         return `<div class="result-player-row">
           <span>${p.name}</span>
           <span style="display:flex;gap:8px;align-items:center;">
             ${stats ? `<span style="font-size:11px;color:var(--accent)">${stats}</span>` : ''}
+<<<<<<< HEAD
             <span class="${ovrClass(p.ovr)}">${p.ovr}</span>
             <span style="font-size:11px;color:var(--gold);font-weight:700;">${perf.toFixed(1)}</span>
+=======
+            <span style="font-family:'Bebas Neue',cursive;font-size:15px;color:${rColor};min-width:28px;text-align:right;">${rating}</span>
+>>>>>>> 39369db857da44cc0dc5d6f952f344ecc34ee4c0
           </span>
         </div>`;
       }).join('')}
+      ${(state.chemBonus > 0) ? `<div style="margin-top:8px;font-size:10px;color:var(--accent);letter-spacing:1px;">🔗 Entrosamento +${state.chemBonus}</div>` : ''}
     </div>
     <div class="result-team-col">
       <h3>${state.awayName}</h3>
@@ -3284,12 +3416,18 @@ function showResult() {
         const a = state.playerAssists[p.id] || 0;
         const perf = calculatePlayerPerformance(p);
         const stats = [g > 0 ? `⚽${g}` : '', a > 0 ? `🅰️${a}` : ''].filter(Boolean).join(' ');
+        const rating = calcPlayerRating(p, false);
+        const rColor = ratingColor(rating);
         return `<div class="result-player-row">
           <span>${p.name}</span>
           <span style="display:flex;gap:8px;align-items:center;">
             ${stats ? `<span style="font-size:11px;color:var(--accent)">${stats}</span>` : ''}
+<<<<<<< HEAD
             <span class="${ovrClass(p.ovr)}">${p.ovr}</span>
             <span style="font-size:11px;color:var(--gold);font-weight:700;">${perf.toFixed(1)}</span>
+=======
+            <span style="font-family:'Bebas Neue',cursive;font-size:15px;color:${rColor};min-width:28px;text-align:right;">${rating}</span>
+>>>>>>> 39369db857da44cc0dc5d6f952f344ecc34ee4c0
           </span>
         </div>`;
       }).join('')}
