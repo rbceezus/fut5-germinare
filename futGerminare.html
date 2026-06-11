@@ -1502,6 +1502,14 @@ let state = {
   }
 };
 
+// ===================== DATA VALIDATION =====================
+// Garantir que nenhum jogador tenha overall <= 0
+ALL_PLAYERS.forEach(player => {
+  if (!player.ovr || player.ovr <= 0) {
+    player.ovr = Math.max(1, player.ovr || 1);
+  }
+});
+
 // ===================== RARITY SYSTEM =====================
 // Faixas: Comum (≤79), Raro (80-89), Muito Raro (90-95), Lendário (96+)
 // Peso no draft: Comum aparece mais, Lendário é raro
@@ -1611,7 +1619,24 @@ function generateChampionship() {
         teamNameIndex++;
         
         // Pegar 5 jogadores sequenciais do pool
-        const teamPlayers = shuffled.slice(playerIndex, playerIndex + 5);
+        let teamPlayers = shuffled.slice(playerIndex, playerIndex + 5);
+        
+        // Se não temos 5 jogadores, reabastecer o pool
+        if (teamPlayers.length < 5) {
+          const remainingNeeded = 5 - teamPlayers.length;
+          const extraPlayers = shuffle(ALL_PLAYERS).slice(0, remainingNeeded);
+          teamPlayers.push(...extraPlayers);
+        }
+        
+        // Garantir exatamente 5 jogadores
+        teamPlayers = teamPlayers.slice(0, 5);
+        
+        // Garantir que nenhum jogador tenha overall <= 0
+        teamPlayers = teamPlayers.map(p => ({
+          ...p,
+          ovr: Math.max(1, p.ovr || 1)
+        }));
+        
         playerIndex += 5;
         
         return {
@@ -1707,6 +1732,57 @@ function nextGroupsMatch() {
       }
     });
     
+    // Sincronizar dados dos times com os grupos (em caso de desincronização)
+    champ.groups.forEach(group => {
+      group.teams.forEach(team => {
+        // Recalcular pontos e stats baseado nas partidas
+        const relevantMatches = champ.groupMatches.filter(m => 
+          (m.team1 === team || m.team2 === team) && m.played
+        );
+        
+        // Resetar stats
+        team.points = 0;
+        team.wins = 0;
+        team.draws = 0;
+        team.losses = 0;
+        team.goalsFor = 0;
+        team.goalsAgainst = 0;
+        
+        // Recalcular
+        relevantMatches.forEach(match => {
+          const isTeam1 = match.team1 === team;
+          const score1 = match.score1;
+          const score2 = match.score2;
+          
+          if (isTeam1) {
+            team.goalsFor += score1;
+            team.goalsAgainst += score2;
+            if (score1 > score2) {
+              team.wins++;
+              team.points += 3;
+            } else if (score1 < score2) {
+              team.losses++;
+            } else {
+              team.draws++;
+              team.points += 1;
+            }
+          } else {
+            team.goalsFor += score2;
+            team.goalsAgainst += score1;
+            if (score2 > score1) {
+              team.wins++;
+              team.points += 3;
+            } else if (score2 < score1) {
+              team.losses++;
+            } else {
+              team.draws++;
+              team.points += 1;
+            }
+          }
+        });
+      });
+    });
+    
     proceedToKnockout();
     return;
   }
@@ -1762,7 +1838,7 @@ function simulateAIMatch(match) {
   const awayAvg = team2Avg;
   
   // Probabilidade de gol
-  function ovrFactor(ovr) { return (ovr - 1) / 98; }
+  function ovrFactor(ovr) { return (Math.max(1, ovr) - 1) / 98; }
   function goalProb(scorer, gk) {
     const attackBonus = ovrFactor(scorer.ovr) * 0.22;
     const gkPenalty = (1 - ovrFactor(gk ? gk.ovr : 70)) * 0.15;
@@ -1781,11 +1857,16 @@ function simulateAIMatch(match) {
     const scorerPool = attackTeam.filter((p, idx) => idx !== 0);
     if (scorerPool.length > 0 && Math.random() < 0.25) {
       const totalOvr = scorerPool.reduce((s, p) => s + p.ovr, 0);
-      let rw = Math.random() * totalOvr;
       let scorer = scorerPool[0];
-      for (const p of scorerPool) {
-        rw -= p.ovr;
-        if (rw <= 0) { scorer = p; break; }
+      
+      if (totalOvr > 0) {
+        let rw = Math.random() * totalOvr;
+        for (const p of scorerPool) {
+          rw -= p.ovr;
+          if (rw <= 0) { scorer = p; break; }
+        }
+      } else {
+        scorer = scorerPool[Math.floor(Math.random() * scorerPool.length)];
       }
       
       if (Math.random() < goalProb(scorer, defendGK)) {
@@ -1955,6 +2036,26 @@ function renderKnockoutBracket() {
 function nextKnockoutMatch() {
   const champ = state.championship;
   
+  // Verificar se o jogador tem uma partida já jogada nesta rodada
+  const playerMatchThisRound = champ.knockoutMatches.find(m => 
+    m.round === champ.currentRound && 
+    m.played && 
+    (m.team1.isPlayer || m.team2.isPlayer)
+  );
+  
+  // Se sim, verificar se o jogador perdeu
+  if (playerMatchThisRound) {
+    const playerWon = playerMatchThisRound.team1.isPlayer 
+      ? playerMatchThisRound.score1 > playerMatchThisRound.score2
+      : playerMatchThisRound.score2 > playerMatchThisRound.score1;
+    
+    if (!playerWon) {
+      // Jogador foi eliminado
+      showChampionEliminated();
+      return;
+    }
+  }
+  
   // Encontrar próxima partida do jogador não jogada
   let nextPlayerMatch = -1;
   for (let i = 0; i < champ.knockoutMatches.length; i++) {
@@ -2037,7 +2138,7 @@ function simulateKnockoutMatch(match) {
   const team1Avg = avgOvr(match.team1.players);
   const team2Avg = avgOvr(match.team2.players);
   
-  function ovrFactor(ovr) { return (ovr - 1) / 98; }
+  function ovrFactor(ovr) { return (Math.max(1, ovr) - 1) / 98; }
   function goalProb(scorer, gk) {
     const attackBonus = ovrFactor(scorer.ovr) * 0.22;
     const gkPenalty = (1 - ovrFactor(gk ? gk.ovr : 70)) * 0.15;
@@ -2055,11 +2156,16 @@ function simulateKnockoutMatch(match) {
     const scorerPool = attackTeam.filter((p, idx) => idx !== 0);
     if (scorerPool.length > 0 && Math.random() < 0.25) {
       const totalOvr = scorerPool.reduce((s, p) => s + p.ovr, 0);
-      let rw = Math.random() * totalOvr;
       let scorer = scorerPool[0];
-      for (const p of scorerPool) {
-        rw -= p.ovr;
-        if (rw <= 0) { scorer = p; break; }
+      
+      if (totalOvr > 0) {
+        let rw = Math.random() * totalOvr;
+        for (const p of scorerPool) {
+          rw -= p.ovr;
+          if (rw <= 0) { scorer = p; break; }
+        }
+      } else {
+        scorer = scorerPool[Math.floor(Math.random() * scorerPool.length)];
       }
       
       if (Math.random() < goalProb(scorer, defendGK)) {
@@ -2073,8 +2179,8 @@ function simulateKnockoutMatch(match) {
   if (homeGoals === awayGoals) {
     // Simular pênaltis
     const penProb = (kicker, gk) => {
-      const att = kicker ? (kicker.ovr - 1) / 98 : 0.5;
-      const def = gk ? (gk.ovr - 1) / 98 : 0.5;
+      const att = kicker ? (Math.max(1, kicker.ovr) - 1) / 98 : 0.5;
+      const def = gk ? (Math.max(1, gk.ovr) - 1) / 98 : 0.5;
       return Math.max(0.30, Math.min(0.85, 0.60 + att * 0.15 - def * 0.12));
     };
     
@@ -2269,29 +2375,81 @@ function handleMatchResult() {
   } else {
     // Registrar resultado no campeonato
     const champ = state.championship;
-    const currentMatch = champ.groupMatches[champ.groupMatchIndex];
     
-    currentMatch.score1 = state.matchGoalsHome;
-    currentMatch.score2 = state.matchGoalsAway;
-    currentMatch.played = true;
-    
-    // Atualizar stats
-    updateGroupStats(currentMatch);
-    
-    // Atualizar stats totais
-    champ.statsTotal.goalsFor += state.matchGoalsHome;
-    champ.statsTotal.goalsAgainst += state.matchGoalsAway;
-    
-    if (state.matchGoalsHome > state.matchGoalsAway) {
-      champ.statsTotal.wins++;
-    } else if (state.matchGoalsHome < state.matchGoalsAway) {
-      champ.statsTotal.losses++;
-    } else {
-      champ.statsTotal.draws++;
+    if (champ.currentPhase === 'groups') {
+      // Fase de grupos
+      const currentMatch = champ.groupMatches[champ.groupMatchIndex];
+      
+      // Determinar se o jogador é team1 ou team2
+      const playerIsTeam1 = currentMatch.team1.isPlayer;
+      
+      // Atribuir scores corretamente
+      if (playerIsTeam1) {
+        currentMatch.score1 = state.matchGoalsHome;
+        currentMatch.score2 = state.matchGoalsAway;
+      } else {
+        currentMatch.score1 = state.matchGoalsAway;
+        currentMatch.score2 = state.matchGoalsHome;
+      }
+      currentMatch.played = true;
+      
+      // Atualizar stats
+      updateGroupStats(currentMatch);
+      
+      // Atualizar stats totais
+      champ.statsTotal.goalsFor += state.matchGoalsHome;
+      champ.statsTotal.goalsAgainst += state.matchGoalsAway;
+      
+      if (state.matchGoalsHome > state.matchGoalsAway) {
+        champ.statsTotal.wins++;
+      } else if (state.matchGoalsHome < state.matchGoalsAway) {
+        champ.statsTotal.losses++;
+      } else {
+        champ.statsTotal.draws++;
+      }
+      
+      showScreen('championship-groups');
+      renderGroupsDisplay();
+    } else if (champ.currentPhase === 'knockout') {
+      // Fase de eliminatórias
+      const currentMatch = champ.knockoutMatches[champ.knockoutMatchIndex];
+      
+      // Determinar se o jogador é team1 ou team2
+      const playerIsTeam1 = currentMatch.team1.isPlayer;
+      
+      // Atribuir scores corretamente
+      if (playerIsTeam1) {
+        currentMatch.score1 = state.matchGoalsHome;
+        currentMatch.score2 = state.matchGoalsAway;
+      } else {
+        currentMatch.score1 = state.matchGoalsAway;
+        currentMatch.score2 = state.matchGoalsHome;
+      }
+      currentMatch.played = true;
+      
+      // Verificar se o jogador perdeu
+      const playerWon = state.matchGoalsHome > state.matchGoalsAway;
+      if (!playerWon) {
+        // Jogador foi eliminado
+        showChampionEliminated();
+        return;
+      }
+      
+      // Atualizar stats totais
+      champ.statsTotal.goalsFor += state.matchGoalsHome;
+      champ.statsTotal.goalsAgainst += state.matchGoalsAway;
+      
+      if (state.matchGoalsHome > state.matchGoalsAway) {
+        champ.statsTotal.wins++;
+      } else if (state.matchGoalsHome < state.matchGoalsAway) {
+        champ.statsTotal.losses++;
+      } else {
+        champ.statsTotal.draws++;
+      }
+      
+      showScreen('championship-knockout');
+      renderKnockoutBracket();
     }
-    
-    showScreen('championship-groups');
-    renderGroupsDisplay();
   }
 }
 
@@ -2587,8 +2745,31 @@ function renderField() {
 // ===================== MATCH =====================
 function generateAwayTeam() {
   const used = new Set(state.myPicks.map(p => p.id));
-  const available = ALL_PLAYERS.filter(p => !used.has(p.id));
+  let available = ALL_PLAYERS.filter(p => !used.has(p.id));
+  
+  // Garantir mínimo 5 jogadores disponíveis
+  if (available.length < 5) {
+    available = ALL_PLAYERS.filter(p => !used.has(p.id) || true); // use todos se necessário
+    if (available.length < 5) {
+      console.warn('⚠️ Menos de 5 jogadores disponíveis. Usando todos os jogadores.');
+    }
+  }
+  
   state.awayTeam = shuffle(available).slice(0, 5);
+  
+  // Garantir que o time tem exatamente 5 jogadores
+  while (state.awayTeam.length < 5) {
+    const newPlayers = shuffle(ALL_PLAYERS).slice(0, 5 - state.awayTeam.length);
+    state.awayTeam.push(...newPlayers);
+  }
+  state.awayTeam = state.awayTeam.slice(0, 5);
+  
+  // Garantir que nenhum jogador tenha overall <= 0
+  state.awayTeam = state.awayTeam.map(p => ({
+    ...p,
+    ovr: Math.max(1, p.ovr || 1)
+  }));
+  
   state.awayName = TEAM_NAMES_AWAY[Math.floor(Math.random() * TEAM_NAMES_AWAY.length)];
 }
 
@@ -2605,6 +2786,25 @@ function startMatch() {
   generateAwayTeam();
 
   const homePlayers = Object.values(state.formation);
+  
+  // Validar que o time do jogador tem exatamente 5 jogadores
+  if (homePlayers.length !== 5 || homePlayers.some(p => !p)) {
+    alert('❌ Seu time precisa ter exatamente 5 jogadores! Por favor, complete a formação.');
+    showScreen('formation');
+    return;
+  }
+  
+  // Validar que o time adversário tem 5 jogadores
+  if (!state.awayTeam || state.awayTeam.length < 5) {
+    console.error('❌ Erro: time adversário não tem jogadores suficientes');
+    generateAwayTeam();
+    if (!state.awayTeam || state.awayTeam.length < 5) {
+      alert('❌ Erro ao gerar time adversário. Tente novamente.');
+      resetGame();
+      return;
+    }
+  }
+  
   const homeAvg = avgOvr(homePlayers);
   const awayAvg = avgOvr(state.awayTeam);
 
@@ -2632,13 +2832,28 @@ function startMatch() {
 }
 
 function simulateMatch(home, away, homeAvg, awayAvg) {
+  // Validar que os times têm jogadores
+  if (!home || home.length < 5 || !away || away.length < 5) {
+    console.error('❌ Erro: Um dos times não tem 5 jogadores');
+    console.error('Home players:', home?.length, 'Away players:', away?.length);
+    showResult();
+    return;
+  }
+  
   // identify GKs (the player in GK slot for each team)
   const homeGK = state.formation.gk;
   // away GK = first player in their team (random assignment)
   const awayGK = state.awayTeam[0];
+  
+  // Validar que os goleiros existem
+  if (!homeGK || !awayGK) {
+    console.error('❌ Erro: Um dos goleiros não existe');
+    showResult();
+    return;
+  }
 
   // OVR helpers: normalize OVR to a 0-1 scale for probability tuning
-  function ovrFactor(ovr) { return (ovr - 1) / 98; } // 0 (OVR=1) → 1 (OVR=99)
+  function ovrFactor(ovr) { return (Math.max(1, ovr) - 1) / 98; } // 0 (OVR=1) → 1 (OVR=99)
 
   // Higher OVR scorer → more likely to score; lower OVR GK → more likely to concede
   function goalProb(scorer, gk) {
@@ -2685,9 +2900,14 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
       const nonGK = attackTeam.filter(p => p.id !== (isHome ? homeGK : awayGK)?.id);
       const scorerPool = nonGK.length > 0 ? nonGK : attackTeam;
       const totalOvr = scorerPool.reduce((s, p) => s + p.ovr, 0);
-      let rw = Math.random() * totalOvr;
       let scorer = scorerPool[0];
-      for (const p of scorerPool) { rw -= p.ovr; if (rw <= 0) { scorer = p; break; } }
+      
+      if (totalOvr > 0) {
+        let rw = Math.random() * totalOvr;
+        for (const p of scorerPool) { rw -= p.ovr; if (rw <= 0) { scorer = p; break; } }
+      } else {
+        scorer = scorerPool[Math.floor(Math.random() * scorerPool.length)];
+      }
 
       // Now decide if goal actually goes in based on scorer vs GK OVR
       const prob = goalProb(scorer, defendGK);
@@ -2698,9 +2918,14 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
           const assistPool = scorerPool.filter(p => p.id !== scorer.id);
           if (assistPool.length > 0) {
             const totalAsstOvr = assistPool.reduce((s, p) => s + p.ovr, 0);
-            let ra = Math.random() * totalAsstOvr;
             assister = assistPool[0];
-            for (const p of assistPool) { ra -= p.ovr; if (ra <= 0) { assister = p; break; } }
+            
+            if (totalAsstOvr > 0) {
+              let ra = Math.random() * totalAsstOvr;
+              for (const p of assistPool) { ra -= p.ovr; if (ra <= 0) { assister = p; break; } }
+            } else {
+              assister = assistPool[Math.floor(Math.random() * assistPool.length)];
+            }
           }
         }
         return { min, type: 'goal', isHome, player: scorer, assister };
@@ -2736,9 +2961,14 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
       // weight inversely by OVR: bad players isolate more
       const invOvr = team.map(p => Math.max(1, 100 - p.ovr));
       const totalInv = invOvr.reduce((s, w) => s + w, 0);
-      let ri = Math.random() * totalInv;
       let isoler = team[0];
-      for (let i = 0; i < team.length; i++) { ri -= invOvr[i]; if (ri <= 0) { isoler = team[i]; break; } }
+      
+      if (totalInv > 0) {
+        let ri = Math.random() * totalInv;
+        for (let i = 0; i < team.length; i++) { ri -= invOvr[i]; if (ri <= 0) { isoler = team[i]; break; } }
+      } else {
+        isoler = team[Math.floor(Math.random() * team.length)];
+      }
       return { min, type: 'isolou', isHome, player: isoler };
     } else if (r < 0.74) {
       // drible especial — mais provável em jogadores de alto OVR
@@ -2746,9 +2976,14 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
       const team = isHome ? home : away;
       // peso por OVR: craques driblam mais
       const totalOvrDrib = team.reduce((s, p) => s + p.ovr, 0);
-      let rd = Math.random() * totalOvrDrib;
       let dribler = team[0];
-      for (const p of team) { rd -= p.ovr; if (rd <= 0) { dribler = p; break; } }
+      
+      if (totalOvrDrib > 0) {
+        let rd = Math.random() * totalOvrDrib;
+        for (const p of team) { rd -= p.ovr; if (rd <= 0) { dribler = p; break; } }
+      } else {
+        dribler = team[Math.floor(Math.random() * team.length)];
+      }
       const dribles = ['caneta', 'chapeu', 'elastico', 'pedalada'];
       const drible = dribles[Math.floor(Math.random() * dribles.length)];
       return { min, type: 'drible', isHome, player: dribler, drible };
@@ -2787,7 +3022,15 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
       document.getElementById('matchProgress').style.width = progress + '%';
 
       if (idx === events.length - 1) {
-        setTimeout(() => { if(state.matchGoalsHome===state.matchGoalsAway){simulatePenalties();} else {showResult();}}, 1500);
+        // Pênaltis apenas nas eliminatórias, não na fase de grupos
+        const hasPenalties = state.gameMode === 'championship' && state.championship.currentPhase === 'knockout';
+        setTimeout(() => { 
+          if(state.matchGoalsHome===state.matchGoalsAway && hasPenalties) {
+            simulatePenalties();
+          } else {
+            showResult();
+          }
+        }, 1500);
       }
     }, delay);
     delay += 1200 + Math.random() * 800;
@@ -2937,7 +3180,7 @@ function calculatePlayerPerformance(player) {
   
   const goals = state.playerGoals[player.id] || 0;
   const assists = state.playerAssists[player.id] || 0;
-  const ovrNormalized = (player.ovr - 1) / 98; // 0-1
+  const ovrNormalized = (Math.max(1, player.ovr) - 1) / 98; // 0-1
   
   // Gols valem até 2 pontos (1 ponto por gol até 2)
   score += Math.min(goals, 2);
@@ -3065,8 +3308,8 @@ function simulatePenalties() {
   const awayPlayers = state.awayTeam.filter(p => p.id !== awayGK?.id);
 
   function penProb(kicker, gk) {
-    const att = kicker ? (kicker.ovr - 1) / 98 : 0.5;
-    const def = gk    ? (gk.ovr    - 1) / 98 : 0.5;
+    const att = kicker ? (Math.max(1, kicker.ovr) - 1) / 98 : 0.5;
+    const def = gk    ? (Math.max(1, gk.ovr)    - 1) / 98 : 0.5;
     return Math.max(0.30, Math.min(0.85, 0.60 + att * 0.15 - def * 0.12));
   }
 
