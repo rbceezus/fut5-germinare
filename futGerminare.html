@@ -173,9 +173,9 @@
 
   .draft-cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
-    max-width: 700px;
+    max-width: 480px;
     width: 100%;
     padding: 0 16px;
   }
@@ -216,9 +216,18 @@
 
   .player-card .card-ovr {
     font-family: 'Bebas Neue', cursive;
-    font-size: 48px;
+    font-size: 56px;
     line-height: 1;
-    margin-bottom: 6px;
+    margin-bottom: 0px;
+  }
+
+  .player-card .card-ovr-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
   }
 
   .player-card .card-name {
@@ -307,8 +316,6 @@
   .draft-cards.shuffling .player-card:nth-child(2) { animation-delay: 0.1s; }
   .draft-cards.shuffling .player-card:nth-child(3) { animation-delay: 0.15s; }
   .draft-cards.shuffling .player-card:nth-child(4) { animation-delay: 0.2s; }
-  .draft-cards.shuffling .player-card:nth-child(5) { animation-delay: 0.25s; }
-  .draft-cards.shuffling .player-card:nth-child(6) { animation-delay: 0.3s; }
 
   @keyframes shuffle-in {
     from { transform: translateY(40px) rotateX(20deg); opacity: 0; }
@@ -597,6 +604,27 @@
     min-width: 40px;
   }
 
+  .event-team-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .event-team-badge.home {
+    background: rgba(0, 230, 118, 0.15);
+    color: var(--accent);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+  }
+  .event-team-badge.away {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--blue);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+  }
+
   .event-icon { font-size: 16px; }
 
   @keyframes event-in {
@@ -711,6 +739,38 @@
 
   .rp-goals { color: var(--accent); font-weight: 700; }
 
+  .feedback-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+  }
+
+  .feedback-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--text-muted);
+    border-radius: 20px;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .feedback-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--bg-card-hover);
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+
   .confetti-container {
     position: fixed;
     top: 0; left: 0;
@@ -740,10 +800,10 @@
 
 <!-- SPLASH SCREEN -->
 <div id="splash" class="screen active">
-  <div class="splash-logo">Fut5 - v1.1</div>
-  <div class="splash-sub">Monte seu time.</div>
-  <div class="splash-venue">Espaço da Felicidade</div>
-  <button class="btn btn-primary" onclick="startDraft()">Jogar</button>
+  <div class="splash-logo">Fut5 - Germinare</div>
+  <div class="splash-sub">Monte sua seleção. (v2.0)</div>
+  <div class="splash-venue">Quadrinha da Felicidade</div>
+  <button class="btn btn-primary" onclick="startDraft()">Draft</button>
 </div>
 
 <!-- DRAFT SCREEN -->
@@ -800,6 +860,31 @@
     <div class="match-progress-bar" id="matchProgress"></div>
   </div>
   <div class="match-events" id="matchEvents"></div>
+</div>
+
+<!-- PENALTY SCREEN -->
+<div id="penalty" class="screen">
+  <div class="match-venue">Espaço da Felicidade</div>
+  <div class="match-title" id="penaltyTitle">DISPUTA DE PÊNALTIS</div>
+  <div class="scoreboard" style="margin:10px 0;">
+    <div class="team-side">
+      <div class="team-name">SEU TIME</div>
+    </div>
+    <div class="score-display">
+      <div class="score-num" id="penScoreHome">0</div>
+      <div class="score-x">x</div>
+      <div class="score-num" id="penScoreAway">0</div>
+    </div>
+    <div class="team-side">
+      <div class="team-name" id="penAwayName">ADVERSÁRIO</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:24px;margin:8px 0;">
+    <div id="penDotsHome" style="display:flex;gap:8px;align-items:center;"></div>
+    <div id="penDotsAway" style="display:flex;gap:8px;align-items:center;"></div>
+  </div>
+  <div class="match-events" id="penaltyEvents" style="max-width:400px;min-height:120px;"></div>
+  <div id="penNextLabel" style="color:var(--text-muted);font-size:13px;letter-spacing:2px;text-transform:uppercase;margin-top:8px;min-height:20px;"></div>
 </div>
 
 <!-- RESULT SCREEN -->
@@ -874,13 +959,10 @@ const ALL_PLAYERS = [
   { id:58, name:"Kaique (Intertech)",   team:"3H", ovr:40 },
   { id:59, name:"Geladeira",            team:"3I", ovr:77 },
   { id:60, name:"Paulino (PH Falso)",   team:"3F", ovr:86 },
-  { id:61, name:"Rafinha (Careca)",     team:"Casa da Pedra", ovr:94 },
   { id:62, name:"Bento (Prime)",        team:"Jumentos", ovr:90 },
   { id:63, name:"Nakashima (Baseball)", team:"Sp.Giants", ovr:93 },
   { id:64, name:"Guegs (Atacadao)",     team:"Atacadão", ovr:60 },
-  { id:65, name:"Rafinha (Careca)",     team:"Casa da Pedra", ovr:94 },
   { id:66, name:"Vargas (Careca)",      team:"3H", ovr:78 },
-  { id:67, name:"Rafinha (Careca)",     team:"Casa da Pedra", ovr:94 },
   { id:68, name:"Guimas (Middle Part)", team:"3H", ovr:45 },
   { id:69, name:"Frodo (Hérnia)",       team:"3H", ovr:40 },
   { id:70, name:"Taxiotti (Barbudo)",   team:"Workspace JF", ovr:60 },
@@ -888,7 +970,7 @@ const ALL_PLAYERS = [
   { id:72, name:"Everton (Van)",        team:"Leva e Traz", ovr:94 },
   { id:73, name:"Hermithão (TI)",       team:"VIX", ovr:82 },
   { id:74, name:"Patrick",              team:"DEPSE", ovr:69 },
-  
+
 ];
 
 const TEAM_NAMES_AWAY = [
@@ -908,7 +990,10 @@ let state = {
   matchGoalsAway: 0,
   matchEvents: [],
   playerGoals: {},
+  playerAssists: {},
+  redCards: new Set(),
   penalties: null,
+  penState: null,
 };
 
 // ===================== RARITY SYSTEM =====================
@@ -921,11 +1006,11 @@ function getRarity(ovr) {
   return { tier: 'common', label: 'Comum', cssClass: 'tier-common', colorClass: 'rarity-common' };
 }
 
-// Weighted pick: jogadores com raridade alta têm MENOS chance de aparecer
+// Weighted pick: jogadores com raridade alta têm MENOS chance de aparecer (mas um pouquinho mais que antes)
 function getWeight(ovr) {
-  if (ovr >= 96) return 1;   // Lendário — muito difícil
-  if (ovr >= 90) return 3;   // Muito Raro
-  if (ovr >= 80) return 6;   // Raro
+  if (ovr >= 96) return 2;   // Lendário — difícil, mas um pouco mais acessível
+  if (ovr >= 90) return 5;   // Muito Raro
+  if (ovr >= 80) return 8;   // Raro
   return 10;                  // Comum — aparece fácil
 }
 
@@ -994,9 +1079,10 @@ function nextDraftRound() {
   state.round++;
   document.getElementById('draftRound').textContent = `RODADA ${state.round} / 5`;
 
-  // pick 6 from remaining pool using WEIGHTED RARITY
-  const available = state.draftPool.filter(p => !state.myPicks.find(pp => pp.id === p.id));
-  state.currentOptions = weightedSample(available, 6);
+  // pick 6 from remaining pool using WEIGHTED RARITY — never show already-picked players
+  const pickedIds = new Set(state.myPicks.map(p => p.id));
+  const available = state.draftPool.filter(p => !pickedIds.has(p.id));
+  state.currentOptions = weightedSample(available, 4);
 
   const container = document.getElementById('draftCards');
   container.innerHTML = '';
@@ -1009,6 +1095,7 @@ function nextDraftRound() {
     card.innerHTML = `
       <span class="rarity-badge ${rarity.tier}">${rarity.label}</span>
       <div class="card-ovr ${rarity.colorClass}">${p.ovr}</div>
+      <div class="card-ovr-label">OVR</div>
       <div class="card-name">${p.name}</div>
       <div class="card-team">${p.team}</div>
     `;
@@ -1192,7 +1279,10 @@ function startMatch() {
   state.matchGoalsAway = 0;
   state.matchEvents = [];
   state.playerGoals = {};
+  state.playerAssists = {};
+  state.redCards = new Set();
   state.penalties = null;
+  state.penState = null;
 
   showScreen('match');
   simulateMatch(homePlayers, state.awayTeam, homeAvg, awayAvg);
@@ -1204,9 +1294,27 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
   // away GK = first player in their team (random assignment)
   const awayGK = state.awayTeam[0];
 
+  // OVR helpers: normalize OVR to a 0-1 scale for probability tuning
+  function ovrFactor(ovr) { return (ovr - 1) / 98; } // 0 (OVR=1) → 1 (OVR=99)
+
+  // Higher OVR scorer → more likely to score; lower OVR GK → more likely to concede
+  function goalProb(scorer, gk) {
+    const attackBonus = ovrFactor(scorer.ovr) * 0.22;  // up to +22% from attacker
+    const gkPenalty   = (1 - ovrFactor(gk ? gk.ovr : 70)) * 0.15; // up to +15% from weak GK
+    return 0.28 + attackBonus + gkPenalty; // base 28% (era 18%), max ~65%
+  }
+
+  // Higher OVR GK → more great saves; lower OVR GK → more frangos
+  function saveProb(gk) {
+    return 0.25 + ovrFactor(gk ? gk.ovr : 70) * 0.30; // 25-55%
+  }
+  function frangoProb(gk) {
+    return 0.06 + (1 - ovrFactor(gk ? gk.ovr : 70)) * 0.18; // 6-24%
+  }
+
   // generate events at random minutes
   const eventMinutes = [];
-  const numEvents = 6 + Math.floor(Math.random() * 6); // 6-11 events
+  const numEvents = 12 + Math.floor(Math.random() * 8); // 12-19 events (era 6-11)
   const usedMinutes = new Set();
 
   for (let i = 0; i < numEvents; i++) {
@@ -1217,43 +1325,91 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
   }
   eventMinutes.sort((a, b) => a - b);
 
-  // decide events
+  // decide events — OVR-driven; attack possession is 50/50 — OVR decides who CONVERTS
   const events = eventMinutes.map(min => {
     const r = Math.random();
-    const homeChance = Math.max(0.35,Math.min(0.65,0.5 + (homeAvg - awayAvg) * 0.004));
+    // homeChance only used for non-goal "flavor" events (isolou, miss, drible)
+    // Goal attempts are always 50/50 possession — the GK and scorer OVR decide the result
+    const homeChance = Math.max(0.40, Math.min(0.60, 0.5 + (homeAvg - awayAvg) * 0.003));
 
-    if (r < 0.25) {
-      // goal
-      const isHome = Math.random() < homeChance;
-      const team = isHome ? home : away;
-      // scorers are non-GK field players preferably
-      const nonGK = team.filter(p => p.id !== (isHome ? homeGK : awayGK)?.id);
-      const scorerPool = nonGK.length > 0 ? nonGK : team;
-      const scorer = scorerPool[Math.floor(Math.random() * scorerPool.length)];
-      return { min, type: 'goal', isHome, player: scorer };
-    } else if (r < 0.52) {
-      // great save — ONLY the GK
+    if (r < 0.40) {
+      // goal attempt — true 50/50 possession, OVR decides outcome
+      const isHome = Math.random() < 0.5;
+      const attackTeam = isHome ? home : away;
+      const defendGK   = isHome ? awayGK : homeGK;
+
+      // Pick scorer: weighted by OVR among non-GKs
+      const nonGK = attackTeam.filter(p => p.id !== (isHome ? homeGK : awayGK)?.id);
+      const scorerPool = nonGK.length > 0 ? nonGK : attackTeam;
+      const totalOvr = scorerPool.reduce((s, p) => s + p.ovr, 0);
+      let rw = Math.random() * totalOvr;
+      let scorer = scorerPool[0];
+      for (const p of scorerPool) { rw -= p.ovr; if (rw <= 0) { scorer = p; break; } }
+
+      // Now decide if goal actually goes in based on scorer vs GK OVR
+      const prob = goalProb(scorer, defendGK);
+      if (Math.random() < prob) {
+        // Pick an assister (different player from same team, 75% chance of having one)
+        let assister = null;
+        if (Math.random() < 0.75) {
+          const assistPool = scorerPool.filter(p => p.id !== scorer.id);
+          if (assistPool.length > 0) {
+            const totalAsstOvr = assistPool.reduce((s, p) => s + p.ovr, 0);
+            let ra = Math.random() * totalAsstOvr;
+            assister = assistPool[0];
+            for (const p of assistPool) { ra -= p.ovr; if (ra <= 0) { assister = p; break; } }
+          }
+        }
+        return { min, type: 'goal', isHome, player: scorer, assister };
+      } else {
+        // shot saved or missed
+        const gkMakesSave = Math.random() < saveProb(defendGK);
+        if (gkMakesSave) {
+          return { min, type: 'save', isHome: !isHome, player: defendGK };
+        } else {
+          return { min, type: 'miss', isHome, player: scorer };
+        }
+      }
+    } else if (r < 0.50) {
+      // frango — chance inversely proportional to GK OVR
       const isHome = Math.random() < 0.5;
       const gk = isHome ? homeGK : awayGK;
-      return { min, type: 'save', isHome, player: gk };
-    } else if (r < 0.62) {
-      // frango — ONLY the GK
-      const isHome = Math.random() < 0.5;
-      const gk = isHome ? homeGK : awayGK;
-      return { min, type: 'frango', isHome, player: gk };
-    } else if (r < 0.72) {
+      if (Math.random() < frangoProb(gk)) {
+        return { min, type: 'frango', isHome, player: gk };
+      } else {
+        // great save instead
+        return { min, type: 'save', isHome, player: gk };
+      }
+    } else if (r < 0.55) {
       // bolada na cara
       const isHome = Math.random() < 0.5;
       const team = isHome ? home : away;
       const p = team[Math.floor(Math.random() * team.length)];
       return { min, type: 'bolada', isHome, player: p };
-    } else if (r < 0.82) {
-      // isolou na rua
+    } else if (r < 0.70) {
+      // isolou na rua — more likely from low-OVR players
       const isHome = Math.random() < homeChance;
       const team = isHome ? home : away;
-      const p = team[Math.floor(Math.random() * team.length)];
-      return { min, type: 'isolou', isHome, player: p };
-    } else if (r < 0.90) {
+      // weight inversely by OVR: bad players isolate more
+      const invOvr = team.map(p => Math.max(1, 100 - p.ovr));
+      const totalInv = invOvr.reduce((s, w) => s + w, 0);
+      let ri = Math.random() * totalInv;
+      let isoler = team[0];
+      for (let i = 0; i < team.length; i++) { ri -= invOvr[i]; if (ri <= 0) { isoler = team[i]; break; } }
+      return { min, type: 'isolou', isHome, player: isoler };
+    } else if (r < 0.74) {
+      // drible especial — mais provável em jogadores de alto OVR
+      const isHome = Math.random() < homeChance;
+      const team = isHome ? home : away;
+      // peso por OVR: craques driblam mais
+      const totalOvrDrib = team.reduce((s, p) => s + p.ovr, 0);
+      let rd = Math.random() * totalOvrDrib;
+      let dribler = team[0];
+      for (const p of team) { rd -= p.ovr; if (rd <= 0) { dribler = p; break; } }
+      const dribles = ['caneta', 'chapeu', 'elastico', 'pedalada'];
+      const drible = dribles[Math.floor(Math.random() * dribles.length)];
+      return { min, type: 'drible', isHome, player: dribler, drible };
+    } else if (r < 0.86) {
       // card
       const isHome = Math.random() < 0.5;
       const team = isHome ? home : away;
@@ -1270,10 +1426,20 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
   });
 
   // play events sequentially with delays
+  // redCards set is populated live during playback — expelled players are skipped in future events
   let delay = 800;
   events.forEach((evt, idx) => {
     setTimeout(() => {
-      processMatchEvent(evt);
+      // Skip this event if the main player (or assister) is already expelled
+      const mainExpelled  = evt.player  && state.redCards.has(evt.player.id);
+      const assistExpelled = evt.assister && state.redCards.has(evt.assister.id);
+      if (!mainExpelled) {
+        // If assister was expelled, just nullify the assist rather than skipping the goal
+        if (assistExpelled) evt.assister = null;
+        processMatchEvent(evt);
+        // Register expulsion immediately so future events respect it
+        if (evt.type === 'red') state.redCards.add(evt.player.id);
+      }
       const progress = ((idx + 1) / events.length) * 100;
       document.getElementById('matchProgress').style.width = progress + '%';
 
@@ -1290,21 +1456,27 @@ function processMatchEvent(evt) {
   const div = document.createElement('div');
   div.className = 'match-event';
 
-  const side = evt.isHome ? '' : `(${state.awayName})`;
+  const teamLabel = evt.isHome ? 'Seu Time' : state.awayName;
+  const badgeClass = evt.isHome ? 'home' : 'away';
+  const badge = `<span class="event-team-badge ${badgeClass}">${teamLabel}</span>`;
   let icon = '', text = '';
 
   switch (evt.type) {
     case 'goal':
       icon = '⚽';
+      const assistLine = evt.assister ? ` <span style="font-size:11px;color:var(--text-muted);">🅰️ ${evt.assister.name}</span>` : '';
       const goalTexts = [
-        `<strong>${evt.player.name}</strong> ${side} marca! GOLAÇO!`,
-        `<strong>${evt.player.name}</strong> ${side} não perdoa! GOL!`,
-        `<strong>${evt.player.name}</strong> ${side} manda pro fundo da rede!`,
-        `<strong>${evt.player.name}</strong> ${side} amplia! Bola na rede!`,
-        `<strong>${evt.player.name}</strong> ${side} fuzilou o goleiro!`,
+        `<strong>${evt.player.name}</strong> marca! GOLAÇO!`,
+        `<strong>${evt.player.name}</strong> não perdoa! GOL!`,
+        `<strong>${evt.player.name}</strong> manda pro fundo da rede!`,
+        `<strong>${evt.player.name}</strong> amplia! Bola na rede!`,
+        `<strong>${evt.player.name}</strong> fuzilou o goleiro!`,
       ];
-      text = goalTexts[Math.floor(Math.random() * goalTexts.length)];
-      state.playerGoals[evt.player.id]=(state.playerGoals[evt.player.id]||0)+1;
+      text = goalTexts[Math.floor(Math.random() * goalTexts.length)] + assistLine;
+      state.playerGoals[evt.player.id] = (state.playerGoals[evt.player.id] || 0) + 1;
+      if (evt.assister) {
+        state.playerAssists[evt.assister.id] = (state.playerAssists[evt.assister.id] || 0) + 1;
+      }
       if (evt.isHome) {
         state.matchGoalsHome++;
         document.getElementById('scoreHome').textContent = state.matchGoalsHome;
@@ -1316,23 +1488,22 @@ function processMatchEvent(evt) {
     case 'save':
       icon = '🧤';
       const saveTexts = [
-        `QUE DEFESAÇA de <strong>${evt.player.name}</strong> ${side}!`,
-        `<strong>${evt.player.name}</strong> ${side} FECHA O GOL! Mão santa!`,
-        `MILAGRE! <strong>${evt.player.name}</strong> ${side} salva o time!`,
-        `<strong>${evt.player.name}</strong> ${side} voa e espalma! Inacreditável!`,
+        `QUE DEFESAÇA de <strong>${evt.player.name}</strong>!`,
+        `<strong>${evt.player.name}</strong> FECHA O GOL! Mão santa!`,
+        `MILAGRE! <strong>${evt.player.name}</strong> salva o time!`,
+        `<strong>${evt.player.name}</strong> voa e espalma! Inacreditável!`,
       ];
       text = saveTexts[Math.floor(Math.random() * saveTexts.length)];
       break;
     case 'frango':
       icon = '🐔';
       const frangoTexts = [
-        `<strong>${evt.player.name}</strong> ${side} FRANGOU! Que vergonha!`,
-        `FRANGO! <strong>${evt.player.name}</strong> ${side} deixou passar entre as pernas!`,
-        `<strong>${evt.player.name}</strong> ${side} entregou a bola! FRANGO MONUMENTAL!`,
-        `A bola passou MANSA e <strong>${evt.player.name}</strong> ${side} só olhou!`,
+        `<strong>${evt.player.name}</strong> FRANGOU! Que vergonha!`,
+        `FRANGO! <strong>${evt.player.name}</strong> deixou passar entre as pernas!`,
+        `<strong>${evt.player.name}</strong> entregou a bola! FRANGO MONUMENTAL!`,
+        `A bola passou MANSA e <strong>${evt.player.name}</strong> só olhou!`,
       ];
       text = frangoTexts[Math.floor(Math.random() * frangoTexts.length)];
-      // frango = gol pro outro time
       if (evt.isHome) {
         state.matchGoalsAway++;
         document.getElementById('scoreAway').textContent = state.matchGoalsAway;
@@ -1344,36 +1515,63 @@ function processMatchEvent(evt) {
     case 'bolada':
       icon = '🤕';
       const boladaTexts = [
-        `<strong>${evt.player.name}</strong> ${side} TOMOU UMA BOLADA NA CARA!`,
-        `BOLADA! <strong>${evt.player.name}</strong> ${side} tá no chão vendo estrelas!`,
-        `<strong>${evt.player.name}</strong> ${side} levou uma bomba na fuça! Aiii!`,
+        `<strong>${evt.player.name}</strong> TOMOU UMA BOLADA NA CARA!`,
+        `BOLADA! <strong>${evt.player.name}</strong> tá no chão vendo estrelas!`,
+        `<strong>${evt.player.name}</strong> levou uma bomba na fuça! Aiii!`,
       ];
       text = boladaTexts[Math.floor(Math.random() * boladaTexts.length)];
       break;
     case 'isolou':
       icon = '🚀';
       const isolouTexts = [
-        `<strong>${evt.player.name}</strong> ${side} ISOLOU NA RUA IRINEU JOSÉ BORDON!`,
-        `<strong>${evt.player.name}</strong> ${side} mandou a bola pro estacionamento!`,
-        `<strong>${evt.player.name}</strong> ${side} chutou pra fora do Espaço da Felicidade!`,
-        `ISOLOU! <strong>${evt.player.name}</strong> ${side} mandou na lua!`,
+        `<strong>${evt.player.name}</strong> ISOLOU NA RUA IRINEU JOSÉ BORDON!`,
+        `<strong>${evt.player.name}</strong> mandou a bola pro estacionamento!`,
+        `<strong>${evt.player.name}</strong> chutou pra fora do Espaço da Felicidade!`,
+        `ISOLOU! <strong>${evt.player.name}</strong> mandou na lua!`,
       ];
       text = isolouTexts[Math.floor(Math.random() * isolouTexts.length)];
       break;
+    case 'drible':
+      const dribleIcons = { caneta: '🦵', chapeu: '🎩', elastico: '🌀', pedalada: '⚡' };
+      const dribleTexts = {
+        caneta: [
+          `<strong>${evt.player.name}</strong> deu uma CANETA absurda! Sem vergonha!`,
+          `CANETA! <strong>${evt.player.name}</strong> passou pelo buraquinho!`,
+          `<strong>${evt.player.name}</strong> enfiou pelo buraquinho! CANETA LINDA!`,
+        ],
+        chapeu: [
+          `<strong>${evt.player.name}</strong> deu um CHAPÉU! A galera foi à loucura!`,
+          `CHAPÉU! <strong>${evt.player.name}</strong> levantou a bola por cima!`,
+          `<strong>${evt.player.name}</strong> jogou por cima como se nada fosse! CHAPÉU!`,
+        ],
+        elastico: [
+          `<strong>${evt.player.name}</strong> fez um ELÁSTICO desconcertante!`,
+          `ELÁSTICO! <strong>${evt.player.name}</strong> deixou o cara sentado!`,
+          `Que mágica de <strong>${evt.player.name}</strong>! ELÁSTICO sensacional!`,
+        ],
+        pedalada: [
+          `PEDALADA! <strong>${evt.player.name}</strong> deixou o adversário tonto!`,
+          `<strong>${evt.player.name}</strong> fez a bicicleta girar! PEDALADA!`,
+          `Que fineza! <strong>${evt.player.name}</strong> aplicou a pedalada e sumiu!`,
+        ],
+      };
+      icon = dribleIcons[evt.drible];
+      text = dribleTexts[evt.drible][Math.floor(Math.random() * dribleTexts[evt.drible].length)];
+      break;
     case 'yellow':
       icon = '🟨';
-      text = `<strong>${evt.player.name}</strong> ${side} recebe amarelo`;
+      text = `<strong>${evt.player.name}</strong> recebe amarelo`;
       break;
     case 'red':
       icon = '🟥';
-      text = `<strong>${evt.player.name}</strong> ${side} expulso!`;
+      text = `<strong>${evt.player.name}</strong> EXPULSO!`;
       break;
     case 'miss':
       icon = '💨';
       const missTexts = [
-        `<strong>${evt.player.name}</strong> ${side} desperdiça chance!`,
-        `<strong>${evt.player.name}</strong> ${side} perdeu gol feito!`,
-        `<strong>${evt.player.name}</strong> ${side} chutou fraco nas mãos do goleiro!`,
+        `<strong>${evt.player.name}</strong> desperdiça chance!`,
+        `<strong>${evt.player.name}</strong> perdeu gol feito!`,
+        `<strong>${evt.player.name}</strong> chutou fraco nas mãos do goleiro!`,
       ];
       text = missTexts[Math.floor(Math.random() * missTexts.length)];
       break;
@@ -1382,6 +1580,7 @@ function processMatchEvent(evt) {
   div.innerHTML = `
     <span class="event-time">${evt.min}'</span>
     <span class="event-icon">${icon}</span>
+    ${badge}
     <span>${text}</span>
   `;
 
@@ -1418,16 +1617,25 @@ function showResult() {
 
   score.textContent = `${h} x ${a}` + (state.penalties ? ` (Pênaltis ${state.penalties.home}x${state.penalties.away})` : '');
 
-  // MVP — pick a random goal scorer from home, or best OVR
+  // MVP — score = goals*2 + assists*1; fallback to best OVR
   const homePlayers = Object.values(state.formation);
-  const allPlayers=[...homePlayers,...state.awayTeam];
-  const maxGoals=Math.max(0,...Object.values(state.playerGoals));
-  let candidates=maxGoals>0?allPlayers.filter(p=>state.playerGoals[p.id]===maxGoals):allPlayers;
-  let mvp=candidates[Math.floor(Math.random()*candidates.length)];
+  const allPlayers = [...homePlayers, ...state.awayTeam];
+  function mvpScore(p) {
+    return (state.playerGoals[p.id] || 0) * 2 + (state.playerAssists[p.id] || 0);
+  }
+  const maxScore = Math.max(0, ...allPlayers.map(mvpScore));
+  let candidates = maxScore > 0 ? allPlayers.filter(p => mvpScore(p) === maxScore) : allPlayers;
+  let mvp = candidates[Math.floor(Math.random() * candidates.length)];
+  const mvpGoals = state.playerGoals[mvp.id] || 0;
+  const mvpAssists = state.playerAssists[mvp.id] || 0;
+  const mvpStatParts = [];
+  if (mvpGoals > 0) mvpStatParts.push(`${mvpGoals} gol${mvpGoals > 1 ? 's' : ''}`);
+  if (mvpAssists > 0) mvpStatParts.push(`${mvpAssists} assist${mvpAssists > 1 ? 's' : ''}`);
+  if (mvpStatParts.length === 0) mvpStatParts.push('destaque da partida');
   mvpDiv.innerHTML = `
     <div class="mvp-label">MVP da Final</div>
     <div class="mvp-name">${mvp.name}</div>
-    <div class="mvp-stat">${state.playerGoals[mvp.id]||0} gols • ${mvp.team}</div>
+    <div class="mvp-stat">${mvpStatParts.join(' • ')} • ${mvp.team}</div>
   `;
   document.getElementById('resultEvents').innerHTML=document.getElementById('matchEvents').innerHTML;
 
@@ -1435,21 +1643,33 @@ function showResult() {
   details.innerHTML = `
     <div class="result-team-col">
       <h3>Seu Time</h3>
-      ${homePlayers.map(p => `
-        <div class="result-player-row">
+      ${homePlayers.map(p => {
+        const g = state.playerGoals[p.id] || 0;
+        const a = state.playerAssists[p.id] || 0;
+        const stats = [g > 0 ? `⚽${g}` : '', a > 0 ? `🅰️${a}` : ''].filter(Boolean).join(' ');
+        return `<div class="result-player-row">
           <span>${p.name}</span>
-          <span class="${ovrClass(p.ovr)}">${p.ovr}</span>
-        </div>
-      `).join('')}
+          <span style="display:flex;gap:8px;align-items:center;">
+            ${stats ? `<span style="font-size:11px;color:var(--accent)">${stats}</span>` : ''}
+            <span class="${ovrClass(p.ovr)}">${p.ovr}</span>
+          </span>
+        </div>`;
+      }).join('')}
     </div>
     <div class="result-team-col">
       <h3>${state.awayName}</h3>
-      ${state.awayTeam.map(p => `
-        <div class="result-player-row">
+      ${state.awayTeam.map(p => {
+        const g = state.playerGoals[p.id] || 0;
+        const a = state.playerAssists[p.id] || 0;
+        const stats = [g > 0 ? `⚽${g}` : '', a > 0 ? `🅰️${a}` : ''].filter(Boolean).join(' ');
+        return `<div class="result-player-row">
           <span>${p.name}</span>
-          <span class="${ovrClass(p.ovr)}">${p.ovr}</span>
-        </div>
-      `).join('')}
+          <span style="display:flex;gap:8px;align-items:center;">
+            ${stats ? `<span style="font-size:11px;color:var(--accent)">${stats}</span>` : ''}
+            <span class="${ovrClass(p.ovr)}">${p.ovr}</span>
+          </span>
+        </div>`;
+      }).join('')}
     </div>
   `;
 
@@ -1457,18 +1677,159 @@ function showResult() {
 }
 
 
-function simulatePenalties(){
- let homePens=0,awayPens=0;
- for(let i=0;i<5;i++){
-  if(Math.random()<0.7) homePens++;
-  if(Math.random()<0.7) awayPens++;
- }
- while(homePens===awayPens){
-  if(Math.random()<0.7) homePens++;
-  if(Math.random()<0.7) awayPens++;
- }
- state.penalties={home:homePens,away:awayPens,winner:homePens>awayPens?'home':'away'};
- showResult();
+function simulatePenalties() {
+  // Pre-generate all 5 kicks per team (more if needed for sudden death)
+  const homeGK = state.formation.gk;
+  const awayGK = state.awayTeam[0];
+  const homePlayers = Object.values(state.formation).filter(p => p && p.id !== homeGK?.id);
+  const awayPlayers = state.awayTeam.filter(p => p.id !== awayGK?.id);
+
+  function penProb(kicker, gk) {
+    const att = kicker ? (kicker.ovr - 1) / 98 : 0.5;
+    const def = gk    ? (gk.ovr    - 1) / 98 : 0.5;
+    return Math.max(0.30, Math.min(0.85, 0.60 + att * 0.15 - def * 0.12));
+  }
+
+  // Generate enough kicks for up to 10 rounds (5 normal + possible sudden death)
+  const MAX_ROUNDS = 10;
+  const homeKicks = [], awayKicks = [];
+  for (let i = 0; i < MAX_ROUNDS; i++) {
+    const hKicker = homePlayers[i % homePlayers.length] || homeGK;
+    const aKicker = awayPlayers[i % awayPlayers.length] || awayGK;
+    homeKicks.push({ kicker: hKicker, scored: Math.random() < penProb(hKicker, awayGK) });
+    awayKicks.push({ kicker: aKicker, scored: Math.random() < penProb(aKicker, homeGK) });
+  }
+
+  // Determine how many rounds actually needed
+  let hScore = 0, aScore = 0, totalRounds = 5;
+  for (let i = 0; i < 5; i++) {
+    if (homeKicks[i].scored) hScore++;
+    if (awayKicks[i].scored) aScore++;
+  }
+  // Sudden death rounds if still tied after 5
+  let round = 5;
+  while (hScore === aScore && round < MAX_ROUNDS) {
+    if (homeKicks[round].scored) hScore++;
+    if (awayKicks[round].scored) aScore++;
+    round++;
+  }
+  totalRounds = round;
+
+  // Reset penalty screen state
+  state.penState = {
+    homeKicks, awayKicks,
+    hScore: 0, aScore: 0,
+    totalRounds,
+    currentStep: 0,   // 0 = home kick 0, 1 = away kick 0, 2 = home kick 1 ...
+    dotsHome: [], dotsAway: [],
+  };
+
+  document.getElementById('penScoreHome').textContent = '0';
+  document.getElementById('penScoreAway').textContent = '0';
+  document.getElementById('penDotsHome').innerHTML = '';
+  document.getElementById('penDotsAway').innerHTML = '';
+  document.getElementById('penaltyEvents').innerHTML = '';
+  document.getElementById('penAwayName').textContent = state.awayName;
+  document.getElementById('penaltyTitle').textContent = 'DISPUTA DE PÊNALTIS';
+  document.getElementById('penNextLabel').textContent = '';
+
+  showScreen('penalty');
+  schedulePenaltyKick();
+}
+
+function schedulePenaltyKick() {
+  const ps = state.penState;
+  const step = ps.currentStep;
+  const kickIndex = Math.floor(step / 2);
+  const isHome = (step % 2 === 0);
+
+  if (kickIndex >= ps.totalRounds) {
+    // All done
+    const winner = ps.hScore > ps.aScore ? 'home' : 'away';
+    state.penalties = { home: ps.hScore, away: ps.aScore, winner };
+    document.getElementById('penNextLabel').textContent = '';
+    setTimeout(() => showResult(), 3000);
+    return;
+  }
+
+  // Show "next up" hint
+  const kick = isHome ? ps.homeKicks[kickIndex] : ps.awayKicks[kickIndex];
+  const teamLabel = isHome ? 'Seu Time' : state.awayName;
+  const isSuddenDeath = kickIndex >= 5;
+  document.getElementById('penNextLabel').textContent =
+    (isSuddenDeath ? '⚡ MORTE SÚBITA — ' : '') + `${teamLabel}: ${kick.kicker.name} na bola...`;
+
+  setTimeout(() => executePenaltyKick(kickIndex, isHome), 3500);
+}
+
+function executePenaltyKick(kickIndex, isHome) {
+  const ps = state.penState;
+  const kick = isHome ? ps.homeKicks[kickIndex] : ps.awayKicks[kickIndex];
+  const scored = kick.scored;
+
+  // Update score
+  if (scored) {
+    if (isHome) { ps.hScore++; document.getElementById('penScoreHome').textContent = ps.hScore; }
+    else         { ps.aScore++; document.getElementById('penScoreAway').textContent = ps.aScore; }
+  }
+
+  // Add dot
+  const dot = document.createElement('span');
+  dot.style.cssText = `
+    display:inline-block;width:20px;height:20px;border-radius:50%;
+    border:2px solid ${scored ? 'var(--accent)' : 'var(--red)'};
+    background:${scored ? 'var(--accent)' : 'var(--red)'};
+    transition:all 0.3s;
+  `;
+  document.getElementById(isHome ? 'penDotsHome' : 'penDotsAway').appendChild(dot);
+
+  // Add event line
+  const container = document.getElementById('penaltyEvents');
+  const div = document.createElement('div');
+  div.className = 'match-event';
+  const side = isHome ? 'Seu Time' : state.awayName;
+
+  const goalPenTexts = [
+    `<strong>${kick.kicker.name}</strong> (${side}) converte! ⚽`,
+    `<strong>${kick.kicker.name}</strong> (${side}) não tremeu! Gol de pênalti!`,
+    `<strong>${kick.kicker.name}</strong> (${side}) bateu no canto e marcou!`,
+  ];
+  const missPenTexts = [
+    `<strong>${kick.kicker.name}</strong> (${side}) parou no goleiro! 🧤`,
+    `<strong>${kick.kicker.name}</strong> (${side}) isolou na cobrança! 🚀`,
+    `<strong>${kick.kicker.name}</strong> (${side}) bateu na trave! 😬`,
+  ];
+  const texts = scored ? goalPenTexts : missPenTexts;
+  div.innerHTML = `
+    <span class="event-icon">${scored ? '⚽' : '❌'}</span>
+    <span>${texts[Math.floor(Math.random() * texts.length)]}</span>
+  `;
+  container.insertBefore(div, container.firstChild);
+
+  ps.currentStep++;
+  document.getElementById('penNextLabel').textContent = '';
+
+  // Check if we can end early (after round 5+, if one side can't be caught)
+  const kicksDone = Math.floor(ps.currentStep / 2);
+  if (kicksDone >= 5 || (kicksDone >= 1 && canEndEarly(ps, kicksDone))) {
+    if (ps.currentStep % 2 === 0) {
+      // just finished a full round pair
+      const done = ps.hScore !== ps.aScore && kicksDone >= 5;
+      if (done) {
+        const winner = ps.hScore > ps.aScore ? 'home' : 'away';
+        state.penalties = { home: ps.hScore, away: ps.aScore, winner };
+        setTimeout(() => showResult(), 3000);
+        return;
+      }
+    }
+  }
+
+  schedulePenaltyKick();
+}
+
+function canEndEarly(ps, roundsDone) {
+  // Both teams have taken same number of kicks and scores differ — game over
+  return ps.currentStep % 2 === 0 && ps.hScore !== ps.aScore && roundsDone >= 5;
 }
 
 function launchConfetti() {
@@ -1507,5 +1868,12 @@ function resetGame() {
   showScreen('splash');
 }
 </script>
+<!-- FEEDBACK BOX (fixed, always visible) -->
+<div class="feedback-box">
+  <a class="feedback-btn" href="https://forms.gle/W99a14RdqH5Dc61Y7" target="_blank" rel="noopener">
+    💬 Feedback & Sugestões
+  </a>
+</div>
+
 </body>
 </html>
