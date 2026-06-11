@@ -118,8 +118,105 @@
   /* ============ DRAFT ============ */
   #draft {
     background: var(--bg-dark);
-    padding-top: 40px;
-    gap: 24px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    gap: 20px;
+  }
+
+  .draft-roster {
+    width: min(340px, 100%);
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .draft-roster-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    padding: 10px 14px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+
+  .draft-roster-list {
+    overflow-y: auto;
+    max-height: 120px;
+    padding: 4px 0;
+  }
+
+  .draft-roster-list::-webkit-scrollbar { width: 4px; }
+  .draft-roster-list::-webkit-scrollbar-track { background: transparent; }
+  .draft-roster-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  .roster-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 14px;
+    transition: all 0.3s;
+    border-left: 3px solid transparent;
+  }
+
+  .roster-row.picked {
+    border-left-color: var(--accent);
+    background: rgba(0, 230, 118, 0.07);
+  }
+
+  .roster-row.picked .roster-name {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .roster-row.picked .roster-ovr {
+    color: var(--accent);
+  }
+
+  .roster-ovr {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 16px;
+    color: var(--text-muted);
+    min-width: 26px;
+    text-align: right;
+    flex-shrink: 0;
+    transition: color 0.3s;
+  }
+
+  .roster-name {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.3s;
+  }
+
+  .roster-team {
+    font-size: 9px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .roster-row-info {
+    overflow: hidden;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .draft-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
   }
 
   .draft-header {
@@ -801,9 +898,9 @@
 <!-- SPLASH SCREEN -->
 <div id="splash" class="screen active">
   <div class="splash-logo">Fut5 - Germinare</div>
-  <div class="splash-sub">Monte sua seleção. (v2.0)</div>
-  <div class="splash-venue">Quadrinha da Felicidade</div>
-  <button class="btn btn-primary" onclick="startDraft()">Draft</button>
+  <div class="splash-sub">Monte sua seleção.</div>
+  <div class="splash-venue">Espaço da Felicidade</div>
+  <button class="btn btn-primary" onclick="startDraft()">Jogar</button>
 </div>
 
 <!-- DRAFT SCREEN -->
@@ -813,6 +910,11 @@
     <div class="draft-instruction">Escolha 1 jogador</div>
   </div>
   <div class="draft-picked-bar" id="pickedBar"></div>
+  <!-- Compact scrollable roster -->
+  <div class="draft-roster">
+    <div class="draft-roster-title">ELENCO DISPONÍVEL — role para ver todos</div>
+    <div class="draft-roster-list" id="rosterList"></div>
+  </div>
   <div class="draft-cards" id="draftCards"></div>
 </div>
 
@@ -1064,8 +1166,33 @@ function startDraft() {
   state.formation = { gk: null, dl: null, dr: null, al: null, ar: null };
 
   renderPickedBar();
+  renderRoster();
   showScreen('draft');
   nextDraftRound();
+}
+
+function renderRoster() {
+  const list = document.getElementById('rosterList');
+  if (!list) return;
+  // Sort all players by OVR descending
+  const sorted = [...ALL_PLAYERS].sort((a, b) => b.ovr - a.ovr);
+  const pickedIds = new Set(state.myPicks.map(p => p.id));
+  list.innerHTML = '';
+  sorted.forEach(p => {
+    const isPicked = pickedIds.has(p.id);
+    const rarity = getRarity(p.ovr);
+    const row = document.createElement('div');
+    row.className = `roster-row${isPicked ? ' picked' : ''}`;
+    row.id = `roster-row-${p.id}`;
+    row.innerHTML = `
+      <span class="roster-ovr ${isPicked ? '' : rarity.colorClass}">${p.ovr}</span>
+      <div class="roster-row-info">
+        <div class="roster-name">${p.name}</div>
+        <div class="roster-team">${p.team}</div>
+      </div>
+    `;
+    list.appendChild(row);
+  });
 }
 
 // ===================== DRAFT LOGIC =====================
@@ -1121,6 +1248,11 @@ function pickPlayer(player, cardEl) {
   });
 
   renderPickedBar();
+  renderRoster();
+
+  // Scroll the picked player into view in the roster
+  const rosterRow = document.getElementById(`roster-row-${player.id}`);
+  if (rosterRow) rosterRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   setTimeout(() => nextDraftRound(), 700);
 }
