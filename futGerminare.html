@@ -1001,9 +1001,22 @@
   @keyframes confetti-fall {
     to { top: 110vh; transform: rotate(720deg); }
   }
+
+:root.dark {
+  --bg:#0f172a;--card:#1e293b;--card-hover:#263548;--text:#f1f5f9;--text-muted:#94a3b8;--line:#334155;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+body.dark{
+ background:linear-gradient(180deg,#0f172a,#111827);
+}
+.theme-toggle{position:fixed;top:18px;right:18px;z-index:9999;padding:10px 14px;border-radius:999px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--text)}
+.goal-event{background:linear-gradient(90deg,rgba(255,198,46,.25),rgba(255,198,46,.08));border-left:5px solid var(--gold-bright)!important;padding:12px 10px!important;border-radius:10px;transform:scale(1.02)}
+.goal-event .event-icon{font-size:24px}
+
 </style>
 </head>
 <body>
+<button class='theme-toggle' id='themeToggle'>🌙</button>
 
 <!-- SPLASH SCREEN -->
 <div id="splash" class="screen active">
@@ -1362,13 +1375,70 @@ function effectiveOvr(player, slotKey) {
   return Math.min(99, player.ovr + posBuff);
 }
 
-// +2 OVR médio por par de jogadores com o mesmo time (máx +8)
+// +1 OVR médio por par de jogadores com o mesmo time (máx +5)
 function chemistryBonus(players) {
   const teamCount = {};
-  players.forEach(p => { if (p) teamCount[p.team] = (teamCount[p.team] || 0) + 1; });
-  let pairs = 0;
-  Object.values(teamCount).forEach(c => { pairs += Math.floor(c * (c - 1) / 2); });
-  return Math.min(8, pairs * 2);
+
+  players.forEach(p => {
+    if (p) teamCount[p.team] = (teamCount[p.team] || 0) + 1;
+  });
+
+  let bonus = 0;
+
+  Object.values(teamCount).forEach(count => {
+    if (count >= 2) {
+      bonus += count; // +1 por jogador do time
+    }
+  });
+
+  return Math.min(5, bonus); // máximo +5
+}
+
+function getDisplayOvr(player){
+
+  const formationEntries = Object.entries(state.formation || {});
+
+  const entry = formationEntries.find(([_, p]) =>
+    p && p.id === player.id
+  );
+
+  const slotKey = entry ? entry[0] : null;
+
+  const positionBonus =
+    slotKey
+      ? effectiveOvr(player, slotKey) - player.ovr
+      : 0;
+
+  const formationPlayers =
+    Object.values(state.formation || {}).filter(Boolean);
+
+  const sameTeamPlayers =
+    formationPlayers.filter(p => p.team === player.team);
+
+  let chemBonus = 0;
+
+  if (sameTeamPlayers.length >= 2) {
+    chemBonus = Math.min(5, sameTeamPlayers.length);
+  }
+
+  const totalBonus = positionBonus + chemBonus;
+
+  return {
+    finalOvr: Math.min(99, player.ovr + totalBonus),
+    positionBonus,
+    chemBonus,
+    totalBonus
+  };
+}
+
+function getPlayerChemBonus(player, players) {
+  const sameTeamPlayers = players.filter(
+    p => p && p.team === player.team
+  );
+
+  if (sameTeamPlayers.length < 2) return 0;
+
+  return Math.min(5, sameTeamPlayers.length);
 }
 
 function getChemistryInfo(formation) {
@@ -1680,10 +1750,20 @@ function renderField() {
   const bar = document.getElementById('chemistryBar');
   if (bar) {
     if (chem.bonus > 0) {
-      const hearts = chem.bonus >= 6 ? '🔥' : chem.bonus >= 4 ? '💚💚' : '💚';
-      bar.innerHTML = `${hearts} <span style="color:var(--green-dark);font-weight:700">ENTROSAMENTO +${chem.bonus} OVR</span> — ${chem.combos.join(', ')}`;
+      const hearts = chem.bonus >= 5 ? '🔥' : chem.bonus >= 3 ? '💚💚' : '💚';
+
+      const combosText = chem.combos
+        .map(combo => {
+          const count = parseInt(combo.split('x')[0].trim());
+          return `${combo} (+${Math.min(5, count)})`;
+        })
+        .join(' • ');
+
+      bar.innerHTML =
+        `${hearts} <span style="color:var(--green-dark);font-weight:700">ENTROSAMENTO ATIVO</span> — ${combosText}`;
     } else {
-      bar.innerHTML = `<span style="color:var(--text-muted)">Escale jogadores do mesmo time para ganhar entrosamento</span>`;
+     bar.innerHTML =
+        `<span style="color:var(--text-muted)">Escale jogadores do mesmo time para ganhar entrosamento</span>`;
     }
   }
 }
@@ -1709,18 +1789,28 @@ function startMatch() {
     return { ...p, ovr: effectiveOvr(p, slot) };
   });
 
-  const chemBonus = chemistryBonus(homePlayers);
-  const homeWithChem = homeEffective.map(p => p ? { ...p, ovr: Math.min(99, p.ovr + chemBonus) } : p);
+  const homeWithChem = homeEffective.map(player => {
+    if (!player) return player;
+
+    const chemBonus = getPlayerChemBonus(
+      player,
+      homeEffective.filter(Boolean)
+    );
+
+    return {
+      ...player,
+      ovr: Math.min(99, player.ovr + chemBonus)
+    };
+  });
 
   const homeAvg = avgOvr(homeWithChem.filter(Boolean));
   const awayAvg = avgOvr(state.awayTeam);
 
   state.homeEffective = homeWithChem;
-  state.chemBonus = chemBonus;
 
   document.getElementById('teamHomeName').textContent = 'SUA SELEÇÃO';
   document.getElementById('teamAwayName').textContent = state.awayName;
-  document.getElementById('teamHomeOvr').textContent = `OVR ${homeAvg}${chemBonus > 0 ? ` (+${chemBonus} ent.)` : ''}`;
+  document.getElementById('teamHomeOvr').textContent =`OVR ${homeAvg}`;  
   document.getElementById('teamAwayOvr').textContent = `OVR ${awayAvg}`;
   document.getElementById('scoreHome').textContent = '0';
   document.getElementById('scoreAway').textContent = '0';
@@ -1889,7 +1979,7 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
 function processMatchEvent(evt) {
   const container = document.getElementById('matchEvents');
   const div = document.createElement('div');
-  div.className = 'match-event';
+  div.className = 'match-event' + (evt.type === 'goal' ? ' goal-event' : '');
 
   const teamLabel = evt.isHome ? 'Sua Seleção' : state.awayName;
   const badgeClass = evt.isHome ? 'home' : 'away';
@@ -2246,7 +2336,7 @@ function executePenaltyKick(kickIndex, isHome) {
 
   const container = document.getElementById('penaltyEvents');
   const div = document.createElement('div');
-  div.className = 'match-event';
+  div.className = 'match-event' + (scored ? ' goal-event' : '');
   const side = isHome ? 'Sua Seleção' : state.awayName;
 
   const goalPenTexts = [
@@ -2632,6 +2722,66 @@ function advanceBracket() {
     else if (t.phase === 'semis') t.phase = 'final';
   }
 }
+const themeBtn=document.getElementById('themeToggle');
+
+if(localStorage.getItem('fg_theme')==='dark'){document.body.classList.add('dark');}
+themeBtn?.addEventListener('click',()=>{
+ document.body.classList.toggle('dark');
+ localStorage.setItem('fg_theme',document.body.classList.contains('dark')?'dark':'light');
+});
+
+function enhanceDisplayedOvrs(){
+ try{
+
+  const allPlayers = [
+    ...(state.myPicks || []),
+    ...(state.draftedPlayers || []),
+    ...(state.availablePlayers || []),
+    ...Object.values(state.formation || {}).filter(Boolean)
+  ];
+
+  document.querySelectorAll(
+    '.player-card,.bench-player,.field-slot.filled,.result-player-row,.picked-slot'
+  ).forEach(el => {
+
+    const txt = el.textContent || '';
+
+    const player = allPlayers.find(
+      p => p && txt.includes(p.name)
+    );
+
+    if(!player) return;
+
+    const ovrEl = el.querySelector(
+      '.card-ovr,.bp-ovr,.slot-ovr,.picked-ovr'
+    );
+
+    if(!ovrEl) return;
+
+    const {
+      finalOvr,
+      positionBonus,
+      totalBonus
+    } = getDisplayOvr(player);
+
+    const arrow =
+      positionBonus > 0
+      ? '<span style="font-size:9px;vertical-align:super;color:#d98e00">▲</span>'
+      : '';
+
+    ovrEl.innerHTML =
+      totalBonus > 0
+      ? `${finalOvr}${arrow} <span style="font-size:.45em;color:var(--gold)">(+${totalBonus})</span>`
+      : `${finalOvr}${arrow}`;
+
+  });
+
+ } catch(e){}
+}
+
+enhanceDisplayedOvrs();
+setInterval(enhanceDisplayedOvrs,500);
+
 </script>
 <!-- FEEDBACK BOX (fixed, always visible) -->
 <div class="feedback-box">
