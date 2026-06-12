@@ -1013,10 +1013,131 @@ body.dark{
 .goal-event{background:linear-gradient(90deg,rgba(255,198,46,.25),rgba(255,198,46,.08));border-left:5px solid var(--gold-bright)!important;padding:12px 10px!important;border-radius:10px;transform:scale(1.02)}
 .goal-event .event-icon{font-size:24px}
 
+.hub-actions{
+  display:flex;flex-direction:column;gap:12px;
+  max-width:640px;width:100%;
+}
+
+.hub-btn{
+  display:flex;align-items:center;gap:12px;width:100%;
+  padding:15px 18px;border-radius:14px;
+  border:2px solid var(--line);background:var(--card);
+  cursor:pointer;box-shadow:var(--shadow);
+  font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:2px;
+  color:var(--text);text-transform:uppercase;
+  transition:all .25s ease;
+}
+.hub-btn:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(20,60,120,0.18);}
+.hub-btn:active{transform:translateY(-1px);}
+
+.hub-btn-ico{
+  flex:0 0 40px;width:40px;height:40px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;background:rgba(20,60,120,0.06);transition:all .25s ease;
+}
+.hub-btn-txt{flex:1;text-align:left;line-height:1;}
+.hub-btn-arw{font-size:22px;opacity:.85;}
+
+/* CARRER PLAY */
+
+
+/* grade 2x2 dos secundários */
+.hub-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media (max-width:480px){.hub-grid{grid-template-columns:1fr;}}
+
+.hub-c-purple{border-color:var(--purple);color:var(--purple);}
+.hub-c-purple .hub-btn-ico{background:rgba(156,39,217,0.12);}
+.hub-c-purple:hover{background:linear-gradient(135deg,var(--purple),#6a0dad);color:#fff;}
+
+.hub-c-blue{border-color:var(--blue);color:var(--blue);}
+.hub-c-blue .hub-btn-ico{background:var(--blue-soft);}
+.hub-c-blue:hover{background:linear-gradient(135deg,var(--blue),#003e85);color:#fff;}
+
+.hub-c-green{border-color:var(--green-dark);color:var(--green-dark);}
+.hub-c-green .hub-btn-ico{background:var(--green-soft);}
+.hub-c-green:hover{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;}
+
+.hub-c-gold{border-color:var(--gold-bright);color:var(--gold);}
+.hub-c-gold .hub-btn-ico{background:var(--gold-soft);}
+.hub-c-gold:hover{background:linear-gradient(135deg,var(--gold-bright),var(--gold));color:#fff;}
+
+/* ícone fica branco translúcido no hover dos coloridos */
+.hub-c-purple:hover .hub-btn-ico,
+.hub-c-blue:hover .hub-btn-ico,
+.hub-c-green:hover .hub-btn-ico,
+.hub-c-gold:hover .hub-btn-ico{background:rgba(255,255,255,0.20);}
+
+/* Voltar ao menu discreto */
+.hub-back{
+  align-self:center;margin-top:4px;background:transparent;border:none;
+  cursor:pointer;color:var(--text-muted);
+  font-family:'Inter',sans-serif;font-weight:700;font-size:12px;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:8px 16px;border-radius:10px;transition:all .25s ease;
+}
+.hub-back:hover{color:var(--text);background:rgba(20,60,120,0.06);}
+
+
+/* ============ LOADING FEEDBACK ============ */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  background: rgba(242, 248, 255, 0.82);
+  backdrop-filter: blur(8px);
+  text-align: center;
+}
+.loading-overlay.active { display: flex; }
+.loading-ball {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff 0 12%, var(--gold-bright) 13% 32%, var(--green) 33% 58%, var(--blue) 59% 100%);
+  box-shadow: 0 14px 32px rgba(0, 87, 183, 0.28);
+  animation: loading-kick 0.85s ease-in-out infinite alternate;
+}
+.loading-text {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 28px;
+  letter-spacing: 2px;
+  color: var(--green-dark);
+}
+.loading-subtext {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.loading-status {
+  min-height: 20px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+@keyframes loading-kick {
+  from { transform: translateY(0) rotate(-8deg) scale(0.96); }
+  to { transform: translateY(-14px) rotate(10deg) scale(1.04); }
+}
+body.is-loading { cursor: wait; }
+
 </style>
 </head>
 <body>
 <button class='theme-toggle' id='themeToggle'>🌙</button>
+<div id="loadingOverlay" class="loading-overlay" aria-live="polite" aria-busy="true">
+  <div class="loading-ball"></div>
+  <div id="loadingText" class="loading-text">Carregando...</div>
+  <div class="loading-subtext">Preparando o gramado</div>
+</div>
+
 
 <!-- SPLASH SCREEN -->
 <div id="splash" class="screen active">
@@ -1030,6 +1151,8 @@ body.dark{
   <div style="display:flex;flex-direction:column;gap:12px;align-items:center;">
     <button class="btn btn-primary" onclick="startGame('quick')">Partida Rápida</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--gold),#ff9800);box-shadow:0 8px 24px rgba(217,142,0,0.35);" onclick="startGame('cup')">🏆 Campeonato</button>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);box-shadow:0 8px 24px rgba(156,39,217,0.35);" onclick="openCareerMode()">⚽ Modo Carreira</button>
+    <div id="menuStatus" class="loading-status">Pronto para jogar</div>
     <span style="font-size:11px;color:var(--text-muted);letter-spacing:1px;">Fase de Grupos → Mata-Mata → Final</span>
   </div>
 </div>
@@ -1154,14 +1277,17 @@ body.dark{
 
 <script>
 // ===================== GAME MODE =====================
-let gameMode = 'quick'; // 'quick' or 'cup'
+let gameMode = 'quick'; // 'quick', 'cup' ou 'career'
 let tournament = null;
 let _cupMatch = null;
 let _cupIsHome = true;
 
 function startGame(mode) {
-  gameMode = mode;
-  startDraft();
+  const label = mode === 'cup' ? 'Carregando campeonato...' : 'Carregando partida rápida...';
+  runWithLoading(label, () => {
+    gameMode = mode;
+    startDraft();
+  });
 }
 
 // ===================== MOCK DATA =====================
@@ -1289,7 +1415,14 @@ const SCHEMES = {
 };
 
 function currentSlots() {
-  return [GK_SLOT, ...SCHEMES[state.scheme].slots];
+  return getSlotsForScheme(state.scheme);
+}
+
+const FORMATION_KEYS = ['gk', 's1', 's2', 's3', 's4'];
+
+function getSlotsForScheme(schemeKey) {
+  const scheme = SCHEMES[schemeKey] || SCHEMES.quadrado;
+  return [GK_SLOT, ...scheme.slots];
 }
 
 // ===================== STATE =====================
@@ -1308,6 +1441,9 @@ let state = {
   playerGoals: {},
   playerAssists: {},
   redCards: new Set(),
+  yellowCards: {},
+  teamHandicap: { home: 1, away: 1 },
+  currentCareerMatch: null,
   penalties: null,
   penState: null,
 };
@@ -1359,9 +1495,53 @@ function ovrClass(ovr) {
   return getRarity(ovr).colorClass;
 }
 
+function showLoading(message = 'Carregando...') {
+  const overlay = document.getElementById('loadingOverlay');
+  const label = document.getElementById('loadingText');
+  const menuStatus = document.getElementById('menuStatus');
+
+  if (label) label.textContent = message;
+  if (menuStatus) menuStatus.textContent = message;
+  document.body.classList.add('is-loading');
+  if (overlay) overlay.classList.add('active');
+}
+
+function hideLoading(delay = 260) {
+  window.setTimeout(() => {
+    const overlay = document.getElementById('loadingOverlay');
+    const menuStatus = document.getElementById('menuStatus');
+
+    document.body.classList.remove('is-loading');
+    if (overlay) overlay.classList.remove('active');
+    if (menuStatus) menuStatus.textContent = 'Pronto para jogar';
+  }, delay);
+}
+
+function runWithLoading(message, fn) {
+  showLoading(message);
+  window.setTimeout(() => {
+    try {
+      fn();
+    } catch (err) {
+      console.error(err);
+      hideLoading(0);
+      alert('O jogo encontrou um erro ao carregar esta tela. Abra o console para ver detalhes.');
+    }
+  }, 120);
+}
+
 function showScreen(id) {
+  const target = document.getElementById(id);
+
+  if (!target) {
+    console.warn(`Tela não encontrada: ${id}`);
+    hideLoading(0);
+    return;
+  }
+
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  target.classList.add('active');
+  hideLoading();
 }
 
 function avgOvr(players) {
@@ -1369,14 +1549,94 @@ function avgOvr(players) {
   return Math.round(players.reduce((s, p) => s + p.ovr, 0) / players.length);
 }
 
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function getSlotDefinition(slotKey, schemeKey = state.scheme) {
+  return getSlotsForScheme(schemeKey).find(s => s.key === slotKey) || null;
+}
+
+function isGoalkeeperSlot(slotKey) {
+  return slotKey === 'gk';
+}
+
+function getMatchSlotForIndex(index) {
+  if (index === 0) return 'gk';
+  return ['s1','s2','s3','s4'][index - 1] || 's1';
+}
+
+function getMatchEffectiveOvr(player, slotKey, schemeKey = state.scheme) {
+  if (!player) return 0;
+  const def = getSlotDefinition(slotKey, schemeKey);
+  const isGk = player.posicao_favorita === 'gk';
+  const slotIsGk = isGoalkeeperSlot(slotKey);
+  let value = player.ovr;
+
+  // Penalidade real por improviso extremo: goleiro na linha ou jogador de linha no gol.
+  if (isGk && !slotIsGk) value -= 10;
+  if (!isGk && slotIsGk) value -= 10;
+
+  // Buff leve apenas quando a posição combina com o slot.
+  if (def && def.roles.includes(player.posicao_favorita)) value += 2;
+
+  // Espaço para sistemas novos de forma/moral sem quebrar saves antigos.
+  if (typeof player.form === 'number') value += player.form;
+  if (typeof player.morale === 'number') value += Math.round((player.morale - 50) / 25);
+
+  return clamp(Math.round(value), 1, 99);
+}
+
+function normalizeTeamForMatch(team) {
+  const arr = (team || []).filter(Boolean).slice(0, 5).map(p => ({ ...p }));
+  if (!arr.length) return arr;
+  const gkIndex = arr.findIndex(p => p.posicao_favorita === 'gk');
+  if (gkIndex > 0) {
+    const [gk] = arr.splice(gkIndex, 1);
+    arr.unshift(gk);
+  }
+  return arr.map((p, index) => ({
+    ...p,
+    matchSlot: getMatchSlotForIndex(index),
+    ovr: getMatchEffectiveOvr(p, getMatchSlotForIndex(index))
+  }));
+}
+
+function getTeamGoalkeeper(team) {
+  if (!team || !team.length) return null;
+  return team.find(p => p && p.matchSlot === 'gk') || team.find(p => p && p.posicao_favorita === 'gk') || team[0];
+}
+
+function getActiveTeam(team) {
+  return (team || []).filter(p => p && !state.redCards.has(p.id));
+}
+
+function pickWeightedBy(players, weightFn) {
+  const valid = (players || []).filter(Boolean);
+  if (!valid.length) return null;
+  const weights = valid.map(p => Math.max(1, weightFn(p)));
+  const total = weights.reduce((s, w) => s + w, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < valid.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return valid[i];
+  }
+  return valid[valid.length - 1];
+}
+
+function shouldGoToPenalties() {
+  if (gameMode === 'cup' && tournament && tournament.phase !== 'groups') return true;
+  if (gameMode === 'career' && career && career.currentCompetition === 'cup' && career.currentPhase === 'knockout') return true;
+  return false;
+}
+// ===================== CHEMISTRY
+
 // ===================== CHEMISTRY & BUFF SYSTEMS =====================
 
 // Retorna o OVR efetivo de um jogador numa determinada slot (buff de posição = +2)
 function effectiveOvr(player, slotKey) {
-  if (!player) return 0;
-  const def = currentSlots().find(s => s.key === slotKey);
-  const posBuff = (def && def.roles.includes(player.posicao_favorita)) ? 2 : 0;
-  return Math.min(99, player.ovr + posBuff);
+  return getMatchEffectiveOvr(player, slotKey);
 }
 
 // +1 OVR médio por par de jogadores com o mesmo time (máx +5)
@@ -1781,40 +2041,36 @@ function generateAwayTeam() {
 }
 
 function startMatch() {
-  if (gameMode !== 'cup') {
+  if (gameMode === 'quick') {
     generateAwayTeam();
-    updateMatchTitle('GRANDE FINAL · COPA 26');
+    updateMatchTitle('AMISTOSO · MODO RÁPIDO');
+  } else if (gameMode === 'career') {
+    updateMatchTitle(`TEMPORADA ${career.season} · RODADA ${career.matchesPlayed + 1}`);
+  } else if (gameMode === 'cup') {
+    updateMatchTitle('COPA 26');
   }
-
-  const homePlayers = Object.values(state.formation);
 
   const homeEffective = Object.entries(state.formation).map(([slot, p]) => {
     if (!p) return p;
-    return { ...p, ovr: effectiveOvr(p, slot) };
+    return { ...p, matchSlot: slot, ovr: effectiveOvr(p, slot) };
   });
 
   const homeWithChem = homeEffective.map(player => {
     if (!player) return player;
+    const chemBonus = getPlayerChemBonus(player, homeEffective.filter(Boolean));
+    return { ...player, ovr: Math.min(99, player.ovr + chemBonus) };
+  }).filter(Boolean);
 
-    const chemBonus = getPlayerChemBonus(
-      player,
-      homeEffective.filter(Boolean)
-    );
-
-    return {
-      ...player,
-      ovr: Math.min(99, player.ovr + chemBonus)
-    };
-  });
-
-  const homeAvg = avgOvr(homeWithChem.filter(Boolean));
+  state.awayTeam = normalizeTeamForMatch(state.awayTeam);
+  const homeAvg = avgOvr(homeWithChem);
   const awayAvg = avgOvr(state.awayTeam);
 
   state.homeEffective = homeWithChem;
+  state.chemBonus = getChemistryInfo(state.formation).bonus;
 
-  document.getElementById('teamHomeName').textContent = 'SUA SELEÇÃO';
+  document.getElementById('teamHomeName').textContent = gameMode === 'career' && career ? career.clubName : 'SUA SELEÇÃO';
   document.getElementById('teamAwayName').textContent = state.awayName;
-  document.getElementById('teamHomeOvr').textContent =`OVR ${homeAvg}`;  
+  document.getElementById('teamHomeOvr').textContent = `OVR ${homeAvg}`;
   document.getElementById('teamAwayOvr').textContent = `OVR ${awayAvg}`;
   document.getElementById('scoreHome').textContent = '0';
   document.getElementById('scoreAway').textContent = '0';
@@ -1827,32 +2083,17 @@ function startMatch() {
   state.playerGoals = {};
   state.playerAssists = {};
   state.redCards = new Set();
+  state.yellowCards = {};
+  state.teamHandicap = { home: 1, away: 1 };
   state.penalties = null;
   state.penState = null;
 
   showScreen('match');
-  simulateMatch(homeWithChem.filter(Boolean), state.awayTeam, homeAvg, awayAvg);
+  simulateMatch(homeWithChem, state.awayTeam, homeAvg, awayAvg);
 }
 
 function simulateMatch(home, away, homeAvg, awayAvg) {
-  const homeGK = state.formation.gk;
-  const awayGK = state.awayTeam[0];
-
-  function ovrFactor(ovr) { return (ovr - 1) / 98; }
-
-  function goalProb(scorer, gk) {
-    const attackBonus = ovrFactor(scorer.ovr) * 0.22;
-    const gkPenalty   = (1 - ovrFactor(gk ? gk.ovr : 70)) * 0.15;
-    return 0.28 + attackBonus + gkPenalty;
-  }
-
-  function saveProb(gk) {
-    return 0.25 + ovrFactor(gk ? gk.ovr : 70) * 0.30;
-  }
-  function frangoProb(gk) {
-    return 0.06 + (1 - ovrFactor(gk ? gk.ovr : 70)) * 0.18;
-  }
-
+  let delay = 800;
   const eventMinutes = [];
   const numEvents = 12 + Math.floor(Math.random() * 8);
   const usedMinutes = new Set();
@@ -1865,111 +2106,155 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
   }
   eventMinutes.sort((a, b) => a - b);
 
-  const events = eventMinutes.map(min => {
+  function ovrFactor(ovr) { return (clamp(ovr || 70, 1, 99) - 1) / 98; }
+
+  function teamPower(team, side) {
+    const active = getActiveTeam(team);
+    if (!active.length) return 1;
+    return avgOvr(active) * (state.teamHandicap[side] || 1);
+  }
+
+  function homeEventChance() {
+    const homePower = teamPower(home, 'home');
+    const awayPower = teamPower(away, 'away');
+    const base = homePower / Math.max(1, homePower + awayPower);
+    return clamp(base, 0.30, 0.70);
+  }
+
+  function goalProb(scorer, gk) {
+    const attackBonus = ovrFactor(scorer?.ovr || 65) * 0.30;
+    const gkPenalty = (1 - ovrFactor(gk?.ovr || 65)) * 0.20;
+    return clamp(0.20 + attackBonus + gkPenalty, 0.08, 0.78);
+  }
+
+  function saveProb(gk) {
+    return clamp(0.20 + ovrFactor(gk?.ovr || 65) * 0.42, 0.18, 0.72);
+  }
+
+  function frangoProb(gk) {
+    return clamp(0.04 + (1 - ovrFactor(gk?.ovr || 65)) * 0.18, 0.02, 0.20);
+  }
+
+  function playerEventWeight(player, type, isHome) {
+    let weight = Math.max(1, player.ovr || 60);
+    if (gameMode === 'career' && isHome && career && player.id === career.player.id) {
+      if (type === 'goal') weight *= 1.22;
+      if (type === 'assist') weight *= 1.20;
+      if (type === 'drible') weight *= 1.15;
+    }
+    return weight;
+  }
+
+  function chooseSide() {
+    return Math.random() < homeEventChance();
+  }
+
+  function applyDiscipline(evt) {
+    if (!evt || (evt.type !== 'yellow' && evt.type !== 'red') || !evt.player) return evt;
+    const side = evt.isHome ? 'home' : 'away';
+
+    if (evt.type === 'yellow') {
+      state.yellowCards[evt.player.id] = (state.yellowCards[evt.player.id] || 0) + 1;
+      if (state.yellowCards[evt.player.id] >= 2) {
+        evt.type = 'red';
+        evt.secondYellow = true;
+      }
+    }
+
+    if (evt.type === 'red') {
+      state.redCards.add(evt.player.id);
+      state.teamHandicap[side] = Math.max(0.45, (state.teamHandicap[side] || 1) * 0.78);
+    }
+    return evt;
+  }
+
+  function createEvent(min) {
+    const homeActive = getActiveTeam(home);
+    const awayActive = getActiveTeam(away);
+    if (!homeActive.length && !awayActive.length) return { min, type: 'miss', isHome: true, player: home[0] || away[0] };
+
     const r = Math.random();
-    const homeChance = Math.max(0.40, Math.min(0.60, 0.5 + (homeAvg - awayAvg) * 0.003));
+    const isHome = chooseSide();
+    const attackTeam = isHome ? homeActive : awayActive;
+    const defendTeam = isHome ? awayActive : homeActive;
+    const attackGK = getTeamGoalkeeper(attackTeam);
+    const defendGK = getTeamGoalkeeper(defendTeam);
+    const attackLine = attackTeam.filter(p => p.id !== attackGK?.id);
+    const scorerPool = attackLine.length ? attackLine : attackTeam;
 
-    if (r < 0.40) {
-      const isHome = Math.random() < 0.5;
-      const attackTeam = isHome ? home : away;
-      const defendGK   = isHome ? awayGK : homeGK;
-
-      const nonGK = attackTeam.filter(p => p.id !== (isHome ? homeGK : awayGK)?.id);
-      const scorerPool = nonGK.length > 0 ? nonGK : attackTeam;
-      const totalOvr = scorerPool.reduce((s, p) => s + p.ovr, 0);
-      let rw = Math.random() * totalOvr;
-      let scorer = scorerPool[0];
-      for (const p of scorerPool) { rw -= p.ovr; if (rw <= 0) { scorer = p; break; } }
-
+    if (r < 0.42) {
+      const scorer = pickWeightedBy(scorerPool, p => playerEventWeight(p, 'goal', isHome));
       const prob = goalProb(scorer, defendGK);
       if (Math.random() < prob) {
         let assister = null;
-        if (Math.random() < 0.75) {
-          const assistPool = scorerPool.filter(p => p.id !== scorer.id);
-          if (assistPool.length > 0) {
-            const totalAsstOvr = assistPool.reduce((s, p) => s + p.ovr, 0);
-            let ra = Math.random() * totalAsstOvr;
-            assister = assistPool[0];
-            for (const p of assistPool) { ra -= p.ovr; if (ra <= 0) { assister = p; break; } }
-          }
+        if (Math.random() < 0.72) {
+          const assistPool = scorerPool.filter(p => p.id !== scorer?.id);
+          assister = pickWeightedBy(assistPool, p => playerEventWeight(p, 'assist', isHome));
         }
         return { min, type: 'goal', isHome, player: scorer, assister };
-      } else {
-        const gkMakesSave = Math.random() < saveProb(defendGK);
-        if (gkMakesSave) {
-          return { min, type: 'save', isHome: !isHome, player: defendGK };
-        } else {
-          return { min, type: 'miss', isHome, player: scorer };
-        }
       }
-    } else if (r < 0.50) {
-      const isHome = Math.random() < 0.5;
-      const gk = isHome ? homeGK : awayGK;
-      if (Math.random() < frangoProb(gk)) {
-        return { min, type: 'frango', isHome, player: gk };
-      } else {
-        return { min, type: 'save', isHome, player: gk };
-      }
-    } else if (r < 0.55) {
-      const isHome = Math.random() < 0.5;
-      const team = isHome ? home : away;
-      const p = team[Math.floor(Math.random() * team.length)];
-      return { min, type: 'bolada', isHome, player: p };
-    } else if (r < 0.70) {
-      const isHome = Math.random() < homeChance;
-      const team = isHome ? home : away;
-      const invOvr = team.map(p => Math.max(1, 100 - p.ovr));
-      const totalInv = invOvr.reduce((s, w) => s + w, 0);
-      let ri = Math.random() * totalInv;
-      let isoler = team[0];
-      for (let i = 0; i < team.length; i++) { ri -= invOvr[i]; if (ri <= 0) { isoler = team[i]; break; } }
-      return { min, type: 'isolou', isHome, player: isoler };
-    } else if (r < 0.74) {
-      const isHome = Math.random() < homeChance;
-      const team = isHome ? home : away;
-      const totalOvrDrib = team.reduce((s, p) => s + p.ovr, 0);
-      let rd = Math.random() * totalOvrDrib;
-      let dribler = team[0];
-      for (const p of team) { rd -= p.ovr; if (rd <= 0) { dribler = p; break; } }
-      const dribles = ['caneta', 'chapeu', 'elastico', 'pedalada'];
-      const drible = dribles[Math.floor(Math.random() * dribles.length)];
-      return { min, type: 'drible', isHome, player: dribler, drible };
-    } else if (r < 0.86) {
-      const isHome = Math.random() < 0.5;
-      const team = isHome ? home : away;
-      const p = team[Math.floor(Math.random() * team.length)];
-      const yellow = Math.random() < 0.8;
-      return { min, type: yellow ? 'yellow' : 'red', isHome, player: p };
-    } else {
-      const isHome = Math.random() < homeChance;
-      const team = isHome ? home : away;
-      const p = team[Math.floor(Math.random() * team.length)];
-      return { min, type: 'miss', isHome, player: p };
+      if (Math.random() < saveProb(defendGK)) return { min, type: 'save', isHome: !isHome, player: defendGK };
+      return { min, type: 'miss', isHome, player: scorer };
     }
-  });
 
-  let delay = 800;
-  events.forEach((evt, idx) => {
+    if (r < 0.50) {
+      const sideHome = chooseSide();
+      const team = sideHome ? homeActive : awayActive;
+      const gk = getTeamGoalkeeper(team);
+      if (Math.random() < frangoProb(gk)) return { min, type: 'frango', isHome: sideHome, player: gk };
+      return { min, type: 'save', isHome: sideHome, player: gk };
+    }
+
+    if (r < 0.56) {
+      const sideHome = chooseSide();
+      const team = sideHome ? homeActive : awayActive;
+      return { min, type: 'bolada', isHome: sideHome, player: pickWeightedBy(team, p => 100 - p.ovr) };
+    }
+
+    if (r < 0.70) {
+      const sideHome = chooseSide();
+      const team = sideHome ? homeActive : awayActive;
+      return { min, type: 'isolou', isHome: sideHome, player: pickWeightedBy(team, p => Math.max(1, 105 - p.ovr)) };
+    }
+
+    if (r < 0.77) {
+      const sideHome = chooseSide();
+      const team = sideHome ? homeActive : awayActive;
+      const dribles = ['caneta', 'chapeu', 'elastico', 'pedalada'];
+      return {
+        min,
+        type: 'drible',
+        isHome: sideHome,
+        player: pickWeightedBy(team, p => playerEventWeight(p, 'drible', sideHome)),
+        drible: dribles[Math.floor(Math.random() * dribles.length)]
+      };
+    }
+
+    if (r < 0.86) {
+      const sideHome = chooseSide();
+      const team = sideHome ? homeActive : awayActive;
+      const p = pickWeightedBy(team, p => Math.max(1, 100 - p.ovr));
+      const directRed = Math.random() < 0.03;
+      return { min, type: directRed ? 'red' : 'yellow', isHome: sideHome, player: p };
+    }
+
+    const sideHome = chooseSide();
+    const team = sideHome ? homeActive : awayActive;
+    return { min, type: 'miss', isHome: sideHome, player: pickWeightedBy(team, p => Math.max(1, 100 - p.ovr)) };
+  }
+
+  eventMinutes.forEach((min, idx) => {
     setTimeout(() => {
-      const mainExpelled  = evt.player  && state.redCards.has(evt.player.id);
-      const assistExpelled = evt.assister && state.redCards.has(evt.assister.id);
-      if (!mainExpelled) {
-        if (assistExpelled) evt.assister = null;
-        processMatchEvent(evt);
-        if (evt.type === 'red') state.redCards.add(evt.player.id);
-      }
-      const progress = ((idx + 1) / events.length) * 100;
+      const evt = applyDiscipline(createEvent(min));
+      processMatchEvent(evt);
+
+      const progress = ((idx + 1) / eventMinutes.length) * 100;
       document.getElementById('matchProgress').style.width = progress + '%';
 
-      if (idx === events.length - 1) {
+      if (idx === eventMinutes.length - 1) {
         setTimeout(() => {
-          if (state.matchGoalsHome === state.matchGoalsAway) {
-            // In cup groups, draw is fine — no penalties
-            if (gameMode === 'cup' && tournament && tournament.phase === 'groups') {
-              showResult();
-            } else {
-              simulatePenalties();
-            }
+          if (state.matchGoalsHome === state.matchGoalsAway && shouldGoToPenalties()) {
+            simulatePenalties();
           } else {
             showResult();
           }
@@ -1979,6 +2264,7 @@ function simulateMatch(home, away, homeAvg, awayAvg) {
     delay += 1200 + Math.random() * 800;
   });
 }
+
 
 function processMatchEvent(evt) {
   const container = document.getElementById('matchEvents');
@@ -2093,7 +2379,9 @@ function processMatchEvent(evt) {
       break;
     case 'red':
       icon = '🟥';
-      text = `<strong>${evt.player.name}</strong> EXPULSO!`;
+      text = evt.secondYellow
+        ? `<strong>${evt.player.name}</strong> recebe o segundo amarelo e está EXPULSO!`
+        : `<strong>${evt.player.name}</strong> EXPULSO!`;
       break;
     case 'miss':
       icon = '💨';
@@ -2150,8 +2438,8 @@ function showResult() {
 
   score.textContent = `${h} x ${a}` + (state.penalties ? ` (Pênaltis ${state.penalties.home}x${state.penalties.away})` : '');
 
-  const homePlayers = Object.values(state.formation);
-  const allPlayers = [...homePlayers, ...state.awayTeam];
+  const homePlayers = Object.values(state.formation).filter(Boolean);
+  const allPlayers = [...homePlayers, ...state.awayTeam].filter(Boolean);
   function mvpScore(p) {
     return (state.playerGoals[p.id] || 0) * 2 + (state.playerAssists[p.id] || 0);
   }
@@ -2242,43 +2530,48 @@ function showResult() {
 
 
 function simulatePenalties() {
-  const homeGK = state.formation.gk;
-  const awayGK = state.awayTeam[0];
-  const homePlayers = Object.values(state.formation).filter(p => p && p.id !== homeGK?.id);
-  const awayPlayers = state.awayTeam.filter(p => p.id !== awayGK?.id);
+  const homeGK = getTeamGoalkeeper(state.homeEffective || Object.values(state.formation).filter(Boolean));
+  const awayGK = getTeamGoalkeeper(state.awayTeam);
+  const homePlayers = (state.homeEffective || Object.values(state.formation).filter(Boolean)).filter(p => p && p.id !== homeGK?.id);
+  const awayPlayers = (state.awayTeam || []).filter(p => p && p.id !== awayGK?.id);
 
   function penProb(kicker, gk) {
     const att = kicker ? (kicker.ovr - 1) / 98 : 0.5;
-    const def = gk    ? (gk.ovr    - 1) / 98 : 0.5;
-    return Math.max(0.30, Math.min(0.85, 0.60 + att * 0.15 - def * 0.12));
+    const def = gk ? (gk.ovr - 1) / 98 : 0.5;
+    return Math.max(0.30, Math.min(0.85, 0.60 + att * 0.18 - def * 0.14));
   }
 
-  const MAX_ROUNDS = 10;
   const homeKicks = [], awayKicks = [];
-  for (let i = 0; i < MAX_ROUNDS; i++) {
-    const hKicker = homePlayers[i % homePlayers.length] || homeGK;
-    const aKicker = awayPlayers[i % awayPlayers.length] || awayGK;
-    homeKicks.push({ kicker: hKicker, scored: Math.random() < penProb(hKicker, awayGK) });
-    awayKicks.push({ kicker: aKicker, scored: Math.random() < penProb(aKicker, homeGK) });
-  }
+  let tempHome = 0, tempAway = 0;
+  let rounds = 0;
 
-  let hScore = 0, aScore = 0, totalRounds = 5;
-  for (let i = 0; i < 5; i++) {
-    if (homeKicks[i].scored) hScore++;
-    if (awayKicks[i].scored) aScore++;
+  while (rounds < 5 || tempHome === tempAway) {
+    const hKicker = homePlayers[rounds % Math.max(1, homePlayers.length)] || homeGK;
+    const aKicker = awayPlayers[rounds % Math.max(1, awayPlayers.length)] || awayGK;
+    const hScored = Math.random() < penProb(hKicker, awayGK);
+    const aScored = Math.random() < penProb(aKicker, homeGK);
+    homeKicks.push({ kicker: hKicker, scored: hScored });
+    awayKicks.push({ kicker: aKicker, scored: aScored });
+    if (hScored) tempHome++;
+    if (aScored) tempAway++;
+    rounds++;
+
+    // Segurança: se ainda empatar demais, força uma última rodada decisiva.
+    if (rounds >= 20 && tempHome === tempAway) {
+      const hFinal = Math.random() < 0.5;
+      homeKicks.push({ kicker: hKicker, scored: hFinal });
+      awayKicks.push({ kicker: aKicker, scored: !hFinal });
+      tempHome += hFinal ? 1 : 0;
+      tempAway += hFinal ? 0 : 1;
+      rounds++;
+      break;
+    }
   }
-  let round = 5;
-  while (hScore === aScore && round < MAX_ROUNDS) {
-    if (homeKicks[round].scored) hScore++;
-    if (awayKicks[round].scored) aScore++;
-    round++;
-  }
-  totalRounds = round;
 
   state.penState = {
     homeKicks, awayKicks,
     hScore: 0, aScore: 0,
-    totalRounds,
+    totalRounds: rounds,
     currentStep: 0,
     dotsHome: [], dotsAway: [],
   };
@@ -2326,7 +2619,7 @@ function executePenaltyKick(kickIndex, isHome) {
 
   if (scored) {
     if (isHome) { ps.hScore++; document.getElementById('penScoreHome').textContent = ps.hScore; }
-    else         { ps.aScore++; document.getElementById('penScoreAway').textContent = ps.aScore; }
+    else        { ps.aScore++; document.getElementById('penScoreAway').textContent = ps.aScore; }
   }
 
   const dot = document.createElement('span');
@@ -2364,16 +2657,11 @@ function executePenaltyKick(kickIndex, isHome) {
   document.getElementById('penNextLabel').textContent = '';
 
   const kicksDone = Math.floor(ps.currentStep / 2);
-  if (kicksDone >= 5 || (kicksDone >= 1 && canEndEarly(ps, kicksDone))) {
-    if (ps.currentStep % 2 === 0) {
-      const done = ps.hScore !== ps.aScore && kicksDone >= 5;
-      if (done) {
-        const winner = ps.hScore > ps.aScore ? 'home' : 'away';
-        state.penalties = { home: ps.hScore, away: ps.aScore, winner };
-        setTimeout(() => showResult(), 3000);
-        return;
-      }
-    }
+  if (ps.currentStep % 2 === 0 && kicksDone >= 5 && ps.hScore !== ps.aScore) {
+    const winner = ps.hScore > ps.aScore ? 'home' : 'away';
+    state.penalties = { home: ps.hScore, away: ps.aScore, winner };
+    setTimeout(() => showResult(), 3000);
+    return;
   }
 
   schedulePenaltyKick();
@@ -2382,6 +2670,7 @@ function executePenaltyKick(kickIndex, isHome) {
 function canEndEarly(ps, roundsDone) {
   return ps.currentStep % 2 === 0 && ps.hScore !== ps.aScore && roundsDone >= 5;
 }
+
 
 function launchConfetti() {
   const container = document.createElement('div');
@@ -2786,12 +3075,1671 @@ function enhanceDisplayedOvrs(){
 enhanceDisplayedOvrs();
 setInterval(enhanceDisplayedOvrs,500);
 
+// ===================== CAREER CONFIG =====================
+
+// Temporada
+const CAREER_MATCHES_PER_SEASON = 20;
+
+// Recompensas
+const CAREER_WIN_COINS = 100;
+const CAREER_DRAW_COINS = 60;
+const CAREER_LOSS_COINS = 30;
+
+const CAREER_WIN_TP = 3;
+const CAREER_DRAW_TP = 2;
+const CAREER_LOSS_TP = 1;
+
+// Lesões
+const CAREER_INJURY_CHANCE = 0.025;
+const CAREER_INJURY_MIN_MATCHES = 1;
+const CAREER_INJURY_MAX_MATCHES = 3;
+
+// Transferências
+const CAREER_TRANSFER_WINDOW_INTERVAL = 5;
+const CAREER_TRANSFER_OPTIONS = 3;
+const CAREER_TRANSFER_WINDOW_DURATION = 2;
+
+// Elenco
+const CAREER_STARTERS = 5;
+const CAREER_BENCH = 3;
+
+// OVR inicial
+const CAREER_PLAYER_START_OVR = 60;
+
+// Mercado
+const CAREER_MIN_TRANSFER_PRICE = 100;
+const CAREER_TRANSFER_PRICE_MULTIPLIER = 1.5;
+
+// ===================== CAREER MODE =====================
+
+const CAREER_LEVEL_XP = [0,100,220,380,580,830,1130,1480,1880,2330,2840,3410,4050,4770,5580,6490,7520,8690,10020,11540,13280];
+// index = level, value = XP needed to reach that level from 0
+// Level ups: difference between consecutive entries
+
+const CAREER_AI_TEAMS = [
+  "Último Lance FC","Casa da Pedra","Sim Sim Sim?","Mesa do Pagode","Força Jovem",
+  "Git Bash","Atende Play","Jumentos FC","Roldão Atacadista","Quadrilha FC","Canil",
+  "Caneta Azul FC","Zaga de Ferro","Chapéu FC","Firula United","Tabela Mágica",
+  "Saltimbanco FC","Brasa Viva","Velha Guarda","Explosão FC"
+];
+
+let career = null; // main career state
+let careerDraftPicks = []; // during squad selection
+let careerPlayerPos = 'ata';
+
+
+function tpCost(ovr) {
+  if (ovr < 70) return 1;
+  if (ovr < 80) return 2;
+  if (ovr < 88) return 3;
+  if (ovr < 94) return 5;
+  return 8;
+}
+
+function getCareerPlayerList() {
+  return [...(career?.squad || []), ...(career?.bench || [])];
+}
+
+function getCareerPlayerById(id) {
+  return getCareerPlayerList().find(p => p && String(p.id) === String(id)) || null;
+}
+
+function getCareerFormationFromSquad() {
+  const formation = { gk: null, s1: null, s2: null, s3: null, s4: null };
+  const starters = (career?.squad || []).slice(0, CAREER_STARTERS);
+  const gk = starters.find(p => p.posicao_favorita === 'gk') || starters[0] || null;
+  formation.gk = gk ? gk.id : null;
+
+  let lineIdx = 0;
+  starters.forEach(p => {
+    if (!p || p.id === gk?.id || lineIdx >= 4) return;
+    formation[['s1', 's2', 's3', 's4'][lineIdx++]] = p.id;
+  });
+
+  return formation;
+}
+
+function normalizeCareerFormationIds(raw = null) {
+  const source = raw || career?.formation || getCareerFormationFromSquad();
+  const ids = {};
+  const used = new Set();
+
+  FORMATION_KEYS.forEach(key => {
+    const value = source ? source[key] : null;
+    const id = value && typeof value === 'object' ? value.id : value;
+    const player = id !== null && id !== undefined ? getCareerPlayerById(id) : null;
+    if (player && !used.has(String(player.id))) {
+      ids[key] = player.id;
+      used.add(String(player.id));
+    } else {
+      ids[key] = null;
+    }
+  });
+
+  return ids;
+}
+
+function getCareerFormationEntries() {
+  const ids = normalizeCareerFormationIds();
+  const formation = {};
+  FORMATION_KEYS.forEach(key => {
+    formation[key] = ids[key] !== null && ids[key] !== undefined ? getCareerPlayerById(ids[key]) : null;
+  });
+  return formation;
+}
+
+function ensureCareerFormationState() {
+  if (!career) return;
+  career.scheme = career.scheme || 'quadrado';
+  career.formation = normalizeCareerFormationIds(career.formation);
+  syncCareerSquadFromFormation();
+}
+
+function syncCareerSquadFromFormation() {
+  if (!career) return;
+  const ids = normalizeCareerFormationIds(career.formation);
+  const all = getCareerPlayerList();
+  const byId = new Map(all.filter(Boolean).map(p => [String(p.id), p]));
+  const starters = [];
+  const used = new Set();
+
+  FORMATION_KEYS.forEach(key => {
+    const p = byId.get(String(ids[key]));
+    if (p && !used.has(String(p.id))) {
+      starters.push(p);
+      used.add(String(p.id));
+    }
+  });
+
+  all.forEach(p => {
+    if (starters.length >= CAREER_STARTERS) return;
+    if (p && !used.has(String(p.id))) {
+      starters.push(p);
+      used.add(String(p.id));
+    }
+  });
+
+  career.squad = starters.slice(0, CAREER_STARTERS);
+  const starterIds = new Set(career.squad.map(p => String(p.id)));
+  career.bench = all.filter((p, idx, arr) =>
+    p &&
+    !starterIds.has(String(p.id)) &&
+    arr.findIndex(x => x && String(x.id) === String(p.id)) === idx
+  );
+
+  const assigned = new Set();
+  career.formation = {};
+  FORMATION_KEYS.forEach(key => {
+    const existing = career.squad.find(p => String(p.id) === String(ids[key]) && !assigned.has(String(p.id)));
+    if (existing) {
+      career.formation[key] = existing.id;
+      assigned.add(String(existing.id));
+      return;
+    }
+
+    const next = career.squad.find(p => !assigned.has(String(p.id)));
+    career.formation[key] = next ? next.id : null;
+    if (next) assigned.add(String(next.id));
+  });
+}
+
+function isCareerPlayerInjured(player) {
+  return !!(career && player && career.injuries && career.injuries[player.id] > 0);
+}
+
+function getStandingByName(name) {
+  return career?.standings?.find(t => t.name === name) || null;
+}
+
+function updateCareerClubOvr() {
+  if (!career || !career.standings) return;
+  const myTeam = career.standings.find(t => t.isPlayer);
+  if (myTeam) myTeam.ovr = avgOvr([...career.squad, ...career.bench].slice(0, 5)) || 65;
+}
+
+function buildSeasonFixtures(standings) {
+  const teams = standings.map(t => ({ name: t.name }));
+  if (teams.length % 2 !== 0) teams.push({ name: 'FOLGA' });
+  const arr = teams.slice();
+  const rounds = [];
+
+  for (let r = 0; r < arr.length - 1; r++) {
+    const round = [];
+    for (let i = 0; i < arr.length / 2; i++) {
+      const home = arr[i].name;
+      const away = arr[arr.length - 1 - i].name;
+      if (home !== 'FOLGA' && away !== 'FOLGA') round.push({ home, away });
+    }
+    rounds.push(round);
+    arr.splice(1, 0, arr.pop());
+  }
+
+  const returnLeg = rounds.map(round => round.map(m => ({ home: m.away, away: m.home })));
+  return [...rounds, ...returnLeg].slice(0, CAREER_MATCHES_PER_SEASON);
+}
+
+function ensureCareerSeasonState() {
+  if (!career) return;
+  career.injuries = career.injuries || {};
+  career.achievements = career.achievements || [];
+  career.transferWindow = !!career.transferWindow;
+  career.transferPlayers = career.transferPlayers || [];
+  career.transferDeadline = career.transferDeadline ?? null;
+  career.history = career.history || [];
+  career.seasonEnded = !!career.seasonEnded;
+  career.scheme = career.scheme || 'quadrado';
+  ensureCareerFormationState();
+
+  career.standings = (career.standings || buildSeasonStandings(career.clubName)).map(t => ({
+    ovr: t.ovr || (t.isPlayer ? 65 : 58 + Math.floor(Math.random() * 18)),
+    ...t
+  }));
+
+  if (!career.fixtures || career.fixtures.length < CAREER_MATCHES_PER_SEASON) {
+    career.fixtures = buildSeasonFixtures(career.standings);
+  }
+  updateCareerClubOvr();
+}
+
+function migrateCareerSave(save) {
+  career = save;
+  ensureCareerSeasonState();
+  return career;
+}
+
+function getCareerCurrentRound() {
+  ensureCareerSeasonState();
+  return career.fixtures[career.matchesPlayed] || [];
+}
+
+function getCareerMyMatch() {
+  const round = getCareerCurrentRound();
+  return round.find(m => m.home === career.clubName || m.away === career.clubName) || null;
+}
+
+function applyCareerStandingResult(homeName, awayName, goalsHome, goalsAway) {
+  const h = getStandingByName(homeName);
+  const a = getStandingByName(awayName);
+  if (!h || !a) return;
+  applyGroupResult(h, a, goalsHome, goalsAway);
+}
+
+function simulateCareerRound(myMatch) {
+  const round = getCareerCurrentRound();
+  round.forEach(match => {
+    if (myMatch && match.home === myMatch.home && match.away === myMatch.away) return;
+    const h = getStandingByName(match.home);
+    const a = getStandingByName(match.away);
+    if (!h || !a) return;
+    const r = simAI({ ovr: h.ovr || 65 }, { ovr: a.ovr || 65 });
+    applyGroupResult(h, a, r.h, r.a);
+  });
+}
+
+function generateCareerOpponentTeam(opponentName) {
+  const usedIds = new Set(getCareerPlayerList().map(p => p.id));
+  const baseOvr = getStandingByName(opponentName)?.ovr || 65;
+  const pool = shuffle(ALL_PLAYERS.filter(p => !usedIds.has(p.id)));
+  let selected = pool.slice(0, CAREER_STARTERS);
+
+  if (!selected.some(p => p.posicao_favorita === 'gk')) {
+    const gk = pool.find(p => p.posicao_favorita === 'gk' && !selected.some(s => s.id === p.id));
+    if (gk) selected[0] = gk;
+  }
+
+  return normalizeTeamForMatch(selected.map((p, index) => ({
+    ...p,
+    team: opponentName,
+    ovr: clamp(baseOvr + Math.floor(Math.random() * 9) - 4 + (index === 0 && p.posicao_favorita === 'gk' ? 1 : 0), 50, 88),
+    potential: p.potential || p.ovr
+  })));
+}
+
+function healCareerInjuries() {
+  Object.keys(career.injuries).forEach(id => {
+    if (career.injuries[id] > 0) career.injuries[id]--;
+    if (career.injuries[id] <= 0) delete career.injuries[id];
+  });
+}
+
+function getInjuryChanceForPlayer(player) {
+  let chance = CAREER_INJURY_CHANCE;
+  if (typeof player.energy === 'number' && player.energy < 40) chance *= 1.6;
+  if (typeof player.idade === 'number' && player.idade >= 30) chance *= 1.35;
+  return chance;
+}
+
+function closeTransferWindowIfExpired() {
+  if (!career.transferWindow) return;
+  if (career.transferDeadline !== null && career.matchesPlayed >= career.transferDeadline) {
+    career.transferWindow = false;
+    career.transferPlayers = [];
+    career.transferDeadline = null;
+  }
+}
+
+
+function openCareerMode() {
+  runWithLoading('Carregando modo carreira...', () => {
+    const saved = localStorage.getItem('careerSave');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        document.getElementById('career-load-info').innerHTML = `
+          <strong style="font-family:'Bebas Neue',cursive;font-size:20px;color:var(--purple);">${data.clubName}</strong><br>
+          Temporada ${data.season} · Partida ${data.matchesPlayed + 1}/20<br>
+          Jogador: ${data.player.name} · OVR ${data.player.ovr}<br>
+          Moedas: ${data.coins} 🪙 · TP: ${data.trainingPoints}
+        `;
+        showScreen('career-load');
+      } catch(e) {
+        showScreen('career-create');
+      }
+    } else {
+      showScreen('career-create');
+    }
+  });
+}
+
+function continueCareer() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('careerSave'));
+    migrateCareerSave(saved);
+    renderCareerHub();
+    showScreen('career-hub');
+  } catch(e) {
+    alert('Erro ao carregar carreira. Iniciando nova.');
+    showScreen('career-create');
+  }
+}
+
+
+function newCareerConfirm() {
+  if (confirm('Tem certeza? O progresso atual será perdido.')) {
+    localStorage.removeItem('careerSave');
+    showScreen('career-create');
+  }
+}
+
+function selectCareerPos(pos) {
+  careerPlayerPos = pos;
+  document.querySelectorAll('.career-pos-btn').forEach(btn => {
+    btn.style.borderColor = 'var(--line)';
+    btn.style.background = 'var(--card)';
+    btn.style.color = 'var(--text)';
+  });
+  const sel = document.querySelector(`.career-pos-btn[data-pos="${pos}"]`);
+  if (sel) {
+    sel.style.borderColor = 'var(--purple)';
+    sel.style.background = 'rgba(156,39,217,0.12)';
+    sel.style.color = 'var(--purple)';
+  }
+}
+
+function startCareerSetup() {
+  const clubName = document.getElementById('career-club-name').value.trim() || 'Germinare FC';
+  const playerName = document.getElementById('career-player-name').value.trim() || 'Jogador';
+  const pos = careerPlayerPos || 'ata';
+
+  const myPlayer = {
+    id: 9999,
+    name: playerName,
+    team: clubName,
+    ovr: CAREER_PLAYER_START_OVR,
+    potential: 99,
+    posicao_favorita: pos,
+    isMyPlayer: true,
+    xp: 0,
+    level: 1,
+    goals: 0,
+    assists: 0,
+    games: 0,
+    mvps: 0,
+    morale: 55,
+    form: 0,
+  };
+
+  const standings = buildSeasonStandings(clubName);
+
+  career = {
+    version: 3,
+    clubName,
+    player: myPlayer,
+    squad: [],
+    bench: [],
+    formation: { gk: null, s1: null, s2: null, s3: null, s4: null },
+    coins: 0,
+    xp: 0,
+    trainingPoints: 0,
+    season: 1,
+    matchesPlayed: 0,
+    standings,
+    fixtures: buildSeasonFixtures(standings),
+    injuries: {},
+    achievements: [],
+    history: [],
+    seasonEnded: false,
+    transferWindow: false,
+    transferPlayers: [],
+    transferDeadline: null,
+    playerGoalsCareer: 0,
+    playerAssistsCareer: 0,
+    playerMvpsCareer: 0,
+    scheme: 'quadrado',
+  };
+
+  careerDraftPicks = [myPlayer];
+  state.careerDraftRound = 0;
+  state.careerDraftPool = shuffle(ALL_PLAYERS);
+  state.careerDraftPhase = 'starters';
+
+  renderCareerDraft();
+  showScreen('career-draft');
+}
+
+
+function buildSeasonStandings(myClub) {
+  const teams = shuffle([...CAREER_AI_TEAMS]).slice(0, 11).map(name => ({
+    name,
+    pts: 0,
+    w: 0,
+    d: 0,
+    l: 0,
+    gf: 0,
+    ga: 0,
+    ovr: 58 + Math.floor(Math.random() * 18)
+  }));
+  teams.unshift({ name: myClub, pts: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, isPlayer: true, ovr: 65 });
+  return teams;
+}
+
+
+function renderCareerDraft() {
+  const myP = career.player;
+  document.getElementById('career-draft-my-name').textContent = myP.name;
+  document.getElementById('career-draft-my-pos').textContent = POS_INFO[myP.posicao_favorita].label + ' · OVR 60';
+
+  nextCareerDraftRound();
+}
+
+function nextCareerDraftRound() {
+  const isStarters = state.careerDraftPhase === 'starters';
+  const maxRounds = isStarters ? 5 : 3;
+  
+  if (state.careerDraftRound >= maxRounds) {
+    // Switch phase or finish
+    if (isStarters) {
+      state.careerDraftPhase = 'bench';
+      state.careerDraftRound = 0;
+      nextCareerDraftRound();
+      return;
+    } else {
+      // Finished drafting
+      confirmCareerDraft();
+      return;
+    }
+  }
+
+  state.careerDraftRound++;
+  const isStarters2 = state.careerDraftPhase === 'starters';
+  const maxRounds2 = isStarters2 ? 5 : 3;
+  const phaseLabel = isStarters2 ? 'TITULARES' : 'RESERVAS';
+  document.getElementById('career-draft-round').textContent = `${phaseLabel} • ${state.careerDraftRound} de ${maxRounds2}`;
+
+  // Get 5 random options
+  const usedIds = new Set([...career.squad.map(p => p.id), ...career.bench.map(p => p.id), 9999]);
+  const available = state.careerDraftPool.filter(p => !usedIds.has(p.id));
+  const options = weightedSample(available, 5);
+
+  const container = document.getElementById('career-draft-cards');
+  container.innerHTML = '';
+  container.classList.add('shuffling');
+
+  options.forEach(p => {
+    const baseP = { ...p, ovr: CAREER_PLAYER_START_OVR, potential: p.ovr };
+    const rarity = getRarity(p.ovr); // rarity reflects real potential
+    const pos = POS_INFO[baseP.posicao_favorita];
+    const card = document.createElement('div');
+    card.className = `player-card ${rarity.cssClass}`;
+    card.innerHTML = `
+      <span class="rarity-badge ${rarity.tier}">${rarity.label}</span>
+      <div class="card-ovr ${rarity.colorClass}">${CAREER_PLAYER_START_OVR}</div>
+      <div class="card-ovr-label">OVR</div>
+      <div class="card-name">${baseP.name}</div>
+      <div class="card-team">${baseP.team}</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:13px;letter-spacing:1px;opacity:0.75;margin:2px 0;">POT <span style="font-size:16px;opacity:1;">${p.ovr}</span></div>
+      <div class="card-pos pos-${pos.cls}">${pos.icon} ${pos.label}<span class="card-pos-sub">posição favorita · +2 OVR</span></div>
+    `;
+    card.onclick = () => pickCareerDraftPlayer(baseP, card);
+    container.appendChild(card);
+  });
+
+  setTimeout(() => container.classList.remove('shuffling'), 500);
+  updateCareerDraftStatus();
+}
+
+function pickCareerDraftPlayer(player, cardEl) {
+  const isStarters = state.careerDraftPhase === 'starters';
+  
+  if (isStarters) {
+    career.squad.push(player);
+  } else {
+    career.bench.push(player);
+  }
+
+  cardEl.classList.add('picked');
+
+  document.querySelectorAll('.player-card').forEach(c => {
+    if (c !== cardEl) c.classList.add('dismissed');
+    c.style.pointerEvents = 'none';
+  });
+
+  setTimeout(() => nextCareerDraftRound(), 700);
+}
+
+function updateCareerDraftStatus() {
+  const s = career.squad.length;
+  const b = career.bench.length;
+  document.getElementById('career-draft-status').textContent = `Titulares: ${s}/5 | Reservas: ${b}/3`;
+}
+
+function confirmCareerDraft() {
+  if (career.squad.length < 5 || career.bench.length < 3) {
+    alert('Selecione 5 titulares e 3 reservas!');
+    return;
+  }
+  // Ensure my player is in starters
+  const myP = career.player;
+  if (!career.squad.find(p => p.id === myP.id)) {
+    career.squad.unshift(myP);
+    if (career.squad.length > 5) career.squad.pop();
+  }
+
+  career.formation = getCareerFormationFromSquad();
+  buildCareerFormation();
+  renderCareerHub();
+  showScreen('career-hub');
+}
+
+function buildCareerFormation() {
+  ensureCareerFormationState();
+  state.scheme = career.scheme || 'quadrado';
+  state.formation = { gk: null, s1: null, s2: null, s3: null, s4: null };
+  state.myPicks = [...career.squad, ...career.bench];
+
+  const all = [...career.squad, ...career.bench];
+  const entries = getCareerFormationEntries();
+  const used = new Set();
+
+  FORMATION_KEYS.forEach(key => {
+    const p = entries[key];
+    if (p && !isCareerPlayerInjured(p)) {
+      state.formation[key] = p;
+      used.add(String(p.id));
+    }
+  });
+
+  const available = all.filter(p => p && !isCareerPlayerInjured(p) && !used.has(String(p.id)));
+  const fallback = all.filter(p => p && isCareerPlayerInjured(p) && !used.has(String(p.id)));
+  const reserves = [...available, ...fallback];
+
+  if (all.filter(p => !isCareerPlayerInjured(p)).length < CAREER_STARTERS) {
+    console.warn('Poucos jogadores disponíveis; alguns lesionados podem aparecer como emergência.');
+  }
+
+  FORMATION_KEYS.forEach(key => {
+    if (state.formation[key]) return;
+    const next = reserves.shift();
+    if (next) state.formation[key] = next;
+  });
+}
+
+
+function renderCareerHub() {
+  ensureCareerSeasonState();
+  const c = career;
+  document.getElementById('career-hub-club').textContent = c.clubName;
+  document.getElementById('career-coins-display').textContent = c.coins;
+  document.getElementById('career-tp-display').textContent = c.trainingPoints;
+  document.getElementById('career-season-label').textContent = `TEMPORADA ${c.season}`;
+  document.getElementById('career-match-num').textContent = Math.min(c.matchesPlayed + 1, CAREER_MATCHES_PER_SEASON);
+
+  const myTeam = c.standings.find(t => t.isPlayer);
+  document.getElementById('career-pts-display').textContent = (myTeam ? myTeam.pts : 0) + ' pts';
+
+  const p = c.player;
+  document.getElementById('career-my-name-hub').textContent = p.name;
+  document.getElementById('career-my-pos-hub').textContent = POS_INFO[p.posicao_favorita].label + ' · ' + c.clubName;
+  document.getElementById('career-my-ovr-hub').textContent = p.ovr;
+
+  const injured = Object.entries(c.injuries).filter(([id, turns]) => turns > 0);
+  const injuryAlert = document.getElementById('career-injury-alert');
+  if (injured.length > 0) {
+    const names = injured.map(([id, turns]) => {
+      const p = getCareerPlayerList().find(p => p.id == id);
+      return p ? `${p.name} (${turns} partida${turns > 1 ? 's' : ''})` : '';
+    }).filter(Boolean).join(', ');
+    injuryAlert.style.display = 'block';
+    injuryAlert.textContent = `🏥 Lesionados: ${names}`;
+  } else {
+    injuryAlert.style.display = 'none';
+  }
+
+  const transferAlert = document.getElementById('career-transfer-alert');
+  transferAlert.style.display = c.transferWindow ? 'block' : 'none';
+  if (c.transferWindow) {
+    const left = c.transferDeadline !== null ? Math.max(0, c.transferDeadline - c.matchesPlayed) : '?';
+    transferAlert.textContent = `🔔 Janela de Transferências aberta! Fecha em ${left} rodada${left === 1 ? '' : 's'}. Toque para ver.`;
+  }
+
+  const over = c.matchesPlayed >= CAREER_MATCHES_PER_SEASON;
+  document.getElementById('career-play-btn').style.display = over ? 'none' : 'block';
+}
+
+// careerPlayMatch moved below
+
+// careerPlayMatch moved below — pre-match screen version
+
+// Hook into showResult for career mode
+const _origShowResult = showResult;
+showResult = function() {
+  if (gameMode !== 'career') { _origShowResult(); return; }
+  showCareerResult();
+};
+
+function showCareerResult() {
+  ensureCareerSeasonState();
+  const h = state.matchGoalsHome;
+  const a = state.matchGoalsAway;
+  const won = state.penalties ? state.penalties.winner === 'home' : h > a;
+  const drew = !state.penalties && h === a;
+
+  const banner = document.getElementById('career-result-banner');
+  if (won) { banner.textContent = 'VITÓRIA!'; banner.className = 'result-banner win'; }
+  else if (drew) { banner.textContent = 'EMPATE'; banner.className = 'result-banner draw'; }
+  else { banner.textContent = 'DERROTA'; banner.className = 'result-banner lose'; }
+
+  document.getElementById('career-result-score').textContent = `${h} x ${a}` + (state.penalties ? ` (Pen ${state.penalties.home}x${state.penalties.away})` : '');
+
+  const homePlayers = Object.values(state.formation).filter(Boolean);
+  const allPlayers = [...homePlayers, ...state.awayTeam].filter(Boolean);
+  function ms(p) { return (state.playerGoals[p.id] || 0) * 2 + (state.playerAssists[p.id] || 0); }
+  const maxS = Math.max(0, ...allPlayers.map(ms));
+  const cands = maxS > 0 ? allPlayers.filter(p => ms(p) === maxS) : allPlayers;
+  const mvp = cands[Math.floor(Math.random() * cands.length)] || career.player;
+  const mvpGoals = state.playerGoals[mvp.id] || 0;
+  const mvpAssists = state.playerAssists[mvp.id] || 0;
+  const mvpParts = [];
+  if (mvpGoals > 0) mvpParts.push(`${mvpGoals} gol${mvpGoals > 1 ? 's' : ''}`);
+  if (mvpAssists > 0) mvpParts.push(`${mvpAssists} assist${mvpAssists > 1 ? 's' : ''}`);
+  if (!mvpParts.length) mvpParts.push('destaque da partida');
+  document.getElementById('career-result-mvp').innerHTML = `
+    <div class="mvp-label">🏆 Craque da Partida</div>
+    <div class="mvp-name">${mvp.name}</div>
+    <div class="mvp-stat">${mvpParts.join(' • ')}</div>
+  `;
+
+  const myId = career.player.id;
+  const myGoals = state.playerGoals[myId] || 0;
+  const myAssists = state.playerAssists[myId] || 0;
+  const isMvp = mvp.id === myId;
+  const performanceBonus = Math.min(2, (myGoals > 0 ? 1 : 0) + (myAssists > 0 ? 1 : 0) + (isMvp ? 1 : 0));
+
+  const coinReward = won ? CAREER_WIN_COINS : drew ? CAREER_DRAW_COINS : CAREER_LOSS_COINS;
+  const baseTpReward = won ? CAREER_WIN_TP : drew ? CAREER_DRAW_TP : CAREER_LOSS_TP;
+  const tpReward = baseTpReward + performanceBonus;
+
+  career.coins += coinReward;
+  career.trainingPoints += tpReward;
+
+  const myMatch = state.currentCareerMatch || getCareerMyMatch();
+  if (myMatch) {
+    const userIsHomeInFixture = myMatch.home === career.clubName;
+    const fixtureHomeGoals = userIsHomeInFixture ? h : a;
+    const fixtureAwayGoals = userIsHomeInFixture ? a : h;
+    applyCareerStandingResult(myMatch.home, myMatch.away, fixtureHomeGoals, fixtureAwayGoals);
+    simulateCareerRound(myMatch);
+  }
+
+  career.player.goals = (career.player.goals || 0) + myGoals;
+  career.player.assists = (career.player.assists || 0) + myAssists;
+  career.player.games = (career.player.games || 0) + 1;
+  if (isMvp) career.player.mvps = (career.player.mvps || 0) + 1;
+  career.playerGoalsCareer = (career.playerGoalsCareer || 0) + myGoals;
+  career.playerAssistsCareer = (career.playerAssistsCareer || 0) + myAssists;
+  if (isMvp) career.playerMvpsCareer = (career.playerMvpsCareer || 0) + 1;
+
+  healCareerInjuries();
+  checkCareerInjuries(homePlayers);
+
+  career.matchesPlayed++;
+  closeTransferWindowIfExpired();
+
+  if (career.matchesPlayed % CAREER_TRANSFER_WINDOW_INTERVAL === 0 && career.matchesPlayed < CAREER_MATCHES_PER_SEASON) {
+    openTransferWindow();
+  }
+
+  if (career.matchesPlayed >= CAREER_MATCHES_PER_SEASON) career.seasonEnded = true;
+  updateCareerClubOvr();
+  saveCareer();
+
+  const rewardsDiv = document.getElementById('career-result-rewards');
+  rewardsDiv.innerHTML = `
+    <div style="font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:var(--green-dark);margin-bottom:6px;">RECOMPENSAS</div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
+      <div style="text-align:center;"><div style="font-family:'Bebas Neue',cursive;font-size:22px;color:var(--gold);">+${coinReward}</div><div style="font-size:10px;color:var(--text-muted);">MOEDAS</div></div>
+      <div style="text-align:center;"><div style="font-family:'Bebas Neue',cursive;font-size:22px;color:var(--blue);">+${tpReward}</div><div style="font-size:10px;color:var(--text-muted);">TRAINING POINTS</div></div>
+    </div>
+    ${(myGoals || myAssists || isMvp) ? `<div style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:4px;">Bônus de estrela: +${performanceBonus} TP · ${myGoals} gol(s) · ${myAssists} assist(s)${isMvp ? ' · MVP' : ''}</div>` : ''}
+  `;
+
+  document.getElementById('career-result-events').innerHTML = document.getElementById('matchEvents').innerHTML;
+  showScreen('career-result');
+}
+
+function checkCareerLevelUp() { /* removed */ }
+
+function checkCareerLevelUp() { /* removed */ }
+
+function checkCareerInjuries(playersUsed = []) {
+  const played = (playersUsed && playersUsed.length ? playersUsed : Object.values(state.formation).filter(Boolean))
+    .filter(p => p && !career.injuries[p.id]);
+
+  played.forEach(p => {
+    if (Math.random() < getInjuryChanceForPlayer(p)) {
+      const turns = CAREER_INJURY_MIN_MATCHES + Math.floor(Math.random() * (CAREER_INJURY_MAX_MATCHES - CAREER_INJURY_MIN_MATCHES + 1));
+      career.injuries[p.id] = turns;
+    }
+  });
+}
+
+
+function openTransferWindow() {
+  const usedIds = new Set([...career.squad.map(p => p.id), ...career.bench.map(p => p.id), 9999]);
+  const pool = shuffle(ALL_PLAYERS.filter(p => !usedIds.has(p.id)));
+  career.transferPlayers = pool.slice(0, CAREER_TRANSFER_OPTIONS).map(p => ({
+    ...p,
+    ovr: Math.max(60, Math.floor(p.ovr * 0.75)),
+    potential: p.ovr,
+    price: CAREER_MIN_TRANSFER_PRICE + Math.floor(p.ovr * CAREER_TRANSFER_PRICE_MULTIPLIER)
+  }));
+  career.transferWindow = true;
+  career.transferDeadline = career.matchesPlayed + CAREER_TRANSFER_WINDOW_DURATION;
+}
+
+
+function afterCareerMatch() {
+  if (career.seasonEnded || career.matchesPlayed >= CAREER_MATCHES_PER_SEASON) {
+    showCareerSeasonEnd();
+    return;
+  }
+  renderCareerHub();
+  renderCareerStandings();
+  showScreen('career-hub');
+  saveCareer();
+}
+
+function saveCareer(ev = null) {
+  if (!career) return;
+  ensureCareerSeasonState();
+  localStorage.setItem('careerSave', JSON.stringify(career));
+
+  const btn = ev?.target || (typeof window !== 'undefined' ? document.activeElement : null);
+  if (btn && btn.tagName === 'BUTTON') {
+    const orig = btn.textContent;
+    btn.textContent = '✅ Salvo!';
+    setTimeout(() => { if (btn) btn.textContent = orig; }, 1500);
+  }
+}
+
+// Training Center
+
+// Training Center
+function renderTrainingCenter() {
+  document.getElementById('ct-tp-available').textContent = career.trainingPoints;
+  const container = document.getElementById('ct-player-list');
+  container.innerHTML = '';
+  const allPlayers = [...career.squad, ...career.bench]
+    .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+
+  allPlayers.forEach(p => {
+    const isInjured = career.injuries[p.id] > 0;
+    const pot = p.potential || 99;
+    const cost = tpCost(p.ovr);
+    const canTrain = p.ovr < pot && !isInjured && career.trainingPoints >= cost;
+    const pos = POS_INFO[p.posicao_favorita];
+    const pct = Math.round((p.ovr / pot) * 100);
+    const isMaxed = p.ovr >= pot;
+    const isMyPlayer = p.id === 9999;
+    const barColor = isMaxed ? 'var(--purple)' : pct >= 90 ? 'var(--gold)' : pct >= 70 ? 'var(--green)' : 'var(--blue)';
+
+    const div = document.createElement('div');
+    div.style.cssText = `
+      background: linear-gradient(135deg, rgba(156,39,217,.07), rgba(255,255,255,.02));
+      border: 1.5px solid ${isMyPlayer ? 'var(--purple)' : isInjured ? 'var(--red)' : 'var(--line)'};
+      border-radius: 18px;
+      padding: 20px 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: border-color 0.2s;
+    `;
+
+    div.innerHTML = `
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span style="font-weight:800;font-size:15px;">${p.name}${isMyPlayer ? ' ⭐' : ''}</span>
+            <span class="pos-tag ${pos.cls}">${pos.icon} ${pos.cls.toUpperCase()}</span>
+          </div>
+          ${isInjured
+            ? `<div style="font-size:11px;color:var(--red);font-weight:700;">🏥 Lesionado · ${career.injuries[p.id]} partida(s)</div>`
+            : isMaxed
+            ? `<div style="font-size:11px;color:var(--purple);font-weight:700;">✨ Potencial máximo atingido</div>`
+            : `<div style="font-size:11px;color:var(--text-muted);">${career.squad.includes(p) ? 'Titular' : 'Reserva'} · Custo atual: ${cost} TP</div>`
+          }
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-family:'Bebas Neue',cursive;font-size:38px;line-height:1;color:var(--text);">${p.ovr}</div>
+          <div style="font-size:10px;letter-spacing:1px;color:var(--text-muted);">OVR</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:1px;">OVR ${p.ovr} / POT ${pot}</span>
+          <span style="font-size:11px;font-weight:700;color:${barColor};">${pct}%</span>
+        </div>
+        <div style="background:var(--line);border-radius:6px;height:8px;overflow:hidden;">
+          <div style="height:100%;width:${pct}%;background:${barColor};border-radius:6px;transition:width 0.5s ease;"></div>
+        </div>
+      </div>
+
+      <button
+        ${canTrain ? '' : 'disabled'}
+        onclick="trainPlayer(${p.id})"
+        style="
+          width:100%;padding:11px 0;border-radius:12px;border:none;
+          cursor:${canTrain ? 'pointer' : 'not-allowed'};
+          font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:1.5px;
+          background:${canTrain ? 'var(--green)' : 'var(--line)'};
+          color:${canTrain ? '#fff' : 'var(--text-muted)'};
+          transition:all 0.2s;
+          display:flex;align-items:center;justify-content:center;gap:8px;
+        ">
+        ${canTrain ? '▲ +1 OVR' : isMaxed ? 'POTENCIAL MÁXIMO' : isInjured ? 'LESIONADO' : 'TP INSUFICIENTE'}
+        <span style="font-family:'Inter',sans-serif;font-size:11px;opacity:0.85;">${!isMaxed && !isInjured ? `· ${cost} TP` : ''}</span>
+      </button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+
+function trainPlayer(playerId) {
+  const allPlayers = [...career.squad, ...career.bench];
+  const p = allPlayers.find(x => x.id == playerId);
+  if (!p) return;
+
+  const cost = tpCost(p.ovr);
+  if (career.trainingPoints < cost) {
+    alert(`Sem Training Points suficientes! Este upgrade custa ${cost} TP.`);
+    return;
+  }
+  if (career.injuries[p.id] > 0) { alert('Jogador lesionado!'); return; }
+  const maxOvr = p.potential || 99;
+  if (p.ovr >= maxOvr) { alert('Jogador no potencial máximo!'); return; }
+
+  p.ovr = Math.min(maxOvr, p.ovr + 1);
+  if (p.id === 9999) career.player.ovr = p.ovr;
+  career.trainingPoints -= cost;
+  updateCareerClubOvr();
+  saveCareer();
+  document.getElementById('ct-tp-available').textContent = career.trainingPoints;
+  renderTrainingCenter();
+  renderCareerHub();
+}
+
+// doTraining removed
+
+// doTraining removed (no XP/level system)
+
+function updateCareerProfileCard() {
+  const p = career.player;
+  const card = document.getElementById('career-profile-card');
+  if (!card) return;
+  const pos = POS_INFO[p.posicao_favorita];
+  card.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:1px;">${p.name}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+          <span style="background:rgba(255,255,255,0.18);border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;">${pos.icon} ${pos.label}</span>
+          <span style="font-size:12px;opacity:0.8;">${career.clubName}</span>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Bebas Neue',cursive;font-size:48px;line-height:1;">${p.ovr}</div>
+        <div style="font-size:11px;letter-spacing:1px;opacity:0.7;">OVR</div>
+      </div>
+    </div>
+    <div style="height:1px;background:rgba(255,255,255,0.15);"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;text-align:center;">
+      <div style="padding:8px 0;">
+        <div style="font-family:'Bebas Neue',cursive;font-size:28px;">${p.goals||0}</div>
+        <div style="font-size:10px;letter-spacing:1px;opacity:0.7;">GOLS</div>
+      </div>
+      <div style="padding:8px 0;border-left:1px solid rgba(255,255,255,0.15);border-right:1px solid rgba(255,255,255,0.15);">
+        <div style="font-family:'Bebas Neue',cursive;font-size:28px;">${p.assists||0}</div>
+        <div style="font-size:10px;letter-spacing:1px;opacity:0.7;">ASSISTS</div>
+      </div>
+      <div style="padding:8px 0;">
+        <div style="font-family:'Bebas Neue',cursive;font-size:28px;">${p.mvps||0}</div>
+        <div style="font-size:10px;letter-spacing:1px;opacity:0.7;">MVPs</div>
+      </div>
+    </div>
+    <div style="height:1px;background:rgba(255,255,255,0.15);"></div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0;text-align:center;">
+      <div style="padding:8px 0;">
+        <div style="font-family:'Bebas Neue',cursive;font-size:24px;">${p.games||0}</div>
+        <div style="font-size:10px;letter-spacing:1px;opacity:0.7;">JOGOS</div>
+      </div>
+      <div style="padding:8px 0;border-left:1px solid rgba(255,255,255,0.15);">
+        <div style="font-family:'Bebas Neue',cursive;font-size:24px;">T${career.season}</div>
+        <div style="font-size:10px;letter-spacing:1px;opacity:0.7;">TEMPORADA</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderCareerStandings() {
+  if (!career) return;
+  document.getElementById('career-standings-season-label').textContent = `TEMPORADA ${career.season} · Partida ${career.matchesPlayed}/20`;
+  const table = document.getElementById('career-standings-table');
+  const sorted = [...career.standings].sort((a,b) => (b.pts-a.pts)||((b.gf-b.ga)-(a.gf-a.ga))||(b.gf-a.gf));
+  table.innerHTML = `
+    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+      <tr style="color:var(--text-muted);font-weight:700;background:var(--bg);">
+        <th style="text-align:left;padding:10px 12px;">#</th>
+        <th style="text-align:left;padding:10px 6px;">Time</th>
+        <th style="padding:8px 4px;text-align:center;">J</th>
+        <th style="padding:8px 4px;text-align:center;">V</th>
+        <th style="padding:8px 4px;text-align:center;">E</th>
+        <th style="padding:8px 4px;text-align:center;">D</th>
+        <th style="padding:8px 4px;text-align:center;">GF</th>
+        <th style="padding:8px 4px;text-align:center;">GA</th>
+        <th style="padding:8px 6px;text-align:center;">Pts</th>
+      </tr>
+      ${sorted.map((t,i) => `
+        <tr style="${t.isPlayer?'font-weight:800;background:rgba(156,39,217,0.06);':''} border-bottom:1px solid var(--line);">
+          <td style="padding:8px 12px;color:${i<3?'var(--green-dark)':'var(--text-muted)'};">${i+1}</td>
+          <td style="padding:8px 6px;">${t.isPlayer?'⭐ ':''}${t.name}</td>
+          <td style="text-align:center;padding:8px 4px;">${t.w+t.d+t.l}</td>
+          <td style="text-align:center;padding:8px 4px;">${t.w}</td>
+          <td style="text-align:center;padding:8px 4px;">${t.d}</td>
+          <td style="text-align:center;padding:8px 4px;">${t.l}</td>
+          <td style="text-align:center;padding:8px 4px;">${t.gf}</td>
+          <td style="text-align:center;padding:8px 4px;">${t.ga}</td>
+          <td style="text-align:center;padding:8px 6px;font-weight:700;">${t.pts}</td>
+        </tr>`).join('')}
+    </table>
+  `;
+}
+
+function renderCareerTransfers() {
+  document.getElementById('transfer-coins-display').textContent = career.coins;
+  const container = document.getElementById('transfer-player-list');
+  container.innerHTML = '';
+
+  if (!career.transferPlayers || career.transferPlayers.length === 0) {
+    container.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:20px;">Sem jogadores disponíveis no momento.</div>';
+    return;
+  }
+
+  career.transferPlayers.forEach((p, idx) => {
+    const pos = POS_INFO[p.posicao_favorita];
+    const canBuy = career.coins >= p.price;
+    const div = document.createElement('div');
+    div.style.cssText = 'background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:var(--shadow);';
+    div.innerHTML = `
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="font-family:'Bebas Neue',cursive;font-size:32px;color:var(--text);">${p.ovr}</div>
+        <div>
+          <div style="font-weight:700;font-size:15px;">${p.name}</div>
+          <span class="pos-tag ${pos.cls}">${pos.icon} ${pos.cls.toUpperCase()}</span>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Potencial: ${p.potential}</div>
+        </div>
+      </div>
+      <button onclick="buyTransferPlayer(${idx})" ${canBuy?'':'disabled'}
+        style="padding:10px 18px;border-radius:10px;border:none;cursor:${canBuy?'pointer':'not-allowed'};font-weight:700;font-size:13px;background:${canBuy?'var(--gold)':'var(--line)'};color:${canBuy?'#fff':'var(--text-muted)'};transition:all 0.2s;">
+        COMPRAR<br><span style="font-size:11px;opacity:0.9;">💰 ${p.price}</span>
+      </button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function buyTransferPlayer(idx) {
+  const p = career.transferPlayers[idx];
+  if (!p) return;
+  if (career.coins < p.price) { alert('Moedas insuficientes!'); return; }
+  career.coins -= p.price;
+  career.bench.push(p);
+  career.transferPlayers.splice(idx, 1);
+  career.transferWindow = career.transferPlayers.length > 0 && career.matchesPlayed < (career.transferDeadline ?? Infinity);
+  renderCareerTransfers();
+  renderCareerHub();
+  alert(`${p.name} contratado! Confira o Centro de Treinamento para evoluí-lo.`);
+}
+
+function showCareerSeasonEnd() {
+  const sorted = [...career.standings].sort((a,b)=>(b.pts-a.pts)||((b.gf-b.ga)-(a.gf-a.ga))||(b.gf-a.gf));
+  const myPos = sorted.findIndex(t=>t.isPlayer) + 1;
+  const myTeam = sorted.find(t=>t.isPlayer);
+  const champion = sorted[0];
+  const gd = (myTeam.gf || 0) - (myTeam.ga || 0);
+  const campaignLabel = myPos === 1 ? 'TEMPORADA DE CAMPEÃO' : myPos <= 3 ? 'TEMPORADA HISTÓRICA' : myPos <= 6 ? 'TEMPORADA COMPETITIVA' : 'TEMPORADA DE APRENDIZADO';
+
+  if (!career.history) career.history = [];
+  if (!career.history.some(h => h.season === career.season)) {
+    career.history.push({
+      season: career.season,
+      position: myPos,
+      points: myTeam.pts,
+      goals: career.playerGoalsCareer || 0,
+      assists: career.playerAssistsCareer || 0,
+      mvps: career.playerMvpsCareer || 0,
+      finalOvr: career.player.ovr,
+      champion: champion.name
+    });
+    saveCareer();
+  }
+
+  const content = document.getElementById('career-season-end-content');
+  content.innerHTML = `
+    <div style="background:linear-gradient(135deg,var(--purple),#6a0dad);border-radius:18px;padding:22px 24px;color:#fff;box-shadow:0 12px 30px rgba(156,39,217,.30);">
+      <div style="font-size:11px;font-weight:800;letter-spacing:2px;opacity:.8;">${campaignLabel}</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:42px;line-height:1;margin-top:4px;">${myPos}º LUGAR</div>
+      <div style="font-size:13px;opacity:.88;margin-top:6px;">${myTeam.pts} pontos · ${myTeam.w}V ${myTeam.d}E ${myTeam.l}D · SG ${gd >= 0 ? '+' : ''}${gd}</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);">
+        <div style="font-size:10px;color:var(--text-muted);font-weight:800;letter-spacing:2px;">GOLS</div>
+        <div style="font-family:'Bebas Neue',cursive;font-size:34px;color:var(--green-dark);">${career.playerGoalsCareer || 0}</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);">
+        <div style="font-size:10px;color:var(--text-muted);font-weight:800;letter-spacing:2px;">ASSISTÊNCIAS</div>
+        <div style="font-family:'Bebas Neue',cursive;font-size:34px;color:var(--blue);">${career.playerAssistsCareer || 0}</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);">
+        <div style="font-size:10px;color:var(--text-muted);font-weight:800;letter-spacing:2px;">MVPs</div>
+        <div style="font-family:'Bebas Neue',cursive;font-size:34px;color:var(--gold);">${career.playerMvpsCareer || 0}</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);">
+        <div style="font-size:10px;color:var(--text-muted);font-weight:800;letter-spacing:2px;">OVR FINAL</div>
+        <div style="font-family:'Bebas Neue',cursive;font-size:34px;color:var(--purple);">${career.player.ovr}</div>
+      </div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 20px;box-shadow:var(--shadow);">
+      <div style="font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:2px;color:var(--green-dark);">TOP 3 DA LIGA</div>
+      ${sorted.slice(0,3).map((t,i)=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;${t.isPlayer?'font-weight:800;color:var(--purple);':''}"><span>${i+1}. ${t.isPlayer?'⭐ ':''}${t.name}</span><span>${t.pts} pts</span></div>`).join('')}
+    </div>
+
+    <div style="background:var(--gold-soft);border:1.5px solid var(--gold-bright);border-radius:16px;padding:14px 18px;color:var(--gold);font-weight:800;font-size:13px;">
+      🏆 Campeão da temporada: ${champion.name}
+    </div>
+  `;
+
+  if (myPos === 1) launchConfetti();
+  showScreen('career-season-end');
+}
+
+
+function startNextSeason() {
+  career.season++;
+  career.matchesPlayed = 0;
+  career.standings = buildSeasonStandings(career.clubName);
+  career.fixtures = buildSeasonFixtures(career.standings);
+  career.playerGoalsCareer = 0;
+  career.playerAssistsCareer = 0;
+  career.playerMvpsCareer = 0;
+  career.transferWindow = false;
+  career.transferPlayers = [];
+  career.transferDeadline = null;
+  career.injuries = {};
+  career.seasonEnded = false;
+  updateCareerClubOvr();
+  saveCareer();
+  renderCareerHub();
+  showScreen('career-hub');
+}
+
+
+// ===================== SQUAD MANAGER
+
+// ===================== SQUAD MANAGER =====================
+
+let sqSelected = null; // { type:'starter'|'bench', idx }
+let sqCareerScheme = 'quadrado';
+
+function renderSquadManager() {
+  ensureCareerFormationState();
+  sqSelected = null;
+  sqCareerScheme = career.scheme || 'quadrado';
+  state.scheme = sqCareerScheme;
+  document.getElementById('sq-hint').textContent = 'Toque em um jogador do elenco e depois em um slot do campinho para escalar.';
+
+  const bar = document.getElementById('sq-scheme-bar');
+  bar.innerHTML = '';
+  Object.entries(SCHEMES).forEach(([key, s]) => {
+    const btn = document.createElement('button');
+    btn.className = 'scheme-chip' + (key === sqCareerScheme ? ' active' : '');
+    btn.textContent = s.name;
+    btn.onclick = () => changeCareerScheme(key);
+    bar.appendChild(btn);
+  });
+
+  renderSqField();
+  renderSqList();
+}
+
+function changeCareerScheme(key) {
+  if (!SCHEMES[key]) return;
+  sqCareerScheme = key;
+  career.scheme = key;
+  state.scheme = key;
+  sqSelected = null;
+  renderSquadManager();
+}
+
+function renderSqField() {
+  const field = document.getElementById('sq-field');
+  if (!field) return;
+  const formation = getCareerFormationEntries();
+  field.innerHTML = `
+    <div class="field-goal-top"></div><div class="field-goal-bottom"></div>
+    <div class="field-area-top"></div><div class="field-area-bottom"></div>
+  `;
+
+  getSlotsForScheme(sqCareerScheme).forEach(def => {
+    const p = formation[def.key];
+    const slot = document.createElement('div');
+    slot.className = 'field-slot ' + (p ? 'filled' : 'empty');
+    slot.style.left = def.x + '%';
+    slot.style.top = def.y + '%';
+    slot.dataset.pos = def.key;
+    slot.dataset.posLabel = def.label;
+    slot.onclick = () => placeCareerSelectedInSlot(def.key);
+
+    if (p) {
+      const eOvr = getMatchEffectiveOvr(p, def.key, sqCareerScheme);
+      const isBad = eOvr < p.ovr;
+      const isBuff = eOvr > p.ovr;
+      slot.className = `field-slot filled${isBuff ? ' pos-buff' : ''}`;
+      slot.innerHTML = `
+        <span class="slot-ovr" style="color:${isBad ? 'var(--red)' : isBuff ? 'var(--gold)' : 'var(--green-dark)'}">${eOvr}${isBad ? '<span style="font-size:9px;vertical-align:super;">▼</span>' : isBuff ? '<span style="font-size:9px;vertical-align:super;">▲</span>' : ''}</span>
+        <span class="slot-name">${p.name}</span>
+      `;
+      slot.title = isBad ? 'Fora da posição: -10 OVR real em jogo' : 'Clique para trocar';
+    }
+    field.appendChild(slot);
+  });
+}
+
+function clearCareerSlotHighlights() {
+  document.querySelectorAll('#sq-field .field-slot').forEach(s => s.classList.remove('highlight', 'highlight-buff'));
+}
+
+function highlightCareerSlotsFor(player) {
+  clearCareerSlotHighlights();
+  const slots = getSlotsForScheme(sqCareerScheme);
+  document.querySelectorAll('#sq-field .field-slot').forEach(s => {
+    const def = slots.find(d => d.key === s.dataset.pos);
+    if (def && def.roles.includes(player.posicao_favorita)) {
+      s.classList.add('highlight-buff');
+    } else {
+      s.classList.add('highlight');
+    }
+  });
+}
+
+function selectCareerSquadPlayer(player) {
+  if (sqSelected && sqSelected.player.id === player.id) {
+    sqSelected = null;
+    clearCareerSlotHighlights();
+    document.getElementById('sq-hint').textContent = 'Toque em um jogador do elenco e depois em um slot do campinho para escalar.';
+    renderSqList();
+    return;
+  }
+
+  sqSelected = { player };
+  document.getElementById('sq-hint').textContent = `${player.name} selecionado - toque em uma posicao do campinho.`;
+  renderSqList();
+  highlightCareerSlotsFor(player);
+}
+
+function renderSqList() {
+  const allPlayers = [...career.squad, ...career.bench].sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+  const container = document.getElementById('sq-all-list');
+  container.innerHTML = '';
+  document.getElementById('sq-starters-count').textContent = `(${career.squad.length}/${CAREER_STARTERS})`;
+  document.getElementById('sq-bench-count').textContent = `(${career.bench.length}/${career.bench.length})`;
+
+  allPlayers.forEach(p => {
+    const pos = POS_INFO[p.posicao_favorita];
+    const isSelected = sqSelected && sqSelected.player.id === p.id;
+    const isInjured = isCareerPlayerInjured(p);
+    const isStarter = career.squad.some(s => s.id === p.id);
+    const row = document.createElement('div');
+    row.style.cssText = `
+      display:flex;align-items:center;gap:10px;
+      background:${isSelected ? 'rgba(156,39,217,0.12)' : 'var(--card)'};
+      border:1.5px solid ${isSelected ? 'var(--purple)' : p.id === 9999 ? 'rgba(156,39,217,0.4)' : 'var(--line)'};
+      border-radius:12px;padding:10px 14px;cursor:pointer;transition:all .15s;${isInjured ? 'opacity:.55;' : ''}
+    `;
+    row.innerHTML = `
+      <div style="font-family:'Bebas Neue',cursive;font-size:22px;min-width:36px;text-align:center;color:var(--text);">${p.ovr}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}${p.id===9999?' ⭐':''}</div>
+        <span class="pos-tag ${pos.cls}" style="font-size:10px;">${pos.icon} ${pos.cls.toUpperCase()}</span>
+        <span style="font-size:10px;color:${isStarter?'var(--green-dark)':'var(--text-muted)'};font-weight:800;margin-left:5px;">${isStarter?'TITULAR':'RESERVA'}</span>
+        ${isInjured ? '<span style="font-size:10px;color:var(--red);font-weight:700;margin-left:4px;">🏥</span>' : ''}
+      </div>
+      ${isSelected ? '<div style="font-size:18px;">✓</div>' : ''}
+    `;
+    row.onclick = () => selectCareerSquadPlayer(p);
+    /*
+      document.getElementById('sq-hint').textContent = `${p.name} selecionado — toque no slot do campinho para escalar.`;
+      renderSqList();
+    */
+    container.appendChild(row);
+  });
+}
+
+function placeCareerSelectedInSlot(slotKey) {
+  if (!sqSelected) {
+    document.getElementById('sq-hint').textContent = 'Selecione primeiro um jogador da lista.';
+    return;
+  }
+
+  const player = sqSelected.player;
+  const formation = getCareerFormationEntries();
+  const currentInSlot = formation[slotKey];
+
+  career.squad = career.squad.filter(p => p.id !== player.id);
+  career.bench = career.bench.filter(p => p.id !== player.id);
+
+  if (currentInSlot && currentInSlot.id !== player.id) {
+    career.bench.push(currentInSlot);
+  }
+
+  const desired = { ...formation, [slotKey]: player };
+  const ordered = ['gk','s1','s2','s3','s4'].map(k => desired[k]).filter(Boolean);
+  const unique = [];
+  ordered.forEach(p => { if (!unique.some(u => u.id === p.id)) unique.push(p); });
+  career.squad = unique.slice(0, CAREER_STARTERS);
+  const starterIds = new Set(career.squad.map(p => p.id));
+  const allKnown = [...career.squad, ...career.bench, ...getCareerPlayerList()];
+  career.bench = allKnown.filter((p, idx, arr) =>
+    p && !starterIds.has(p.id) && arr.findIndex(x => x.id === p.id) === idx
+  );
+
+  sqSelected = null;
+  renderSqField();
+  renderSqList();
+  document.getElementById('sq-hint').textContent = '✅ Escalação atualizada no campinho.';
+}
+
+function handleSqTap(type, idx, player) {
+  sqSelected = { player };
+  renderSqList();
+}
+
+function placeCareerSelectedInSlot(slotKey) {
+  const formation = getCareerFormationEntries();
+  const currentInSlot = formation[slotKey];
+
+  if (!sqSelected) {
+    if (currentInSlot) {
+      selectCareerSquadPlayer(currentInSlot);
+    } else {
+      document.getElementById('sq-hint').textContent = 'Selecione primeiro um jogador da lista.';
+    }
+    return;
+  }
+
+  const player = sqSelected.player;
+  const playerCurrentSlot = FORMATION_KEYS.find(key => formation[key] && formation[key].id === player.id);
+
+  career.formation = normalizeCareerFormationIds(career.formation);
+  if (playerCurrentSlot) career.formation[playerCurrentSlot] = currentInSlot ? currentInSlot.id : null;
+  career.formation[slotKey] = player.id;
+  syncCareerSquadFromFormation();
+
+  sqSelected = null;
+  clearCareerSlotHighlights();
+  renderSqField();
+  renderSqList();
+  document.getElementById('sq-hint').textContent = 'Escalacao atualizada no campinho.';
+}
+
+function saveSquadChanges() {
+  career.scheme = sqCareerScheme;
+  buildCareerFormation();
+  updateCareerClubOvr();
+  saveCareer();
+  renderCareerHub();
+  showScreen('career-hub');
+}
+
+// ===================== PRE-MATCH SCREEN =====================
+
+// ===================== PRE-MATCH SCREEN =====================
+
+let prematchAwayTeam = null;
+let prematchAwayName = '';
+
+function careerPlayMatch() {
+  if (!career) return;
+  ensureCareerSeasonState();
+
+  if (career.matchesPlayed >= CAREER_MATCHES_PER_SEASON) {
+    showCareerSeasonEnd();
+    return;
+  }
+
+  const myMatch = getCareerMyMatch();
+  if (!myMatch) {
+    alert('Erro no calendário da temporada. Um novo calendário será gerado.');
+    career.fixtures = buildSeasonFixtures(career.standings);
+    saveCareer();
+    return;
+  }
+
+  state.currentCareerMatch = myMatch;
+  prematchAwayName = myMatch.home === career.clubName ? myMatch.away : myMatch.home;
+  prematchAwayTeam = generateCareerOpponentTeam(prematchAwayName);
+
+  document.getElementById('prematch-home-name').textContent = career.clubName;
+  document.getElementById('prematch-away-name').textContent = prematchAwayName;
+  document.getElementById('prematch-season-label').textContent =
+    `Temporada ${career.season} · Rodada ${career.matchesPlayed + 1} de ${CAREER_MATCHES_PER_SEASON}`;
+
+  const homeDiv = document.getElementById('prematch-home-squad');
+  homeDiv.innerHTML = '';
+  [...career.squad, ...career.bench].forEach((p, i) => {
+    const pos = POS_INFO[p.posicao_favorita];
+    const isMe = p.id === 9999;
+    const isInjured = career.injuries[p.id] > 0;
+    const isBench = i >= career.squad.length;
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);';
+    row.innerHTML = `
+      <div style="font-family:'Bebas Neue',cursive;font-size:16px;min-width:28px;color:var(--text);">${p.ovr}</div>
+      <span class="pos-tag ${pos.cls}" style="font-size:9px;">${pos.icon}</span>
+      <div style="font-size:12px;font-weight:${isMe?'800':'600'};flex:1;color:${isMe?'rgba(200,150,255,1)':'var(--text)'};">${p.name}${isMe?' ⭐':''}</div>
+      ${isBench ? '<span style="font-size:9px;color:var(--text-muted);letter-spacing:1px;">RES</span>' : ''}
+      ${isInjured ? '<span style="font-size:10px;">🏥</span>' : ''}
+    `;
+    homeDiv.appendChild(row);
+  });
+
+  const awayDiv = document.getElementById('prematch-away-squad');
+  awayDiv.innerHTML = '';
+  prematchAwayTeam.forEach((p, i) => {
+    const pos = POS_INFO[p.posicao_favorita];
+    const isBench = i >= CAREER_STARTERS;
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);';
+    row.innerHTML = `
+      <div style="font-family:'Bebas Neue',cursive;font-size:16px;min-width:28px;color:var(--text);">${p.ovr}</div>
+      <span class="pos-tag ${pos.cls}" style="font-size:9px;">${pos.icon}</span>
+      <div style="font-size:12px;font-weight:600;flex:1;">${p.name}</div>
+      ${isBench ? '<span style="font-size:9px;color:var(--text-muted);letter-spacing:1px;">RES</span>' : ''}
+    `;
+    awayDiv.appendChild(row);
+  });
+
+  showScreen('career-prematch');
+}
+
+
+function confirmAndStartCareerMatch() {
+  buildCareerFormation();
+
+  state.awayName = prematchAwayName;
+  state.awayTeam = prematchAwayTeam;
+  state.currentCareerMatch = state.currentCareerMatch || getCareerMyMatch();
+
+  document.getElementById('teamHomeName').textContent = career.clubName;
+  document.getElementById('teamAwayName').textContent = state.awayName;
+
+  gameMode = 'career';
+  startMatch();
+}
+
+// Override showScreen
+
+// Override showScreen to trigger career renders
+const _origShowScreen = showScreen;
+showScreen = function(id) {
+  _origShowScreen(id);
+  if (id === 'career-training-center' && career) renderTrainingCenter();
+  if (id === 'career-player-profile' && career) updateCareerProfileCard();
+  if (id === 'career-standings' && career) renderCareerStandings();
+  if (id === 'career-transfers' && career) renderCareerTransfers();
+  if (id === 'career-squad-manager' && career) renderSquadManager();
+  if (id === 'career-hub' && career) renderCareerHub();
+};
+
 </script>
 <!-- FEEDBACK BOX (fixed, always visible) -->
 <div class="feedback-box">
   <a class="feedback-btn" href="https://forms.gle/W99a14RdqH5Dc61Y7" target="_blank" rel="noopener">
     💬 Feedback & Sugestões
   </a>
+</div>
+
+<!-- ============ CAREER MODE SCREENS ============ -->
+
+<!-- CAREER SAVE FOUND -->
+<div id="career-load" class="screen">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(28px,7vw,52px);letter-spacing:3px;color:var(--purple);text-align:center;">CARREIRA ENCONTRADA</div>
+  <div id="career-load-info" style="color:var(--text-muted);font-size:14px;text-align:center;max-width:340px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 24px;box-shadow:var(--shadow);"></div>
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);" onclick="continueCareer()">Continuar Carreira</button>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text);" onclick="newCareerConfirm()">Nova Carreira</button>
+</div>
+
+<!-- CAREER CREATE PLAYER -->
+<div id="career-create" class="screen">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(28px,7vw,52px);letter-spacing:3px;color:var(--purple);text-align:center;">CRIAR JOGADOR</div>
+  <div style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px 24px;max-width:400px;width:100%;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:16px;">
+    <div>
+      <label style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;">Nome do Clube</label>
+      <input id="career-club-name" type="text" placeholder="Ex: Germinare FC" maxlength="24"
+        style="width:100%;margin-top:6px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:var(--text);background:var(--bg);outline:none;">
+    </div>
+    <div>
+      <label style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;">Nome do Jogador</label>
+      <input id="career-player-name" type="text" placeholder="Seu nome" maxlength="20"
+        style="width:100%;margin-top:6px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:var(--text);background:var(--bg);outline:none;">
+    </div>
+    <div>
+      <label style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;">Posição</label>
+      <div style="display:flex;gap:10px;margin-top:8px;" id="career-pos-selector">
+        <button class="career-pos-btn" data-pos="gk" onclick="selectCareerPos('gk')" style="flex:1;padding:10px 0;border-radius:10px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-weight:700;font-size:13px;transition:all 0.2s;">🧤 GK</button>
+        <button class="career-pos-btn" data-pos="zag" onclick="selectCareerPos('zag')" style="flex:1;padding:10px 0;border-radius:10px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-weight:700;font-size:13px;transition:all 0.2s;">🛡️ ZAG</button>
+        <button class="career-pos-btn" data-pos="ata" onclick="selectCareerPos('ata')" style="flex:1;padding:10px 0;border-radius:10px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-weight:700;font-size:13px;transition:all 0.2s;">⚡ ATA</button>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);" onclick="startCareerSetup()">INICIAR CARREIRA</button>
+</div>
+
+<!-- CAREER DRAFT (squad selection) -->
+<div id="career-draft" class="screen">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,40px);letter-spacing:3px;color:var(--purple);text-align:center;">MONTE SEU ELENCO</div>
+  <div style="font-size:12px;color:var(--text-muted);text-align:center;letter-spacing:1px;">5 titulares + 3 reservas • escolha 1 de cada vez</div>
+  <div id="career-draft-player-card" style="background:linear-gradient(135deg,var(--purple),#6a0dad);border-radius:16px;padding:14px 28px;text-align:center;color:#fff;box-shadow:0 8px 24px rgba(156,39,217,0.35);">
+    <div style="font-size:10px;letter-spacing:2px;font-weight:700;opacity:0.8;">SEU JOGADOR</div>
+    <div id="career-draft-my-name" style="font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:1px;"></div>
+    <div id="career-draft-my-pos" style="font-size:12px;opacity:0.85;"></div>
+  </div>
+  <div style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:2px;text-align:center;" id="career-draft-round">TITULARES • 0 de 5</div>
+  <div style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:2px;text-align:center;" id="career-draft-status">Titulares: 0/5 | Reservas: 0/3</div>
+  <div id="career-draft-cards" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:800px;"></div>
+</div>
+
+<!-- CAREER SQUAD MANAGER -->
+<div id="career-squad-manager" class="screen" style="gap:14px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,38px);letter-spacing:3px;color:var(--purple);text-align:center;">GERENCIAR TIME</div>
+
+  <div style="max-width:760px;width:100%;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-muted);margin-bottom:8px;">ESQUEMA TÁTICO</div>
+    <div id="sq-scheme-bar" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:minmax(280px,420px) minmax(260px,1fr);gap:16px;max-width:900px;width:100%;align-items:start;">
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--green-dark);margin-bottom:8px;text-align:center;">CAMPINHO DOS TITULARES <span id="sq-starters-count" style="color:var(--text-muted);font-weight:400;"></span></div>
+      <div id="sq-field" class="field" style="width:100%;max-width:420px;margin:0 auto;"></div>
+      <div style="font-size:10px;color:var(--text-muted);text-align:center;margin-top:8px;">Fora da posição: goleiro na linha ou linha no gol recebe −10 OVR real.</div>
+    </div>
+
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--blue);margin-bottom:8px;">ELENCO COMPLETO <span id="sq-bench-count" style="color:var(--text-muted);font-weight:400;"></span></div>
+      <div id="sq-all-list" style="display:flex;flex-direction:column;gap:6px;max-height:520px;overflow-y:auto;padding-right:4px;"></div>
+      <div id="sq-starters-list" style="display:none;"></div>
+      <div id="sq-bench-list" style="display:none;"></div>
+    </div>
+  </div>
+
+  <div id="sq-hint" style="font-size:12px;color:var(--text-muted);text-align:center;min-height:18px;letter-spacing:0.5px;"></div>
+
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);max-width:320px;" onclick="saveSquadChanges()">✅ Confirmar Time</button>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text-muted);" onclick="showScreen('career-hub')">← Voltar sem salvar</button>
+</div>
+
+<!-- CAREER PRE-MATCH -->
+
+<!-- CAREER PRE-MATCH -->
+<div id="career-prematch" class="screen" style="gap:14px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(20px,5vw,34px);letter-spacing:3px;color:var(--text);text-align:center;">PRÓXIMA PARTIDA</div>
+  <div style="font-size:11px;color:var(--text-muted);letter-spacing:1px;text-align:center;" id="prematch-season-label"></div>
+
+  <div style="display:flex;gap:12px;max-width:660px;width:100%;flex-wrap:wrap;justify-content:center;">
+
+    <!-- Home team -->
+    <div style="flex:1;min-width:240px;background:var(--card);border:1.5px solid var(--purple);border-radius:18px;padding:18px 16px;box-shadow:var(--shadow);">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--purple);margin-bottom:6px;">SEU TIME</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:1px;margin-bottom:12px;" id="prematch-home-name"></div>
+      <div id="prematch-home-squad" style="display:flex;flex-direction:column;gap:5px;"></div>
+    </div>
+
+    <!-- VS -->
+    <div style="display:flex;align-items:center;justify-content:center;">
+      <div style="font-family:'Bebas Neue',cursive;font-size:32px;color:var(--text-muted);letter-spacing:2px;">VS</div>
+    </div>
+
+    <!-- Away team -->
+    <div style="flex:1;min-width:240px;background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:18px 16px;box-shadow:var(--shadow);">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text-muted);margin-bottom:6px;">ADVERSÁRIO</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:1px;margin-bottom:12px;" id="prematch-away-name"></div>
+      <div id="prematch-away-squad" style="display:flex;flex-direction:column;gap:5px;"></div>
+    </div>
+
+  </div>
+
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--green),var(--green-dark));max-width:320px;" onclick="confirmAndStartCareerMatch()">⚽ JOGAR AGORA</button>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text-muted);" onclick="showScreen('career-hub')">← Voltar</button>
+</div>
+
+<!-- CAREER HUB (main dashboard) -->
+<div id="career-hub" class="screen" style="gap:14px;">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:640px;flex-wrap:wrap;gap:8px;">
+    <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,5vw,36px);letter-spacing:3px;color:var(--purple);" id="career-hub-club"></div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <div style="background:var(--gold-soft);border:1.5px solid var(--gold-bright);border-radius:10px;padding:6px 14px;font-weight:700;font-size:13px;color:var(--gold);">🪙 <span id="career-coins-display">0</span></div>
+      <div style="background:var(--blue-soft);border:1.5px solid var(--blue);border-radius:10px;padding:6px 14px;font-weight:700;font-size:13px;color:var(--blue);">⭐ <span id="career-tp-display">0</span> TP</div>
+    </div>
+  </div>
+
+  <div id="career-season-bar" style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 20px;max-width:640px;width:100%;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:2px;color:var(--green-dark);" id="career-season-label">TEMPORADA 1</div>
+      <div style="font-size:12px;color:var(--text-muted);">Partida <span id="career-match-num">1</span> de 20</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text-muted);">CLASSIFICAÇÃO</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:22px;color:var(--text);" id="career-pts-display">0 pts</div>
+    </div>
+  </div>
+
+  <!-- Player card -->
+  <div id="career-my-player-card" style="background:linear-gradient(135deg,var(--purple),#6a0dad);border-radius:16px;padding:14px 24px;max-width:640px;width:100%;box-shadow:0 8px 24px rgba(156,39,217,0.35);color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;cursor:pointer;" onclick="showScreen('career-player-profile')">
+    <div>
+      <div style="font-size:10px;letter-spacing:2px;font-weight:700;opacity:0.75;">SEU JOGADOR</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:1px;" id="career-my-name-hub"></div>
+      <div style="font-size:12px;opacity:0.85;" id="career-my-pos-hub"></div>
+    </div>
+    <div style="display:flex;gap:16px;align-items:center;">
+      <div style="text-align:center;">
+        <div style="font-family:'Bebas Neue',cursive;font-size:36px;line-height:1;" id="career-my-ovr-hub">60</div>
+        <div style="font-size:10px;letter-spacing:1px;opacity:0.8;">OVR</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alertas -->
+  <div id="career-injury-alert" style="display:none;background:var(--red-soft);border:1.5px solid var(--red);border-radius:12px;padding:12px 18px;max-width:640px;width:100%;font-size:13px;color:var(--red);font-weight:600;text-align:center;"></div>
+  <div id="career-transfer-alert" style="display:none;background:var(--gold-soft);border:1.5px solid var(--gold-bright);border-radius:12px;padding:12px 18px;max-width:640px;width:100%;font-size:13px;color:var(--gold);font-weight:700;text-align:center;cursor:pointer;" onclick="showScreen('career-transfers')">🔔 Janela de Transferências aberta! Toque para ver.</div>
+
+  <!-- Action buttons -->
+  <div class="hub-actions">
+
+    <button id="career-play-btn" onclick="careerPlayMatch()"
+      style="display:block;width:100%;padding:22px 20px;border:none;border-radius:14px;cursor:pointer;
+             background:linear-gradient(135deg,#00a651,#00813f);color:#fff;
+             box-shadow:0 8px 24px rgba(0,166,81,0.35);
+             font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:2px;
+             text-transform:uppercase;text-align:center;line-height:1;white-space:nowrap;
+             transition:all .25s ease;"
+      onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 14px 32px rgba(0,166,81,0.45)';"
+      onmouseout="this.style.transform='';this.style.boxShadow='0 8px 24px rgba(0,166,81,0.35)';">
+      ⚽&nbsp; Jogar Próxima Partida &nbsp;→
+    </button>
+
+    <div class="hub-grid">
+      <button class="hub-btn hub-c-purple" onclick="showScreen('career-squad-manager')">
+        <span class="hub-btn-ico">🔀</span><span class="hub-btn-txt">Gerenciar Time</span>
+      </button>
+      <button class="hub-btn hub-c-blue" onclick="showScreen('career-training-center')">
+        <span class="hub-btn-ico">🏋️</span><span class="hub-btn-txt">Centro de Treinamento</span>
+      </button>
+      <button class="hub-btn hub-c-green" onclick="showScreen('career-standings')">
+        <span class="hub-btn-ico">📊</span><span class="hub-btn-txt">Classificação</span>
+      </button>
+      <button class="hub-btn hub-c-gold" onclick="saveCareer()">
+        <span class="hub-btn-ico">💾</span><span class="hub-btn-txt">Salvar Carreira</span>
+      </button>
+    </div>
+
+    <button class="hub-back" onclick="resetGame()">Voltar ao Menu</button>
+
+  </div>
+
+</div>
+
+<!-- CAREER TRAINING CENTER -->
+<div id="career-training-center" class="screen" style="gap:14px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,40px);letter-spacing:3px;color:var(--purple);text-align:center;">CENTRO DE TREINAMENTO</div>
+  <div style="font-size:12px;color:var(--text-muted);text-align:center;">Custo progressivo por +1 OVR | Disponível: <span id="ct-tp-available" style="color:var(--blue);font-weight:700;"></span> TP</div>
+  <div id="ct-player-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;max-width:700px;width:100%;max-height:520px;overflow-y:auto;padding:2px;"></div>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text-muted);" onclick="showScreen('career-hub')">← Voltar</button>
+</div>
+
+<!-- CAREER PLAYER PROFILE -->
+<div id="career-player-profile" class="screen" style="gap:16px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,40px);letter-spacing:3px;color:var(--purple);text-align:center;">MINHA CARREIRA</div>
+  <div id="career-profile-card" style="background:linear-gradient(135deg,var(--purple),#6a0dad);border-radius:20px;padding:28px;max-width:420px;width:100%;box-shadow:0 8px 24px rgba(156,39,217,0.35);color:#fff;display:flex;flex-direction:column;gap:16px;"></div>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text-muted);" onclick="showScreen('career-hub')">← Voltar</button>
+</div>
+
+<!-- CAREER STANDINGS -->
+<div id="career-standings" class="screen" style="gap:14px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,40px);letter-spacing:3px;color:var(--purple);text-align:center;">CLASSIFICAÇÃO</div>
+  <div style="font-size:12px;color:var(--text-muted);text-align:center;letter-spacing:1px;" id="career-standings-season-label"></div>
+  <div id="career-standings-table" style="max-width:600px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);"></div>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text-muted);" onclick="showScreen('career-hub')">← Voltar</button>
+</div>
+
+<!-- CAREER TRANSFERS -->
+<div id="career-transfers" class="screen" style="gap:14px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,40px);letter-spacing:3px;color:var(--gold);text-align:center;">JANELA DE TRANSFERÊNCIAS</div>
+  <div style="font-size:13px;color:var(--text-muted);text-align:center;">Saldo: <span id="transfer-coins-display" style="color:var(--gold);font-weight:700;"></span> moedas</div>
+  <div id="transfer-player-list" style="display:flex;flex-direction:column;gap:12px;max-width:500px;width:100%;"></div>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text-muted);" onclick="showScreen('career-hub')">← Voltar</button>
+</div>
+
+<!-- CAREER POST-MATCH RESULT -->
+<div id="career-result" class="screen" style="gap:18px;text-align:center;">
+  <div class="result-banner" id="career-result-banner"></div>
+  <div class="result-score" id="career-result-score"></div>
+  <div class="result-mvp" id="career-result-mvp"></div>
+  <div id="career-result-rewards" style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 28px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;min-width:260px;"></div>
+  <div id="career-result-events" class="match-events" style="max-width:500px;"></div>
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);" onclick="afterCareerMatch()">Continuar</button>
+</div>
+
+<!-- CAREER SEASON END -->
+<div id="career-season-end" class="screen" style="gap:16px;text-align:center;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(32px,8vw,60px);letter-spacing:4px;background:linear-gradient(135deg,var(--purple),#ff9800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">FIM DE TEMPORADA</div>
+  <div id="career-season-end-content" style="max-width:560px;width:100%;display:flex;flex-direction:column;gap:12px;"></div>
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);" onclick="startNextSeason()">Próxima Temporada →</button>
 </div>
 
 </body>
