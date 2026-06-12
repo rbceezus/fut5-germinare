@@ -1151,6 +1151,7 @@ body.is-loading { cursor: wait; }
   <div style="display:flex;flex-direction:column;gap:12px;align-items:center;">
     <button class="btn btn-primary" onclick="startGame('quick')">Partida Rápida</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--gold),#ff9800);box-shadow:0 8px 24px rgba(217,142,0,0.35);" onclick="startGame('cup')">🏆 Campeonato</button>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--red),#ff4060);box-shadow:0 8px 24px rgba(200,16,46,0.35);" onclick="startGame('1v1')">🎮 1v1 Local</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);box-shadow:0 8px 24px rgba(156,39,217,0.35);" onclick="openCareerMode()">⚽ Modo Carreira</button>
     <div id="menuStatus" class="loading-status">Pronto para jogar</div>
     <span style="font-size:11px;color:var(--text-muted);letter-spacing:1px;">Fase de Grupos → Mata-Mata → Final</span>
@@ -1283,10 +1284,11 @@ let _cupMatch = null;
 let _cupIsHome = true;
 
 function startGame(mode) {
-  const label = mode === 'cup' ? 'Carregando campeonato...' : 'Carregando partida rápida...';
+  const label = mode === 'cup' ? 'Carregando campeonato...' : mode === '1v1' ? 'Carregando 1v1...' : 'Carregando partida rápida...';
   runWithLoading(label, () => {
     gameMode = mode;
-    startDraft();
+    if (mode === '1v1') { start1v1Draft(); }
+    else { startDraft(); }
   });
 }
 
@@ -2044,6 +2046,8 @@ function startMatch() {
   if (gameMode === 'quick') {
     generateAwayTeam();
     updateMatchTitle('AMISTOSO · MODO RÁPIDO');
+  } else if (gameMode === '1v1') {
+    updateMatchTitle('1v1 LOCAL · COPA 26');
   } else if (gameMode === 'career') {
     updateMatchTitle(`TEMPORADA ${career.season} · RODADA ${career.matchesPlayed + 1}`);
   } else if (gameMode === 'cup') {
@@ -2068,7 +2072,7 @@ function startMatch() {
   state.homeEffective = homeWithChem;
   state.chemBonus = getChemistryInfo(state.formation).bonus;
 
-  document.getElementById('teamHomeName').textContent = gameMode === 'career' && career ? career.clubName : 'SUA SELEÇÃO';
+  document.getElementById('teamHomeName').textContent = gameMode === '1v1' ? 'PLAYER 1' : gameMode === 'career' && career ? career.clubName : 'SUA SELEÇÃO';
   document.getElementById('teamAwayName').textContent = state.awayName;
   document.getElementById('teamHomeOvr').textContent = `OVR ${homeAvg}`;
   document.getElementById('teamAwayOvr').textContent = `OVR ${awayAvg}`;
@@ -2271,7 +2275,8 @@ function processMatchEvent(evt) {
   const div = document.createElement('div');
   div.className = 'match-event' + (evt.type === 'goal' ? ' goal-event' : '');
 
-  const teamLabel = evt.isHome ? 'Sua Seleção' : state.awayName;
+  const _homeName = gameMode === '1v1' ? 'Player 1' : gameMode === 'career' && career ? career.clubName : 'Sua Seleção';
+  const teamLabel = evt.isHome ? _homeName : state.awayName;
   const badgeClass = evt.isHome ? 'home' : 'away';
   const badge = `<span class="event-team-badge ${badgeClass}">${teamLabel}</span>`;
   let icon = '', text = '';
@@ -2461,7 +2466,7 @@ function showResult() {
 
   details.innerHTML = `
     <div class="result-team-col">
-      <h3>Sua Seleção</h3>
+      <h3>${gameMode === '1v1' ? 'Player 1' : gameMode === 'career' && career ? career.clubName : 'Sua Seleção'}</h3>
       ${homePlayers.map(p => {
         const g = state.playerGoals[p.id] || 0;
         const a = state.playerAssists[p.id] || 0;
@@ -2515,6 +2520,12 @@ function showResult() {
       resultBtn.textContent = 'Continuar';
       resultBtn.onclick = () => cupAfterMatch();
     }
+  } else if (gameMode === '1v1') {
+    resultBtn.textContent = 'Jogar novamente';
+    resultBtn.onclick = () => resetGame();
+    if (won) { banner.textContent = 'PLAYER 1 VENCEU!'; banner.className = 'result-banner win'; launchConfetti(); }
+    else if (!state.penalties && state.matchGoalsHome === state.matchGoalsAway) { banner.textContent = 'EMPATE!'; }
+    else { banner.textContent = 'PLAYER 2 VENCEU!'; banner.className = 'result-banner lose'; }
   } else {
     resultBtn.textContent = 'Jogar novamente';
     resultBtn.onclick = () => resetGame();
@@ -2604,7 +2615,7 @@ function schedulePenaltyKick() {
   }
 
   const kick = isHome ? ps.homeKicks[kickIndex] : ps.awayKicks[kickIndex];
-  const teamLabel = isHome ? 'Sua Seleção' : state.awayName;
+  const teamLabel = isHome ? (gameMode === '1v1' ? 'Player 1' : 'Sua Seleção') : state.awayName;
   const isSuddenDeath = kickIndex >= 5;
   document.getElementById('penNextLabel').textContent =
     (isSuddenDeath ? '⚡ MORTE SÚBITA — ' : '') + `${teamLabel}: ${kick.kicker.name} na bola...`;
@@ -2634,7 +2645,7 @@ function executePenaltyKick(kickIndex, isHome) {
   const container = document.getElementById('penaltyEvents');
   const div = document.createElement('div');
   div.className = 'match-event' + (scored ? ' goal-event' : '');
-  const side = isHome ? 'Sua Seleção' : state.awayName;
+  const side = isHome ? (gameMode === '1v1' ? 'Player 1' : 'Sua Seleção') : state.awayName;
 
   const goalPenTexts = [
     `<strong>${kick.kicker.name}</strong> (${side}) converte! ⚽`,
@@ -2701,6 +2712,10 @@ function resetGame() {
   state.selectedBenchPlayer = null;
   gameMode = 'quick';
   tournament = null;
+  window._p1Formation = null; window._p1Picks = null; window._p1Scheme = null;
+  window._p2Formation = null; window._p2Picks = null;
+  const ind = document.getElementById('formPlayerInd');
+  if (ind) ind.remove();
   showScreen('splash');
 }
 
@@ -2708,9 +2723,111 @@ function resetGame() {
 function confirmFormation() {
   if (gameMode === 'cup') {
     setupCup();
+  } else if (gameMode === '1v1') {
+    if (!window._p1Formation) { confirm1v1P1(); }
+    else { confirm1v1P2(); }
   } else {
     startMatch();
   }
+}
+
+// ===================== 1v1 LOCAL =====================
+let _1v1Turn = 1, _1v1Picks = { 1: [], 2: [] };
+
+function start1v1Draft() {
+  state.round = 0; state.myPicks = [];
+  state.draftPool = shuffle([...ALL_PLAYERS]);
+  state.scheme = 'quadrado';
+  state.formation = { gk: null, s1: null, s2: null, s3: null, s4: null };
+  _1v1Turn = 1; _1v1Picks = { 1: [], 2: [] };
+  window._p1Formation = null; window._p1Picks = null; window._p1Scheme = null;
+  window._p2Formation = null; window._p2Picks = null;
+  renderPickedBar(); renderRoster(); showScreen('draft');
+  next1v1Round();
+}
+
+function next1v1Round() {
+  if (_1v1Picks[1].length >= 5 && _1v1Picks[2].length >= 5) {
+    // Done drafting → P1 formation
+    state.myPicks = _1v1Picks[1];
+    showScreen('formation');
+    let ind = document.getElementById('formPlayerInd');
+    if (!ind) { ind = document.createElement('div'); ind.id='formPlayerInd'; ind.style.cssText='font-family:Bebas Neue,cursive;font-size:22px;color:var(--red);letter-spacing:2px;text-align:center;margin-bottom:4px;'; document.getElementById('formation').insertBefore(ind, document.getElementById('formation').firstChild); }
+    ind.textContent = 'PLAYER 1 — MONTE SUA FORMAÇÃO';
+    renderSchemeBar(); rebuildFieldSlots(); renderBench();
+    return;
+  }
+  const allPicked = new Set([..._1v1Picks[1].map(p=>p.id), ..._1v1Picks[2].map(p=>p.id)]);
+  const available = state.draftPool.filter(p => !allPicked.has(p.id));
+  state.currentOptions = weightedSample(available, 5);
+  const who = _1v1Turn === 1 ? 'PLAYER 1' : 'PLAYER 2';
+  const count = _1v1Picks[_1v1Turn].length + 1;
+  document.getElementById('draftRound').textContent = `${who} — ESCOLHA ${count}/5`;
+  const container = document.getElementById('draftCards');
+  container.innerHTML = ''; container.classList.add('shuffling');
+  state.currentOptions.forEach(p => {
+    const rarity = getRarity(p.ovr); const pos = POS_INFO[p.posicao_favorita];
+    const card = document.createElement('div');
+    card.className = `player-card ${rarity.cssClass}`;
+    card.innerHTML = `<span class="rarity-badge ${rarity.tier}">${rarity.label}</span><div class="card-ovr ${rarity.colorClass}">${p.ovr}</div><div class="card-ovr-label">OVR</div><div class="card-name">${p.name}</div><div class="card-team">${p.team}</div><div class="card-pos pos-${pos.cls}">${pos.icon} ${pos.label}<span class="card-pos-sub">posição favorita · +2 OVR</span></div>`;
+    card.onclick = () => pick1v1(p, card);
+    container.appendChild(card);
+  });
+  setTimeout(() => container.classList.remove('shuffling'), 500);
+  render1v1Bar();
+}
+
+function pick1v1(player, cardEl) {
+  _1v1Picks[_1v1Turn].push(player);
+  cardEl.classList.add('picked');
+  document.querySelectorAll('.player-card').forEach(c => { if (c !== cardEl) c.classList.add('dismissed'); c.style.pointerEvents = 'none'; });
+  render1v1Bar();
+  // Alternate
+  _1v1Turn = (_1v1Turn === 1 && _1v1Picks[2].length < 5) ? 2 : (_1v1Turn === 2 && _1v1Picks[1].length < 5) ? 1 : (_1v1Picks[1].length < 5 ? 1 : 2);
+  setTimeout(() => next1v1Round(), 700);
+}
+
+function render1v1Bar() {
+  const bar = document.getElementById('pickedBar'); bar.innerHTML = '';
+  [1,2].forEach(pn => {
+    const lbl = document.createElement('div');
+    lbl.style.cssText = `font-size:10px;font-weight:700;color:var(--${pn===1?'blue':'red'});width:100%;text-align:center;letter-spacing:1px;`;
+    lbl.textContent = 'P'+pn; bar.appendChild(lbl);
+    for (let i=0;i<5;i++) {
+      const slot = document.createElement('div'); const p = _1v1Picks[pn][i];
+      if (p) { const pos = POS_INFO[p.posicao_favorita]; slot.className='picked-slot filled'; slot.innerHTML=`<span class="picked-ovr">${p.ovr}</span><span class="picked-pos" style="color:var(--text-muted)">${pos.icon}</span>`; slot.title=`${p.name}`; }
+      else { slot.className='picked-slot'; slot.textContent=i+1; }
+      bar.appendChild(slot);
+    }
+    if (pn===1) { const d=document.createElement('div'); d.style.cssText='width:2px;height:28px;background:var(--line);margin:0 6px;'; bar.appendChild(d); }
+  });
+}
+
+function confirm1v1P1() {
+  window._p1Formation = JSON.parse(JSON.stringify(state.formation));
+  window._p1Scheme = state.scheme;
+  window._p1Picks = [..._1v1Picks[1]];
+  // Switch to P2
+  state.myPicks = _1v1Picks[2];
+  state.scheme = 'quadrado';
+  state.formation = { gk: null, s1: null, s2: null, s3: null, s4: null };
+  state.selectedBenchPlayer = null;
+  document.getElementById('formPlayerInd').textContent = 'PLAYER 2 — MONTE SUA FORMAÇÃO';
+  renderSchemeBar(); rebuildFieldSlots(); renderBench();
+  document.getElementById('confirmBtn').style.display = 'none';
+}
+
+function confirm1v1P2() {
+  window._p2Formation = JSON.parse(JSON.stringify(state.formation));
+  window._p2Picks = [..._1v1Picks[2]];
+  // Restore P1 as home
+  state.myPicks = window._p1Picks;
+  state.scheme = window._p1Scheme;
+  state.formation = window._p1Formation;
+  state.awayTeam = Object.values(window._p2Formation).filter(Boolean);
+  state.awayName = 'PLAYER 2';
+  const ind = document.getElementById('formPlayerInd'); if (ind) ind.remove();
+  startMatch();
 }
 
 // ===================== CAMPEONATO =====================
