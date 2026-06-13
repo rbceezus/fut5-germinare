@@ -1,0 +1,34 @@
+// ===================== CAREER CONFIG =====================
+
+// Temporada
+const CAREER_MATCHES_PER_SEASON = 20;
+
+// Recompensas
+const CAREER_WIN_COINS = 100;
+const CAREER_DRAW_COINS = 60;
+const CAREER_LOSS_COINS = 30;
+
+const CAREER_WIN_TP = 3;
+const CAREER_DRAW_TP = 2;
+const CAREER_LOSS_TP = 1;
+
+// Lesões
+const CAREER_INJURY_CHANCE = 0.025;
+const CAREER_INJURY_MIN_MATCHES = 1;
+const CAREER_INJURY_MAX_MATCHES = 3;
+
+// Transferências
+const CAREER_TRANSFER_WINDOW_INTERVAL = 5;
+const CAREER_TRANSFER_OPTIONS = 3;
+const CAREER_TRANSFER_WINDOW_DURATION = 2;
+
+// Elenco
+const CAREER_STARTERS = 5;
+const CAREER_BENCH = 3;
+
+// OVR inicial
+const CAREER_PLAYER_START_OVR = 60;
+
+// Mercado
+const CAREER_MIN_TRANSFER_PRICE = 100;
+const CAREER_TRANSFER_PRICE_MULTIPLIER = 1.5;

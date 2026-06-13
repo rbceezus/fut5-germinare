@@ -1,0 +1,254 @@
+  /* ============ FORMATION ============ */
+  #formation { padding: 34px 16px; gap: 16px; }
+
+  .formation-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 32px;
+    letter-spacing: 3px;
+    color: var(--green-dark);
+    text-align: center;
+  }
+
+  .formation-sub {
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+    margin-top: -10px;
+  }
+
+  /* seletor de esquema tático */
+  .scheme-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .scheme-chip {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 2px solid var(--line);
+    background: var(--card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .scheme-chip:hover { border-color: var(--green); color: var(--green-dark); }
+
+  .scheme-chip.active {
+    border-color: var(--green);
+    background: var(--green);
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(0,166,81,0.35);
+  }
+
+  .field {
+    width: min(420px, 100%);
+    aspect-ratio: 3/4;
+    background:
+      repeating-linear-gradient(180deg, rgba(255,255,255,0.06) 0 12.5%, rgba(0,0,0,0.05) 12.5% 25%),
+      linear-gradient(180deg, #36bb5d, #2aa04c);
+    border-radius: 18px;
+    border: 3px solid #ffffff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(20,90,40,0.30), inset 0 0 60px rgba(0,0,0,0.12);
+  }
+
+  .field::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 10%; right: 10%;
+    height: 2px;
+    background: var(--field-line);
+    transform: translateY(-50%);
+  }
+
+  .field::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 80px; height: 80px;
+    border: 2px solid var(--field-line);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .field-trophy {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 110px;
+    transform: translate(-50%, -50%);
+    opacity: 0.16;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .field-goal-top, .field-goal-bottom {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 40px;
+    border: 2px solid var(--field-line);
+  }
+  .field-goal-top { top: 0; border-top: none; border-radius: 0 0 8px 8px; }
+  .field-goal-bottom { bottom: 0; border-bottom: none; border-radius: 8px 8px 0 0; }
+
+  .field-area-top, .field-area-bottom {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 70px;
+    border: 2px solid var(--field-line);
+  }
+  .field-area-top { top: 0; border-top: none; }
+  .field-area-bottom { bottom: 0; border-bottom: none; }
+
+  .field-slot {
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 2;
+  }
+
+  .field-slot.empty {
+    border: 2px dashed rgba(255,255,255,0.75);
+    background: rgba(0,60,25,0.25);
+  }
+
+  .field-slot.empty::after {
+    content: attr(data-pos-label);
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .field-slot.filled {
+    background: var(--card);
+    border: 2px solid var(--green);
+    box-shadow: 0 8px 18px rgba(0,40,15,0.30);
+  }
+
+  .field-slot.filled .slot-ovr {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 24px;
+    color: var(--green-dark);
+    line-height: 1;
+  }
+
+  .field-slot.filled .slot-name {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--text);
+    max-width: 64px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .field-slot.highlight {
+    border-color: #ffffff !important;
+    box-shadow: 0 0 18px rgba(255,255,255,0.7);
+    animation: slot-pulse 1s ease infinite;
+  }
+
+  /* slot que dá buff de posição pro jogador selecionado */
+  .field-slot.highlight-buff {
+    border-color: var(--gold-bright) !important;
+    border-style: solid !important;
+    box-shadow: 0 0 24px rgba(255,198,46,0.85);
+    animation: slot-pulse-gold 1s ease infinite;
+  }
+  .field-slot.highlight-buff::before {
+    content: '+2';
+    position: absolute;
+    top: -8px; right: -8px;
+    background: var(--gold-bright);
+    color: #5b3a00;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 2px 7px;
+    border-radius: 999px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    z-index: 3;
+  }
+
+  @keyframes slot-pulse {
+    0%, 100% { box-shadow: 0 0 14px rgba(255,255,255,0.4); }
+    50% { box-shadow: 0 0 26px rgba(255,255,255,0.8); }
+  }
+  @keyframes slot-pulse-gold {
+    0%, 100% { box-shadow: 0 0 16px rgba(255,198,46,0.5); }
+    50% { box-shadow: 0 0 30px rgba(255,198,46,0.95); }
+  }
+
+  .bench-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .bench-player {
+    background: var(--card);
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 14px;
+    text-align: center;
+    cursor: grab;
+    transition: all 0.3s;
+    min-width: 92px;
+    box-shadow: var(--shadow);
+  }
+
+  .bench-player:hover { border-color: var(--green); transform: translateY(-2px); }
+
+  .bench-player.selected {
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 18px rgba(255,198,46,0.55);
+  }
+
+  .bench-player .bp-ovr {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 28px;
+  }
+  .bench-player .bp-name { font-size: 11px; font-weight: 600; }
+
+  .pos-tag {
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    margin-top: 3px;
+    display: inline-block;
+  }
+  .pos-tag.gk  { background: var(--gold-soft); color: var(--gold); }
+  .pos-tag.zag { background: var(--blue-soft); color: var(--blue); }
+  .pos-tag.ata { background: var(--green-soft); color: var(--green-dark); }
+
+  .field-slot.pos-buff {
+    border-color: var(--gold-bright) !important;
+    box-shadow: 0 0 14px rgba(255,198,46,0.55);
+  }
+
+  .confirm-formation { margin-top: 6px; }

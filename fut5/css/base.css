@@ -1,0 +1,66 @@
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap');
+
+  :root {
+    --bg: #f2f8ff;
+    --card: #ffffff;
+    --card-hover: #f3f9ff;
+    --green: #00a651;
+    --green-dark: #00813f;
+    --green-soft: rgba(0, 166, 81, 0.12);
+    --blue: #0057b7;
+    --blue-soft: rgba(0, 87, 183, 0.12);
+    --red: #c8102e;
+    --red-soft: rgba(200, 16, 46, 0.10);
+    --gold: #d98e00;
+    --gold-bright: #ffc62e;
+    --gold-soft: rgba(217, 142, 0, 0.14);
+    --purple: #9c27d9;
+    --silver: #64748b;
+    --text: #14253c;
+    --text-muted: #5b7390;
+    --line: #d9e6f5;
+    --field-green: #2fae54;
+    --field-line: rgba(255,255,255,0.65);
+    --shadow: 0 10px 30px rgba(20, 60, 120, 0.10);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background:
+      radial-gradient(ellipse 90% 50% at 15% -5%, rgba(0,166,81,0.14), transparent 60%),
+      radial-gradient(ellipse 90% 50% at 85% -5%, rgba(0,87,183,0.14), transparent 60%),
+      radial-gradient(ellipse 100% 60% at 50% 110%, rgba(200,16,46,0.08), transparent 60%),
+      linear-gradient(180deg, #e8f4ff 0%, #f6fbff 45%, #fff9ec 100%);
+    background-attachment: fixed;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* faixa tricolor dos países-sede */
+  body::before {
+    content:'';
+    position: fixed;
+    top:0; left:0; right:0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--red) 0 33.3%, #ffffff 33.3% 50%, var(--green) 50% 66.6%, var(--blue) 66.6% 100%);
+    z-index: 50;
+  }
+
+  .wc-chip {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background: var(--card);
+    border: 1.5px solid var(--gold-bright);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 999px;
+    box-shadow: 0 4px 14px rgba(217,142,0,0.18);
+  }

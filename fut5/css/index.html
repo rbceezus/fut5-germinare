@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fut5 Germinare — Rumo à Copa 26</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/screens.css">
+  <link rel="stylesheet" href="css/splash.css">
+  <link rel="stylesheet" href="css/draft.css">
+  <link rel="stylesheet" href="css/formation.css">
+  <link rel="stylesheet" href="css/match.css">
+  <link rel="stylesheet" href="css/result.css">
+  <link rel="stylesheet" href="css/feedback.css">
+</head>
+<body>
+<button class='theme-toggle' id='themeToggle'>🌙</button>
+<div id="loadingOverlay" class="loading-overlay" aria-live="polite" aria-busy="true">
+  <div class="loading-ball"></div>
+  <div id="loadingText" class="loading-text">Carregando...</div>
+  <div class="loading-subtext">Preparando o gramado</div>
+</div>
+
+
+<!-- SPLASH SCREEN -->
+<div id="splash" class="screen active">
+  <img class="splash-side-trophy left" src="assets/trophy.webp" alt="">
+  <img class="splash-side-trophy right" src="assets/badge.webp" alt="">
+  <div class="wc-chip">🏆 Copa do Mundo 2026 · Canadá · EUA · México</div>
+  <img class="splash-trophy" src="assets/trophy.webp" alt="Taça da Copa">
+  <div class="splash-logo">Fut5 Germinare</div>
+  <div class="splash-sub">Monte sua seleção. Conquiste o mundo.</div>
+  <div class="splash-venue">🏟️ Estádio Espaço da Felicidade</div>
+  <div style="display:flex;flex-direction:column;gap:12px;align-items:center;">
+    <button class="btn btn-primary" onclick="startGame('quick')">Partida Rápida</button>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--gold),#ff9800);box-shadow:0 8px 24px rgba(217,142,0,0.35);" onclick="startGame('cup')">🏆 Campeonato</button>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);box-shadow:0 8px 24px rgba(156,39,217,0.35);" onclick="openCareerMode()">⚽ Modo Carreira</button>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--blue),#003e85);box-shadow:0 8px 24px rgba(0,87,183,0.35);" onclick="openOnlineMenu()">🌐 Jogar Online</button>
+    <div id="menuStatus" class="loading-status">Pronto para jogar</div>
+    <span style="font-size:11px;color:var(--text-muted);letter-spacing:1px;">Fase de Grupos → Mata-Mata → Final</span>
+  </div>
+</div>
+
+<!-- DRAFT SCREEN -->
+<div id="draft" class="screen">
+  <div class="draft-header">
+    <div class="screen-title-row">
+      <img class="title-trophy" src="assets/trophy.webp" alt="">
+      <div class="draft-round" id="draftRound">RODADA 1 / 5</div>
+      <img class="title-trophy" src="assets/trophy.webp" alt="" style="transform:scaleX(-1)">
+    </div>
+    <div class="draft-instruction">Convocação · escolha 1 entre 5 jogadores — a posição favorita dá <strong style="color:var(--gold)">+2 OVR</strong> em campo</div>
+  </div>
+  <div class="draft-picked-bar" id="pickedBar"></div>
+  <div class="draft-roster">
+    <div class="draft-roster-title">ELENCO DISPONÍVEL — role para ver todos</div>
+    <div class="draft-roster-list" id="rosterList"></div>
+  </div>
+  <div class="draft-cards" id="draftCards"></div>
+</div>
+
+<!-- FORMATION SCREEN -->
+<div id="formation" class="screen">
+  <div class="screen-title-row">
+    <img class="title-trophy" src="assets/badge.webp" alt="">
+    <div class="formation-title">Escale sua seleção</div>
+  </div>
+  <div class="formation-sub">Escolha o esquema tático, clique num jogador e depois numa posição. Slots dourados dão +2 de OVR!</div>
+  <div class="scheme-bar" id="schemeBar"></div>
+  <div class="field" id="field"></div>
+  <div class="bench-area" id="bench"></div>
+  <div id="chemistryBar" style="min-height:28px;text-align:center;font-size:12px;color:var(--text-muted);letter-spacing:1px;"></div>
+  <button class="btn btn-primary confirm-formation" id="confirmBtn" onclick="confirmFormation()" style="display:none;">
+    Iniciar Partida
+  </button>
+</div>
+
+<!-- MATCH SCREEN -->
+<div id="match" class="screen">
+  <div class="match-venue">Estádio Espaço da Felicidade</div>
+  <div class="match-title" id="matchTitle"><img class="title-trophy" src="assets/trophy.webp" alt=""><span id="matchTitleText">GRANDE FINAL · COPA 26</span><img class="title-trophy" src="assets/trophy.webp" alt="" style="transform:scaleX(-1)"></div>
+  <div class="scoreboard">
+    <div class="team-side">
+      <div class="team-name" id="teamHomeName">SUA SELEÇÃO</div>
+      <div class="team-ovr-avg" id="teamHomeOvr"></div>
+    </div>
+    <div class="score-display">
+      <div class="score-num" id="scoreHome">0</div>
+      <div class="score-x">x</div>
+      <div class="score-num" id="scoreAway">0</div>
+    </div>
+    <div class="team-side">
+      <div class="team-name" id="teamAwayName">ADVERSÁRIO</div>
+      <div class="team-ovr-avg" id="teamAwayOvr"></div>
+    </div>
+  </div>
+  <div class="match-progress">
+    <div class="match-progress-bar" id="matchProgress"></div>
+  </div>
+  <div style="display:flex;justify-content:center;margin:6px 0 2px;">
+    <button class="match-speed-btn" onclick="cycleMatchSpeed()"
+      style="background:var(--card);border:1.5px solid var(--line);color:var(--text);border-radius:999px;padding:7px 18px;font-family:'Bebas Neue',cursive;font-size:15px;letter-spacing:2px;cursor:pointer;box-shadow:var(--shadow);">⏩ 1x</button>
+  </div>
+  <div class="match-events" id="matchEvents"></div>
+</div>
+
+<!-- PENALTY SCREEN -->
+<div id="penalty" class="screen">
+  <div class="match-venue">Estádio Espaço da Felicidade</div>
+  <div class="match-title" id="penaltyTitle">DISPUTA DE PÊNALTIS</div>
+  <div class="scoreboard" style="margin:10px 0;">
+    <div class="team-side">
+      <div class="team-name">SUA SELEÇÃO</div>
+    </div>
+    <div class="score-display">
+      <div class="score-num" id="penScoreHome">0</div>
+      <div class="score-x">x</div>
+      <div class="score-num" id="penScoreAway">0</div>
+    </div>
+    <div class="team-side">
+      <div class="team-name" id="penAwayName">ADVERSÁRIO</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:24px;margin:8px 0;">
+    <div id="penDotsHome" style="display:flex;gap:8px;align-items:center;"></div>
+    <div id="penDotsAway" style="display:flex;gap:8px;align-items:center;"></div>
+  </div>
+  <div class="match-events" id="penaltyEvents" style="max-width:400px;min-height:120px;"></div>
+  <div id="penNextLabel" style="color:var(--text-muted);font-size:13px;letter-spacing:2px;text-transform:uppercase;margin-top:8px;min-height:20px;"></div>
+  <div style="display:flex;justify-content:center;margin-top:6px;">
+    <button class="match-speed-btn" onclick="cycleMatchSpeed()"
+      style="background:var(--card);border:1.5px solid var(--line);color:var(--text);border-radius:999px;padding:7px 18px;font-family:'Bebas Neue',cursive;font-size:15px;letter-spacing:2px;cursor:pointer;box-shadow:var(--shadow);">⏩ 1x</button>
+  </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="result" class="screen">
+  <div class="wc-chip">🏆 Copa do Mundo 2026 · Final</div>
+  <img class="result-trophy" id="resultTrophy" src="assets/badge.webp" alt="Taça da Copa" style="display:none;">
+  <div class="result-banner" id="resultBanner"></div>
+  <div class="result-score" id="resultScore"></div>
+  <div class="result-mvp" id="resultMvp"></div>
+  <div class="result-details" id="resultDetails"></div>
+  <div id="resultEvents" class="match-events" style="max-width:700px;"></div><button class="btn btn-primary" id="resultBtn" onclick="resetGame()">Jogar novamente</button>
+</div>
+
+<!-- TOURNAMENT GROUP STAGE -->
+<div id="tournament" class="screen">
+  <div style="font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:3px;color:var(--gold);text-align:center;" id="tournamentTitle">FASE DE GRUPOS</div>
+  <div style="font-family:'Bebas Neue',cursive;font-size:20px;color:var(--green-dark);letter-spacing:2px;text-align:center;" id="tournamentPhase"></div>
+  <div id="groupContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;max-width:880px;width:100%;"></div>
+  <button class="btn btn-primary" id="tournamentBtn" onclick="nextCupMatch()">Jogar Próxima Partida</button>
+</div>
+
+<!-- BRACKET (Knockout) -->
+<div id="bracket" class="screen">
+  <div style="font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:3px;color:var(--gold);text-align:center;">MATA-MATA</div>
+  <div style="font-family:'Bebas Neue',cursive;font-size:20px;color:var(--green-dark);letter-spacing:2px;text-align:center;" id="bracketPhase"></div>
+  <div id="bracketContainer" style="display:flex;gap:18px;align-items:center;overflow-x:auto;max-width:100%;padding:10px;"></div>
+  <button class="btn btn-primary" id="bracketBtn" onclick="nextCupMatch()">Jogar Partida</button>
+</div>
+
+<!-- ELIMINATED -->
+<div id="eliminated" class="screen">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(40px,10vw,72px);color:var(--red);letter-spacing:4px;">ELIMINADO</div>
+  <div id="elimSub" style="color:var(--text-muted);font-size:16px;max-width:400px;text-align:center;">Seu time não avançou.</div>
+  <button class="btn btn-primary" onclick="resetGame()">Tentar Novamente</button>
+</div>
+<script src="js/core/mode.js"></script>
+<script src="js/data/players.js"></script>
+<script src="js/data/schemes.js"></script>
+<script src="js/core/state.js"></script>
+<script src="js/core/rarity.js"></script>
+<script src="js/core/helpers.js"></script>
+<script src="js/match/chemistry.js"></script>
+<script src="js/modes/quick/draft.js"></script>
+<script src="js/modes/quick/draft-logic.js"></script>
+<script src="js/modes/quick/formation.js"></script>
+<script src="js/match/engine.js"></script>
+<script src="js/match/speed.js"></script>
+<script src="js/match/result.js"></script>
+<script src="js/core/dispatch.js"></script>
+<script src="js/modes/cup.js"></script>
+<script src="js/modes/career/config.js"></script>
+<script src="js/modes/career/career.js"></script>
+<script src="js/modes/career/squad.js"></script>
+<script src="js/modes/career/prematch.js"></script>
+<!-- FEEDBACK BOX (fixed, always visible) -->
+<div class="feedback-box">
+  <a class="feedback-btn" href="https://forms.gle/W99a14RdqH5Dc61Y7" target="_blank" rel="noopener">
+    💬 Feedback & Sugestões
+  </a>
+</div>
+
+<!-- ============ CAREER MODE SCREENS ============ -->
+
+<!-- CAREER SAVE FOUND -->
+<div id="career-load" class="screen">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(28px,7vw,52px);letter-spacing:3px;color:var(--purple);text-align:center;">CARREIRA ENCONTRADA</div>
+  <div id="career-load-info" style="color:var(--text-muted);font-size:14px;text-align:center;max-width:340px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 24px;box-shadow:var(--shadow);"></div>
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);" onclick="continueCareer()">Continuar Carreira</button>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text);" onclick="newCareerConfirm()">Nova Carreira</button>
+</div>
+
+<!-- CAREER CREATE PLAYER -->
+<div id="career-create" class="screen">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(28px,7vw,52px);letter-spacing:3px;color:var(--purple);text-align:center;">CRIAR JOGADOR</div>
+  <div style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px 24px;max-width:400px;width:100%;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:16px;">
+    <div>
+      <label style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;">Nome do Clube</label>
+      <input id="career-club-name" type="text" placeholder="Ex: Germinare FC" maxlength="24"
+        style="width:100%;margin-top:6px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:var(--text);background:var(--bg);outline:none;">
+    </div>
+    <div>
+      <label style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;">Nome do Jogador</label>
+      <input id="career-player-name" type="text" placeholder="Seu nome" maxlength="20"
+        style="width:100%;margin-top:6px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:var(--text);background:var(--bg);outline:none;">
+    </div>
+    <div>
+      <label style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;">Posição</label>
+      <div style="display:flex;gap:10px;margin-top:8px;" id="career-pos-selector">
+        <button class="career-pos-btn" data-pos="gk" onclick="selectCareerPos('gk')" style="flex:1;padding:10px 0;border-radius:10px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-weight:700;font-size:13px;transition:all 0.2s;">🧤 GK</button>
+        <button class="career-pos-btn" data-pos="zag" onclick="selectCareerPos('zag')" style="flex:1;padding:10px 0;border-radius:10px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-weight:700;font-size:13px;transition:all 0.2s;">🛡️ ZAG</button>
+        <button class="career-pos-btn" data-pos="ata" onclick="selectCareerPos('ata')" style="flex:1;padding:10px 0;border-radius:10px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-weight:700;font-size:13px;transition:all 0.2s;">⚡ ATA</button>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);" onclick="startCareerSetup()">INICIAR CARREIRA</button>
+</div>
+
+<!-- CAREER DRAFT (squad selection) -->
+<div id="career-draft" class="screen">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,40px);letter-spacing:3px;color:var(--purple);text-align:center;">MONTE SEU ELENCO</div>
+  <div style="font-size:12px;color:var(--text-muted);text-align:center;letter-spacing:1px;">5 titulares + 3 reservas • escolha 1 de cada vez</div>
+  <div id="career-draft-player-card" style="background:linear-gradient(135deg,var(--purple),#6a0dad);border-radius:16px;padding:14px 28px;text-align:center;color:#fff;box-shadow:0 8px 24px rgba(156,39,217,0.35);">
+    <div style="font-size:10px;letter-spacing:2px;font-weight:700;opacity:0.8;">SEU JOGADOR</div>
+    <div id="career-draft-my-name" style="font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:1px;"></div>
+    <div id="career-draft-my-pos" style="font-size:12px;opacity:0.85;"></div>
+  </div>
+  <div style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:2px;text-align:center;" id="career-draft-round">TITULARES • 0 de 5</div>
+  <div style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:2px;text-align:center;" id="career-draft-status">Titulares: 0/5 | Reservas: 0/3</div>
+  <div id="career-draft-cards" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:800px;"></div>
+</div>
+
+<!-- CAREER SQUAD MANAGER -->
+<div id="career-squad-manager" class="screen" style="gap:14px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,38px);letter-spacing:3px;color:var(--purple);text-align:center;">GERENCIAR TIME</div>
+
+  <div style="max-width:760px;width:100%;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-muted);margin-bottom:8px;">ESQUEMA TÁTICO</div>
+    <div id="sq-scheme-bar" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:minmax(280px,420px) minmax(260px,1fr);gap:16px;max-width:900px;width:100%;align-items:start;">
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--green-dark);margin-bottom:8px;text-align:center;">CAMPINHO DOS TITULARES <span id="sq-starters-count" style="color:var(--text-muted);font-weight:400;"></span></div>
+      <div id="sq-field" class="field" style="width:100%;max-width:420px;margin:0 auto;"></div>
+      <div style="font-size:10px;color:var(--text-muted);text-align:center;margin-top:8px;">Fora da posição: goleiro na linha ou linha no gol recebe −10 OVR real.</div>
+    </div>
+
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--blue);margin-bottom:8px;">ELENCO COMPLETO <span id="sq-bench-count" style="color:var(--text-muted);font-weight:400;"></span></div>
+      <div id="sq-all-list" style="display:flex;flex-direction:column;gap:6px;max-height:520px;overflow-y:auto;padding-right:4px;"></div>
+      <div id="sq-starters-list" style="display:none;"></div>
+      <div id="sq-bench-list" style="display:none;"></div>
+    </div>
+  </div>
+
+  <div id="sq-hint" style="font-size:12px;color:var(--text-muted);text-align:center;min-height:18px;letter-spacing:0.5px;"></div>
+
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);max-width:320px;" onclick="saveSquadChanges()">✅ Confirmar Time</button>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text-muted);" onclick="showScreen('career-hub')">← Voltar sem salvar</button>
+</div>
+
+<!-- CAREER PRE-MATCH -->
+
+<!-- CAREER PRE-MATCH -->
+<div id="career-prematch" class="screen" style="gap:14px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(20px,5vw,34px);letter-spacing:3px;color:var(--text);text-align:center;">PRÓXIMA PARTIDA</div>
+  <div style="font-size:11px;color:var(--text-muted);letter-spacing:1px;text-align:center;" id="prematch-season-label"></div>
+
+  <div style="display:flex;gap:12px;max-width:660px;width:100%;flex-wrap:wrap;justify-content:center;">
+
+    <!-- Home team -->
+    <div style="flex:1;min-width:240px;background:var(--card);border:1.5px solid var(--purple);border-radius:18px;padding:18px 16px;box-shadow:var(--shadow);">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--purple);margin-bottom:6px;">SEU TIME</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:1px;margin-bottom:12px;" id="prematch-home-name"></div>
+      <div id="prematch-home-squad" style="display:flex;flex-direction:column;gap:5px;"></div>
+    </div>
+
+    <!-- VS -->
+    <div style="display:flex;align-items:center;justify-content:center;">
+      <div style="font-family:'Bebas Neue',cursive;font-size:32px;color:var(--text-muted);letter-spacing:2px;">VS</div>
+    </div>
+
+    <!-- Away team -->
+    <div style="flex:1;min-width:240px;background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:18px 16px;box-shadow:var(--shadow);">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text-muted);margin-bottom:6px;">ADVERSÁRIO</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:1px;margin-bottom:12px;" id="prematch-away-name"></div>
+      <div id="prematch-away-squad" style="display:flex;flex-direction:column;gap:5px;"></div>
+    </div>
+
+  </div>
+
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--green),var(--green-dark));max-width:320px;" onclick="confirmAndStartCareerMatch()">⚽ JOGAR AGORA</button>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text-muted);" onclick="showScreen('career-hub')">← Voltar</button>
+</div>
+
+<!-- CAREER HUB (main dashboard) -->
+<div id="career-hub" class="screen" style="gap:14px;">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:640px;flex-wrap:wrap;gap:8px;">
+    <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,5vw,36px);letter-spacing:3px;color:var(--purple);" id="career-hub-club"></div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <div style="background:var(--gold-soft);border:1.5px solid var(--gold-bright);border-radius:10px;padding:6px 14px;font-weight:700;font-size:13px;color:var(--gold);">🪙 <span id="career-coins-display">0</span></div>
+      <div style="background:var(--blue-soft);border:1.5px solid var(--blue);border-radius:10px;padding:6px 14px;font-weight:700;font-size:13px;color:var(--blue);">⭐ <span id="career-tp-display">0</span> TP</div>
+    </div>
+  </div>
+
+  <div id="career-season-bar" style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 20px;max-width:640px;width:100%;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:2px;color:var(--green-dark);" id="career-season-label">TEMPORADA 1</div>
+      <div style="font-size:12px;color:var(--text-muted);">Partida <span id="career-match-num">1</span> de 20</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text-muted);">CLASSIFICAÇÃO</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:22px;color:var(--text);" id="career-pts-display">0 pts</div>
+    </div>
+  </div>
+
+  <!-- Player card -->
+  <div id="career-my-player-card" style="background:linear-gradient(135deg,var(--purple),#6a0dad);border-radius:16px;padding:14px 24px;max-width:640px;width:100%;box-shadow:0 8px 24px rgba(156,39,217,0.35);color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;cursor:pointer;" onclick="showScreen('career-player-profile')">
+    <div>
+      <div style="font-size:10px;letter-spacing:2px;font-weight:700;opacity:0.75;">SEU JOGADOR</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:1px;" id="career-my-name-hub"></div>
+      <div style="font-size:12px;opacity:0.85;" id="career-my-pos-hub"></div>
+    </div>
+    <div style="display:flex;gap:16px;align-items:center;">
+      <div style="text-align:center;">
+        <div style="font-family:'Bebas Neue',cursive;font-size:36px;line-height:1;" id="career-my-ovr-hub">60</div>
+        <div style="font-size:10px;letter-spacing:1px;opacity:0.8;">OVR</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alertas -->
+  <div id="career-injury-alert" style="display:none;background:var(--red-soft);border:1.5px solid var(--red);border-radius:12px;padding:12px 18px;max-width:640px;width:100%;font-size:13px;color:var(--red);font-weight:600;text-align:center;"></div>
+  <div id="career-transfer-alert" style="display:none;background:var(--gold-soft);border:1.5px solid var(--gold-bright);border-radius:12px;padding:12px 18px;max-width:640px;width:100%;font-size:13px;color:var(--gold);font-weight:700;text-align:center;cursor:pointer;" onclick="showScreen('career-transfers')">🔔 Janela de Transferências aberta! Toque para ver.</div>
+
+  <!-- Action buttons -->
+  <div class="hub-actions">
+
+    <button id="career-play-btn" onclick="careerPlayMatch()"
+      style="display:block;width:100%;padding:22px 20px;border:none;border-radius:14px;cursor:pointer;
+             background:linear-gradient(135deg,#00a651,#00813f);color:#fff;
+             box-shadow:0 8px 24px rgba(0,166,81,0.35);
+             font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:2px;
+             text-transform:uppercase;text-align:center;line-height:1;white-space:nowrap;
+             transition:all .25s ease;"
+      onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 14px 32px rgba(0,166,81,0.45)';"
+      onmouseout="this.style.transform='';this.style.boxShadow='0 8px 24px rgba(0,166,81,0.35)';">
+      ⚽&nbsp; Jogar Próxima Partida &nbsp;→
+    </button>
+
+    <div class="hub-grid">
+      <button class="hub-btn hub-c-purple" onclick="showScreen('career-squad-manager')">
+        <span class="hub-btn-ico">🔀</span><span class="hub-btn-txt">Gerenciar Time</span>
+      </button>
+      <button class="hub-btn hub-c-blue" onclick="showScreen('career-training-center')">
+        <span class="hub-btn-ico">🏋️</span><span class="hub-btn-txt">Centro de Treinamento</span>
+      </button>
+      <button class="hub-btn hub-c-green" onclick="showScreen('career-standings')">
+        <span class="hub-btn-ico">📊</span><span class="hub-btn-txt">Classificação</span>
+      </button>
+      <button class="hub-btn hub-c-gold" onclick="saveCareer()">
+        <span class="hub-btn-ico">💾</span><span class="hub-btn-txt">Salvar Carreira</span>
+      </button>
+    </div>
+
+    <button class="hub-back" onclick="resetGame()">Voltar ao Menu</button>
+
+  </div>
+
+</div>
+
+<!-- CAREER TRAINING CENTER -->
+<div id="career-training-center" class="screen" style="gap:14px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,40px);letter-spacing:3px;color:var(--purple);text-align:center;">CENTRO DE TREINAMENTO</div>
+  <div style="font-size:12px;color:var(--text-muted);text-align:center;">Custo progressivo por +1 OVR | Disponível: <span id="ct-tp-available" style="color:var(--blue);font-weight:700;"></span> TP</div>
+  <div id="ct-player-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;max-width:700px;width:100%;max-height:520px;overflow-y:auto;padding:2px;"></div>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text-muted);" onclick="showScreen('career-hub')">← Voltar</button>
+</div>
+
+<!-- CAREER PLAYER PROFILE -->
+<div id="career-player-profile" class="screen" style="gap:16px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,40px);letter-spacing:3px;color:var(--purple);text-align:center;">MINHA CARREIRA</div>
+  <div id="career-profile-card" style="background:linear-gradient(135deg,var(--purple),#6a0dad);border-radius:20px;padding:28px;max-width:420px;width:100%;box-shadow:0 8px 24px rgba(156,39,217,0.35);color:#fff;display:flex;flex-direction:column;gap:16px;"></div>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text-muted);" onclick="showScreen('career-hub')">← Voltar</button>
+</div>
+
+<!-- CAREER STANDINGS -->
+<div id="career-standings" class="screen" style="gap:14px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,40px);letter-spacing:3px;color:var(--purple);text-align:center;">CLASSIFICAÇÃO</div>
+  <div style="font-size:12px;color:var(--text-muted);text-align:center;letter-spacing:1px;" id="career-standings-season-label"></div>
+  <div id="career-standings-table" style="max-width:600px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);"></div>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text-muted);" onclick="showScreen('career-hub')">← Voltar</button>
+</div>
+
+<!-- CAREER TRANSFERS -->
+<div id="career-transfers" class="screen" style="gap:14px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,40px);letter-spacing:3px;color:var(--gold);text-align:center;">JANELA DE TRANSFERÊNCIAS</div>
+  <div style="font-size:13px;color:var(--text-muted);text-align:center;">Saldo: <span id="transfer-coins-display" style="color:var(--gold);font-weight:700;"></span> moedas</div>
+  <div id="transfer-player-list" style="display:flex;flex-direction:column;gap:12px;max-width:500px;width:100%;"></div>
+  <button class="btn" style="background:var(--card);border:1px solid var(--line);color:var(--text-muted);" onclick="showScreen('career-hub')">← Voltar</button>
+</div>
+
+<!-- CAREER POST-MATCH RESULT -->
+<div id="career-result" class="screen" style="gap:18px;text-align:center;">
+  <div class="result-banner" id="career-result-banner"></div>
+  <div class="result-score" id="career-result-score"></div>
+  <div class="result-mvp" id="career-result-mvp"></div>
+  <div id="career-result-rewards" style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 28px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;min-width:260px;"></div>
+  <div class="result-details" id="career-result-details" style="max-width:500px;width:100%;"></div>
+  <div id="career-result-events" class="match-events" style="max-width:500px;"></div>
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);" onclick="afterCareerMatch()">Continuar</button>
+</div>
+
+<!-- CAREER SEASON END -->
+<div id="career-season-end" class="screen" style="gap:16px;text-align:center;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(32px,8vw,60px);letter-spacing:4px;background:linear-gradient(135deg,var(--purple),#ff9800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">FIM DE TEMPORADA</div>
+  <div id="career-season-end-content" style="max-width:560px;width:100%;display:flex;flex-direction:column;gap:12px;"></div>
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);" onclick="startNextSeason()">Próxima Temporada →</button>
+</div>
+<!-- ONLINE_SCREENS_INJECTED_HERE -->
+
+<!-- ONLINE: MENU -->
+<div id="online-menu" class="screen" style="gap:16px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(26px,7vw,48px);letter-spacing:3px;color:var(--blue);text-align:center;">JOGAR ONLINE</div>
+  <div style="font-size:12px;color:var(--text-muted);text-align:center;max-width:420px;">Crie uma sala e compartilhe o código, ou entre com o código de um amigo. Precisa de internet.</div>
+
+  <div style="background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:18px;max-width:420px;width:100%;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);">
+    <div style="font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:var(--green-dark);">1 x 1 RÁPIDO</div>
+    <button class="btn btn-primary" onclick="onlineCreate('1v1')">Criar sala 1x1</button>
+    <button class="btn" style="background:var(--card);border:1.5px solid var(--blue);color:var(--blue);" onclick="onlineJoinPrompt('1v1')">Entrar em sala 1x1</button>
+  </div>
+
+  <div style="background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:18px;max-width:420px;width:100%;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);">
+    <div style="font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:var(--purple);">CAMPEONATO (CARREIRA)</div>
+    <div style="font-size:11px;color:var(--text-muted);">Use o time da sua carreira. Vários jogadores, pontos corridos.</div>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--purple),#6a0dad);" onclick="onlineCreate('career')">Criar campeonato</button>
+    <button class="btn" style="background:var(--card);border:1.5px solid var(--purple);color:var(--purple);" onclick="onlineJoinPrompt('career')">Entrar no campeonato</button>
+  </div>
+
+  <div style="max-width:420px;width:100%;">
+    <input id="online-join-code" type="text" placeholder="CÓDIGO DA SALA" maxlength="8"
+      style="width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:4px;text-align:center;text-transform:uppercase;color:var(--text);background:var(--bg);outline:none;">
+  </div>
+  <div id="online-status" style="font-size:12px;color:var(--text-muted);min-height:18px;text-align:center;"></div>
+  <button class="btn" style="background:transparent;border:none;color:var(--text-muted);" onclick="leaveOnline()">← Voltar ao Menu</button>
+</div>
+
+<!-- ONLINE: LOBBY -->
+<div id="online-lobby" class="screen" style="gap:14px;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,40px);letter-spacing:3px;color:var(--blue);text-align:center;">SALA</div>
+  <div id="online-lobby-mode" style="font-size:12px;color:var(--text-muted);text-align:center;"></div>
+  <div style="background:linear-gradient(135deg,var(--blue),#003e85);color:#fff;border-radius:16px;padding:16px 28px;text-align:center;box-shadow:0 8px 24px rgba(0,87,183,.35);">
+    <div style="font-size:11px;letter-spacing:2px;opacity:.85;">CÓDIGO DA SALA</div>
+    <div id="online-lobby-code" style="font-family:'Bebas Neue',cursive;font-size:44px;letter-spacing:8px;">----</div>
+  </div>
+  <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-muted);max-width:420px;width:100%;">JOGADORES NA SALA</div>
+  <div id="online-lobby-players" style="display:flex;flex-direction:column;gap:8px;max-width:420px;width:100%;"></div>
+  <button id="online-lobby-start" class="btn btn-primary" style="display:none;max-width:320px;">Iniciar</button>
+  <div id="online-lobby-hint" style="font-size:11px;color:var(--text-muted);text-align:center;max-width:420px;"></div>
+  <button class="btn" style="background:transparent;border:none;color:var(--text-muted);" onclick="leaveOnline()">← Sair da sala</button>
+</div>
+
+<!-- ONLINE: MATCH RESULT -->
+<div id="online-result" class="screen" style="gap:16px;text-align:center;">
+  <div class="result-banner" id="online-result-banner"></div>
+  <div class="result-score" id="online-result-score"></div>
+  <div class="result-details" id="online-result-details" style="max-width:500px;width:100%;"></div>
+  <div id="online-result-events" class="match-events" style="max-width:500px;"></div>
+  <button id="online-result-btn" class="btn btn-primary" style="background:linear-gradient(135deg,var(--blue),#003e85);">Continuar</button>
+</div>
+
+<!-- ONLINE: CHAMPIONSHIP STANDINGS -->
+<div id="online-champ-standings" class="screen" style="gap:14px;">
+  <div id="champ-standings-title" style="font-family:'Bebas Neue',cursive;font-size:clamp(22px,6vw,40px);letter-spacing:3px;color:var(--purple);text-align:center;">RODADA</div>
+  <div id="champ-standings-table" style="max-width:560px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);padding:4px;"></div>
+  <button id="champ-next-btn" class="btn btn-primary" style="display:none;max-width:320px;background:linear-gradient(135deg,var(--purple),#6a0dad);">Próxima Rodada →</button>
+  <div id="champ-wait" style="display:none;font-size:12px;color:var(--text-muted);text-align:center;"></div>
+  <button class="btn" style="background:transparent;border:none;color:var(--text-muted);" onclick="leaveOnline()">← Sair do campeonato</button>
+</div>
+
+<!-- ONLINE: CHAMPIONSHIP OVER -->
+<div id="online-champ-over" class="screen" style="gap:16px;text-align:center;">
+  <div style="font-family:'Bebas Neue',cursive;font-size:clamp(30px,8vw,56px);letter-spacing:3px;background:linear-gradient(135deg,var(--gold),#ff9800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">CAMPEÃO</div>
+  <div id="champ-over-name" style="font-family:'Bebas Neue',cursive;font-size:28px;color:var(--purple);"></div>
+  <div id="champ-over-table" style="max-width:560px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);padding:4px;"></div>
+  <button class="btn btn-primary" style="background:linear-gradient(135deg,var(--blue),#003e85);" onclick="leaveOnline()">Voltar ao Menu</button>
+</div>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="js/online/net.js"></script>
+<script src="js/online/protocol.js"></script>
+<script src="js/online/sim.js"></script>
+<script src="js/online/lobby.js"></script>
+<script src="js/online/online1v1.js"></script>
+<script src="js/online/onlineCareer.js"></script>
+</body>
+</html>
