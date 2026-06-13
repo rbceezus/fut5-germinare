@@ -1,0 +1,23 @@
+// ===================== STATE =====================
+let state = {
+  round: 0,
+  myPicks: [],
+  draftPool: [],
+  currentOptions: [],
+  selectedBenchPlayer: null,
+  scheme: 'quadrado',
+  formation: { gk: null, s1: null, s2: null, s3: null, s4: null },
+  awayTeam: [],
+  matchGoalsHome: 0,
+  matchGoalsAway: 0,
+  matchEvents: [],
+  playerGoals: {},
+  playerAssists: {},
+  redCards: new Set(),
+  yellowCards: {},
+  teamHandicap: { home: 1, away: 1 },
+  currentCareerMatch: null,
+  penalties: null,
+  penState: null,
+  matchSpeed: 1,
+};

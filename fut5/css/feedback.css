@@ -1,0 +1,49 @@
+/* ============ LOADING FEEDBACK ============ */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  background: rgba(242, 248, 255, 0.82);
+  backdrop-filter: blur(8px);
+  text-align: center;
+}
+.loading-overlay.active { display: flex; }
+.loading-ball {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff 0 12%, var(--gold-bright) 13% 32%, var(--green) 33% 58%, var(--blue) 59% 100%);
+  box-shadow: 0 14px 32px rgba(0, 87, 183, 0.28);
+  animation: loading-kick 0.85s ease-in-out infinite alternate;
+}
+.loading-text {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 28px;
+  letter-spacing: 2px;
+  color: var(--green-dark);
+}
+.loading-subtext {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.loading-status {
+  min-height: 20px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+@keyframes loading-kick {
+  from { transform: translateY(0) rotate(-8deg) scale(0.96); }
+  to { transform: translateY(-14px) rotate(10deg) scale(1.04); }
+}
+body.is-loading { cursor: wait; }
